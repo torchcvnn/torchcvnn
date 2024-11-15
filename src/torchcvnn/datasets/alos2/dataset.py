@@ -34,7 +34,7 @@ class ALOSDataset(Dataset):
     ALOSDataset
 
     The format is described in
-    [https://www.eorc.jaxa.jp/ALOS/en/alos-2/pdf/product_format_description/PALSAR-2_xx_Format_CEOS_E_g.pdf]()
+    `<https://www.eorc.jaxa.jp/ALOS/en/alos-2/pdf/product_format_description/PALSAR-2_xx_Format_CEOS_E_g.pdf>`_
 
     The dataset is constructed from the volume file. If leader and trailer files
     are colocated, they are loaded as well.

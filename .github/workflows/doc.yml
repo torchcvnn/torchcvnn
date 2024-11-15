@@ -1,23 +1,50 @@
-name: mkdocs
+name: sphinx
+
 on:
   push:
     branches:
       - main
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python: ["3.10"]      
+
     permissions:
       contents: write
       pages: write
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
         with:
-          python-version: ">= 3.8 < 3.12"
-      - name: Install doc dependencies
+          python-version: ${{ matrix.python }}
+
+      - name: Cache python modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pkg-deps-${{ matrix.python }}-${{ hashFiles('pyproject.toml') }}-docs
+
+      - name: Install torchcvnn and its doc dependencies
         run: |
-          pip install -r docs/requirements.txt
-      - name: Install torchcvnn
-        run: pip install .
-      - name: Generate and deploy the documentation
-        run: mkdocs gh-deploy --force --clean --verbose
+          python -m pip install --upgrade pip
+          python -m pip install -e .[docs]
+
+      - name: Build HTML
+        run : |
+          cd docs && make html
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-docs
+          path: docs/_build/html/
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html

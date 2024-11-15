@@ -50,37 +50,40 @@ class SLCDataset(Dataset):
         As an example, using the example `read_slc.py`, with the SSurge_15305 stack provided
         by the UAVSar, the Pauli representation of the four polarizations is shown below :
 
-        ![Pauli representation of a $3000 \times 3000$ crop of the SSurge_15305
-        stack](../../../../../images/slc_SSurge_15305.png)
+        .. figure:: ../assets/datasets/slc_SSurge_15305.png
+           :alt: Pauli representation of a :math:`3000 \times 3000` crop of the SSurge_15305 stack
+           :width: 50%
+           :align: center
+
 
         The code may look like this :
 
-        ```python
-        import numpy as np
-        import torchcvnn
-        from torchcvnn.datasets.slc.dataset import SLCDataset
+        .. code-block:: python
 
-        def get_pauli(data):
-            # Returns Pauli in (H, W, C)
-            HH = data["HH"]
-            HV = data["HV"]
-            VH = data["VH"]
-            VV = data["VV"]
+            import numpy as np
+            import torchcvnn
+            from torchcvnn.datasets.slc.dataset import SLCDataset
 
-            alpha = HH + VV
-            beta = HH - VV
-            gamma = HV + VH
+            def get_pauli(data):
+                # Returns Pauli in (H, W, C)
+                HH = data["HH"]
+                HV = data["HV"]
+                VH = data["VH"]
+                VV = data["VV"]
 
-            return np.stack([beta, gamma, alpha], axis=-1)
+                alpha = HH + VV
+                beta = HH - VV
+                gamma = HV + VH
+
+                return np.stack([beta, gamma, alpha], axis=-1)
 
 
-        patch_size = (3000, 3000)
-        dataset = SLCDataset(
-            rootdir,
-            transform=get_pauli,
-            patch_size=patch_size,
-        )
-        ```
+            patch_size = (3000, 3000)
+            dataset = SLCDataset(
+                rootdir,
+                transform=get_pauli,
+                patch_size=patch_size,
+            )
 
     Arguments:
         rootdir: the path containing the SLC and ANN files

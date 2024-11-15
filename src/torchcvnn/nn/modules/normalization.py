@@ -44,8 +44,8 @@ class LayerNorm(nn.Module):
     Implementation of the torch.nn.LayerNorm for complex numbers.
 
     Arguments:
-        normalized_shape (int or list or torch.Size): input shape from an expected input of size $(*, normalized_shape[0], normalized_shape[1], ..., normalized_shape[-1])
-        elementwise_affine (bool): a boolean value that when set to `True`, this module has learnable per-element affine parameters initialized to a diagonal matrix with diagonal element $1/\sqrt{2}$ (for weights) and zeros (for biases). Default: `True`
+        normalized_shape (int or list or torch.Size): input shape from an expected input of size :math:`(*, normalized_shape[0], normalized_shape[1], ..., normalized_shape[-1])`
+        elementwise_affine (bool): a boolean value that when set to `True`, this module has learnable per-element affine parameters initialized to a diagonal matrix with diagonal element :math:`\frac{1}{\sqrt{2}}` (for weights) and zeros (for biases). Default: `True`
         bias (bool): if set to `False`, the layer will not learn an additive bias
     """
 
@@ -83,9 +83,9 @@ class LayerNorm(nn.Module):
     def reset_parameters(self) -> None:
         r"""
         Initialize the weight and bias. The weight is initialized to a diagonal
-        matrix with diagonal $\frac{1}{\sqrt{2}}$.
+        matrix with diagonal :math:`\frac{1}{\sqrt{2}}`.
 
-        The bias is initialized to $0$.
+        The bias is initialized to :math:`0`.
         """
         with torch.no_grad():
             if self.elementwise_affine:

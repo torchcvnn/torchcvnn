@@ -32,17 +32,17 @@ from torch.nn.common_types import _size_2_t
 class MaxPool2d(nn.Module):
     r"""Applies a 2D max pooling on the module of the input signal
 
-    In the simplest case, the output value of the layer with input size $(N, C, H, W)$, output $(N, C, H_{out}, W_{out})$ and `kernel_size` `(kH, kW)` can be precisely described as:
+    In the simplest case, the output value of the layer with input size :math:`(N, C, H, W)`, output :math:`(N, C, H_{out}, W_{out})` and `kernel_size` `(kH, kW)` can be precisely described as:
 
-    $$
-    \begin{aligned}
-    out(N_i, C_j, h, w) ={} & \max_{m=0, \ldots, kH-1} \max_{n=0, \ldots, kW-1} \\
-                            & \text{|input|}(N_i, C_j, \text{stride[0]} \times h + m,
-                                                   \text{stride[1]} \times w + n)
-    \end{aligned}
-    $$
+    .. math::
 
-    Internally, it is relying on the `torch.nn.MaxPool2d`
+        \begin{aligned}
+        out(N_i, C_j, h, w) ={} & \max_{m=0, \ldots, kH-1} \max_{n=0, \ldots, kW-1} \\
+                                & \text{|input|}(N_i, C_j, \text{stride[0]} \times h + m,
+                                                       \text{stride[1]} \times w + n)
+        \end{aligned}
+
+    Internally, it is relying on the :external:py:class:`torch.nn.MaxPool2d`
     
     Arguments:
         kernel_size: thr size of the window to take a max over

@@ -54,12 +54,10 @@ class CReLU(IndependentRealImag):
     """
     Applies a ReLU independently on both the real and imaginary parts
 
-    $$
-    CReLU(z) = ReLU(Re[z]) + ReLU(Im[z])j
-    $$
+    :math:`CReLU(z) = ReLU(Re[z]) + ReLU(Im[z])j`
 
     Only the quadrant where both `Re[z]` and `Im[z]` are negative is projected to
-    $0$. Otherwise either the real and/or the imaginary part is preserved.
+    :math:`0`. Otherwise either the real and/or the imaginary part is preserved.
 
     """
 
@@ -71,9 +69,7 @@ class CPReLU(IndependentRealImag):
     """
     Applies a PReLU independently on both the real and imaginary parts
 
-    $$
-    CPReLU(z) = PReLU(Re[z]) + PReLU(Im[z])j
-    $$
+    :math:`CPReLU(z) = PReLU(Re[z]) + PReLU(Im[z])j`
     """
 
     def __init__(self) -> None:
@@ -87,9 +83,7 @@ class CELU(IndependentRealImag):
     Not to confuse with `torch.nn.CELU`. For the complex equivalent of
     `torch.nn.CELU`, see [torchcvnn.nn.modules.activation.CCELU][]
 
-    $$
-    CELU(z) = ELU(Re[z]) + ELU(Im[z])j
-    $$
+    :math:`CELU(z) = ELU(Re[z]) + ELU(Im[z])j`
     """
 
     def __init__(self) -> None:
@@ -100,9 +94,7 @@ class CCELU(IndependentRealImag):
     """
     Applies a CELU independently on both the real and imaginary parts
 
-    $$
-    CCELU(z) = CELU(Re[z]) + CELU(Im[z])j
-    $$
+    :math:`CCELU(z) = CELU(Re[z]) + CELU(Im[z])j`
     """
 
     def __init__(self) -> None:
@@ -113,9 +105,7 @@ class CGELU(IndependentRealImag):
     """
     Applies a GELU independently on both the real and imaginary parts
 
-    $$
-    CGELU(z) = GELU(Re[z]) + GELU(Im[z])j
-    $$
+    :math:`CGELU(z) = GELU(Re[z]) + GELU(Im[z])j`
     """
 
     def __init__(self) -> None:
@@ -128,10 +118,7 @@ class CSigmoid(IndependentRealImag):
 
     as used in Nitta Tohru. An extension of the back-propagation algorithm to complex numbers. Neural Networks, 10(9):1391–1415, November 1997.
 
-
-    $$
-    CSigmoid(z) = Sigmoid(Re[z]) + Sigmoid(Im[z])j
-    $$
+    :math:`CSigmoid(z) = Sigmoid(Re[z]) + Sigmoid(Im[z])j`
 
     where the real valued sigmoid is applied in the right hand side terms.
     """
@@ -144,9 +131,7 @@ class CTanh(IndependentRealImag):
     """
     Applies a Tanh independently on both the real and imaginary parts
 
-    $$
-    CTanh(z) = Tanh(Re[z]) + Tanh(Im[z])j
-    $$
+    :math:`CTanh(z) = Tanh(Re[z]) + Tanh(Im[z])j`
 
     where the real valued sigmoid is applied in the right hand side terms.
     """
@@ -159,12 +144,10 @@ class zReLU(nn.Module):
     r"""
     Applies a zReLU
 
-    $$
-    zRELU(z) = \begin{cases} z & \mbox{if } Re[z] > 0 \mbox{ and } Im[z] > 0\\ 0 & \mbox{otherwise}  \end{cases}
-    $$
+    :math:`zReLU(z) = \begin{cases} z & \mbox{if } Re[z] > 0 \mbox{ and } Im[z] > 0\\ 0 & \mbox{otherwise}  \end{cases}`
 
     All the quadrant where both `Re[z]` and `Im[z]` are non negative are
-    projected to $0$. In other words, only one quadrant is preserved.
+    projected to :math:`0`. In other words, only one quadrant is preserved.
     """
 
     def __init__(self):
@@ -186,11 +169,9 @@ class zAbsReLU(nn.Module):
     r"""
     Applies a zAbsReLU
 
-    $$
-    zAbsReLU(z) = \begin{cases} z & \mbox{if } |z| \geq a\\ 0 & \mbox{otherwise}  \end{cases}
-    $$
+    :math:`zAbsReLU(z) = \begin{cases} z & \mbox{if } |z| \geq a\\ 0 & \mbox{otherwise}  \end{cases}`
 
-    This cancels all the complex plane in the circle of radius $a$, where $a$ is
+    This cancels all the complex plane in the circle of radius :math:`a`, where :math:`a` is
     trainable.
     """
 
@@ -215,10 +196,7 @@ class zLeakyReLU(nn.Module):
     r"""
     Applies a zReLU
 
-    $$
-    zLeajyReLU(z) = \begin{cases} z & \mbox{if } Re[z] > 0 \mbox{ and } Im[z] >
-    0\\ a.z & \mbox{otherwise}  \end{cases}
-    $$
+    :math:`zLeakyReLU(z) = \begin{cases} z & \mbox{if } Re[z] > 0 \mbox{ and } Im[z] > 0\\ a.z & \mbox{otherwise}  \end{cases}`
 
     """
 
@@ -242,11 +220,9 @@ class zLeakyReLU(nn.Module):
 
 class Mod(nn.Module):
     r"""
-    Extracts the magnitude of the complex input: maps to $\mathbb{R}$
+    Extracts the magnitude of the complex input: maps to :math:`\mathbb{R}`
 
-    $$
-    Mod(z) = |z|
-    $$
+    :math:`Mod(z) = |z|`
 
     This activation function allows to go from complex values to real
     values.
@@ -270,9 +246,7 @@ class modReLU(nn.Module):
     r"""
     Applies a ReLU with parametric offset on the amplitude, keeping the phase unchanged.
 
-    $$
-    modReLU(z = r e^{\theta j}) = ReLU(r + b) e^{\theta j})
-    $$
+    :math:`modReLU(z) = ReLU(|z| + b) e^{j \theta}`
     """
 
     def __init__(self):
@@ -293,16 +267,12 @@ class Cardioid(nn.Module):
     r"""
     Applies a ReLU with parametric offset on the amplitude, keeping the phase unchanged.
 
-    $$
-    Cardioid(z = r e^{\theta j}) = \frac{1+\cos(\theta)}{2} z
-    $$
+    :math:`Cardioid(z) = \frac{1+\cos(\theta)}{2} z`
 
-    As proposed by Virtue et al. (2019). For real numbers, e.g. $\theta \in \{0,
-    \pi\}$, it reduces to the ReLU :
+    As proposed by Virtue et al. (2019). For real numbers, e.g. :math:`\theta \in \{0,
+    \pi\}`, it reduces to the ReLU :
 
-    $$
-    \forall r \in \mathbb{R}, \theta \in \{0, \pi\}, Cardiod(r e^{\theta j}) = Relu(r)
-    $$
+    :math:`\forall r \in \mathbb{R}, \theta \in \{0, \pi\}, Cardiod(r e^{\theta j}) = Relu(r)`
     """
 
     def __init__(self):

@@ -58,18 +58,18 @@ def inv_2x2(M: torch.Tensor) -> torch.Tensor:
 
     If we denote
 
-    $$
-    M = \begin{pmatrix} a & b \\ c & d \end{pmatrix}
-    $$
+    .. math::
+
+        M = \begin{pmatrix} a & b \\ c & d \end{pmatrix}
 
     The inverse is given by
 
-    $$
-    M^{-1} = \frac{1}{Det M} Adj(M) = \frac{1}{ad - bc}\begin{pmatrix}d & -b \\ -c & a\end{pmatrix}
-    $$
+    .. math::
+
+        M^{-1} = \frac{1}{Det M} Adj(M) = \frac{1}{ad - bc}\begin{pmatrix}d & -b \\ -c & a\end{pmatrix}
 
     Arguments:
-        M: a batch of 2x2 tensors to invert, i.e. a $(B, 2, 2)$ tensor
+        M: a batch of 2x2 tensors to invert, i.e. a :math:`(B, 2, 2)` tensor
     """
     det = torch.linalg.det(M).unsqueeze(-1).unsqueeze(-1)
 
@@ -87,21 +87,21 @@ def sqrt_2x2(M: torch.Tensor) -> torch.Tensor:
 
     If we denote
 
-    $$
-    M = \begin{pmatrix} a & b \\ c & d \end{pmatrix}
-    $$
+    .. math::
+
+        M = \begin{pmatrix} a & b \\ c & d \end{pmatrix}
 
     The square root is given by :
 
-    $$
-    \begin{align}
-    \sqrt{M} &= \frac{1}{t} ( M + \sqrt{Det M} I)\\
-    t &= \sqrt{Tr M + 2 \sqrt{Det M}}
-    \end{align}
-    $$
+    .. math::
+
+        \begin{align}
+        \sqrt{M} &= \frac{1}{t} ( M + \sqrt{Det M} I)\\
+        t &= \sqrt{Tr M + 2 \sqrt{Det M}}
+        \end{align}
 
     Arguments:
-        M: a batch of 2x2 tensors to invert, i.e. a $(B, 2, 2)$ tensor
+        M: a batch of 2x2 tensors to invert, i.e. a :math:`(B, 2, 2)` tensor
     """
     N = M.shape[0]
     det = torch.linalg.det(M).unsqueeze(-1).unsqueeze(-1)
@@ -119,7 +119,7 @@ def slow_inv_sqrt_2x2(M: torch.Tensor) -> torch.Tensor:
     Computes the square root of the inverse of a tensor of shape [N, 2, 2]
 
     Arguments:
-        M: a batch of 2x2 tensors to sqrt invert, i.e. a $(B, 2, 2)$ tensor
+        M: a batch of 2x2 tensors to sqrt invert, i.e. a :math:`(B, 2, 2)` tensor
     """
     return sqrt_2x2(inv_2x2(M))
 
@@ -129,7 +129,7 @@ def inv_sqrt_2x2(M: torch.Tensor) -> torch.Tensor:
     Computes the square root of the inverse of a tensor of shape [N, 2, 2]
 
     Arguments:
-        M: a batch of 2x2 tensors to sqrt invert, i.e. a $(B, 2, 2)$ tensor
+        M: a batch of 2x2 tensors to sqrt invert, i.e. a :math:`(B, 2, 2)` tensor
     """
     N = M.shape[0]
     det = torch.linalg.det(M).unsqueeze(-1).unsqueeze(-1)
@@ -154,15 +154,15 @@ class _BatchNormNd(nn.Module):
     BatchNorm1d, BatchNorm2d, the only condition being the input tensor must be
     (batch_size, features, d1, d2, ..)
 
-    The statistics will be computed over the $batch\_size \times d_1 \times d_2 \times ..$
-    vectors of size $features$.
+    The statistics will be computed over the :math:`batch\_size \times d_1 \times d_2 \times ..`
+    vectors of size `features`.
 
     As defined by Trabelsi et al. (2018)
 
     Arguments:
-        num_features: $C$ from an expected input of size $(B, C)$
-        eps: a value added to the denominator for numerical stability. Default $1e-5$.
-        momentum: the value used for the running mean and running var computation. Can be set to `None` for cumulative moving average (i.e. simple average). Default: $0.1$
+        num_features: :math:`C` from an expected input of size :math:`(B, C)`
+        eps: a value added to the denominator for numerical stability. Default :math:`1e-5`.
+        momentum: the value used for the running mean and running var computation. Can be set to `None` for cumulative moving average (i.e. simple average). Default: :math:`0.1`
         affine: a boolean value that when set to `True`, this module has learnable affine parameters. Default: `True`
         track_running_stats: a boolean value that when set to `True`, this module tracks the running mean and variance, and when set to`False`, this module does not track such statistics, and initializes statistics buffers running_mean and running_var as None. When these buffers are None, this module always uses batch statistics. in both training and eval modes. Default: `True`
         cdtype: the dtype for complex numbers. Default torch.complex64
@@ -317,19 +317,20 @@ class BatchNorm1d(_BatchNormNd):
     BatchNorm1d, BatchNorm2d, the only condition being the input tensor must be
     (batch_size, features, d1, d2, ..)
 
-    The statistics will be computed over the $batch\_size \times d_1 \times d_2 \times ..$
-    vectors of size $features$.
+    The statistics will be computed over the :math:`batch\_size \times d_1 \times d_2 \times ..`
+    vectors of size `features`.
 
     As defined by Trabelsi et al. (2018)
 
     Arguments:
-        num_features: $C$ from an expected input of size $(B, C)$
-        eps: a value added to the denominator for numerical stability. Default $1e-5$.
-        momentum: the value used for the running mean and running var computation. Can be set to `None` for cumulative moving average (i.e. simple average). Default: $0.1$
+        num_features: :math:`C` from an expected input of size :math:`(B, C)`
+        eps: a value added to the denominator for numerical stability. Default :math:`1e-5`.
+        momentum: the value used for the running mean and running var computation. Can be set to `None` for cumulative moving average (i.e. simple average). Default: :math:`0.1`
         affine: a boolean value that when set to `True`, this module has learnable affine parameters. Default: `True`
         track_running_stats: a boolean value that when set to `True`, this module tracks the running mean and variance, and when set to`False`, this module does not track such statistics, and initializes statistics buffers running_mean and running_var as None. When these buffers are None, this module always uses batch statistics. in both training and eval modes. Default: `True`
         cdtype: the dtype for complex numbers. Default torch.complex64
     """
+
     pass
 
 
@@ -339,17 +340,18 @@ class BatchNorm2d(_BatchNormNd):
     BatchNorm1d, BatchNorm2d, the only condition being the input tensor must be
     (batch_size, features, d1, d2, ..)
 
-    The statistics will be computed over the $batch\_size \times d_1 \times d_2 \times ..$
-    vectors of size $features$.
+    The statistics will be computed over the :math:`batch\_size \times d_1 \times d_2 \times ..`
+    vectors of size `features`.
 
     As defined by Trabelsi et al. (2018)
 
     Arguments:
-        num_features: $C$ from an expected input of size $(B, C)$
-        eps: a value added to the denominator for numerical stability. Default $1e-5$.
-        momentum: the value used for the running mean and running var computation. Can be set to `None` for cumulative moving average (i.e. simple average). Default: $0.1$
+        num_features: :math:`C` from an expected input of size :math:`(B, C)`
+        eps: a value added to the denominator for numerical stability. Default :math:`1e-5`.
+        momentum: the value used for the running mean and running var computation. Can be set to `None` for cumulative moving average (i.e. simple average). Default: :math:`0.1`
         affine: a boolean value that when set to `True`, this module has learnable affine parameters. Default: `True`
         track_running_stats: a boolean value that when set to `True`, this module tracks the running mean and variance, and when set to`False`, this module does not track such statistics, and initializes statistics buffers running_mean and running_var as None. When these buffers are None, this module always uses batch statistics. in both training and eval modes. Default: `True`
         cdtype: the dtype for complex numbers. Default torch.complex64
     """
+
     pass

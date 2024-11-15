@@ -44,21 +44,27 @@ class Bretigny(Dataset):
     Note:
         An example usage :
 
-        ```python
-        import torchcvnn
-        from torchcvnn.datasets import Bretigny
+        .. code-block:: python
 
-        dataset = Bretigny(
-            rootdir, fold="train", patch_size=((128, 128)), transform=lambda x: np.abs(x)
-        )
-        X, y = dataset[0]
-        ```
+            import torchcvnn
+            from torchcvnn.datasets import Bretigny
+
+            dataset = Bretigny(
+                rootdir, fold="train", patch_size=((128, 128)), transform=lambda x: np.abs(x)
+            )
+            X, y = dataset[0]
 
         Displayed below are the train, valid and test parts with the labels overlayed
 
-        ![Train patch ](../../../../../images/bretigny_train.png)
-        ![Valid patch ](../../../../../images/bretigny_valid.png)
-        ![Test patch ](../../../../../images/bretigny_test.png)
+        .. image:: ../assets/datasets/bretigny_train.png
+           :alt: Train fold
+           :width: 60%
+        .. image:: ../assets/datasets/bretigny_valid.png
+           :alt: Valid fold
+           :width: 15%
+        .. image:: ../assets/datasets/bretigny_test.png
+           :alt: Test fold
+           :width: 15%
 
     """
 

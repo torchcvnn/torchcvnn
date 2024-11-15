@@ -36,7 +36,7 @@ from .alos2 import ALOSDataset
 class PolSFDataset(Dataset):
     r"""
     The Polarimetric SAR dataset with the labels provided by
-    [https://ietr-lab.univ-rennes1.fr/polsarpro-bio/san-francisco/]()
+    https://ietr-lab.univ-rennes1.fr/polsarpro-bio/san-francisco/
 
     We expect the data to be already downloaded and available on your drive.
 
@@ -49,27 +49,29 @@ class PolSFDataset(Dataset):
     Note:
         An example usage :
 
-        ```python
-        import torchcvnn
-        from torchcvnn.datasets import PolSFDataset
+        .. code-block:: python
 
-        def transform_patches(patches):
-            # We keep all the patches and get the spectrum
-            # from it
-            # If you wish, you could filter out some polarizations
-            # PolSF provides the four HH, HV, VH, VV
-            patches = [np.abs(patchi) for _, patchi in patches.items()]
-            return np.stack(patches)
+            import torchcvnn
+            from torchcvnn.datasets import PolSFDataset
 
-        dataset = PolSFDataset(
-            rootdir, patch_size=((512, 512)), transform=transform_patches
-        X, y = dataset[0]
-        ```
+            def transform_patches(patches):
+                # We keep all the patches and get the spectrum
+                # from it
+                # If you wish, you could filter out some polarizations
+                # PolSF provides the four HH, HV, VH, VV
+                patches = [np.abs(patchi) for _, patchi in patches.items()]
+                return np.stack(patches)
 
-        Displayed below are example patches with pache sizes $512 \times 512$
+            dataset = PolSFDataset(rootdir, patch_size=((512, 512)), transform=transform_patches
+            X, y = dataset[0]
+
+        Displayed below are example patches with patch sizes :math:`512 \times 512`
         with the labels overlayed
 
-        ![Example patches](../../../images/polsf.png)
+        .. figure:: ../assets/datasets/polsf.png
+           :alt: Patches from the PolSF dataset
+           :width: 100%
+           :align: center
 
     """
 

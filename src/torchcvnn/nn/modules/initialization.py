@@ -42,11 +42,10 @@ def complex_kaiming_normal_(
     described in `Delving deep into rectifiers: Surpassing human-level
     performance on ImageNet classification` - He, K. et al. (2015), using a
     normal distribution. The resulting tensor will have values sampled from
-    $\mathcal{N}(0, \text{std}^2)$ where
+    :math:`\mathcal{N}(0, \text{std}^2)` where
 
-    $$
-    \text{std} = \frac{\text{gain}}{\sqrt{2\text{fan_mode}}}
-    $$
+    .. math::
+        \text{std} = \frac{\text{gain}}{\sqrt{2\text{fan_mode}}}
 
     Also known as He initialization.
 
@@ -65,7 +64,7 @@ def complex_kaiming_normal_(
         >>> w = torch.empty(3, 5, dtype=torch.complex64)
         >>> c_nn.init.complex_kaiming_normal_(w, mode='fan_out', nonlinearity='relu')
 
-    This implementation is a minor adaptation of the torch.nn.init.kaiming_normal_ function
+    This implementation is a minor adaptation of the :external:py:func:`torch.nn.init.kaiming_normal_` function
     """
 
     fan = nn.init._calculate_correct_fan(tensor, mode)
@@ -85,16 +84,16 @@ def complex_kaiming_uniform_(
     described in `Delving deep into rectifiers: Surpassing human-level
     performance on ImageNet classification` - He, K. et al. (2015), using a
     uniform distribution. The resulting tensor will have values sampled from
-    $\mathcal{U}(-\text{bound}, \text{bound})$ where
+    :math:`\mathcal{U}(-\text{bound}, \text{bound})` where
 
-    $$
-    \text{bound} = \text{gain} \times \sqrt{\frac{3}{2\text{fan_mode}}}
-    $$
+    .. math::
+
+        \text{bound} = \text{gain} \times \sqrt{\frac{3}{2\text{fan_mode}}}
 
     Also known as He initialization.
 
     Arguments:
-        tensor: an n-dimensional `torch.Tensor`
+        tensor: an n-dimensional :external:py:class`torch.Tensor`
         a: the negative slope of the rectifier used after this layer (only
             used with ``'leaky_relu'``)
         mode: either ``'fan_in'`` (default) or ``'fan_out'``. Choosing ``'fan_in'``
@@ -108,7 +107,7 @@ def complex_kaiming_uniform_(
         >>> w = torch.empty(3, 5, dtype=torch.complex64)
         >>> c_nn.init.complex_kaiming_uniform_(w, mode='fan_in', nonlinearity='relu')
 
-    This implementation is a minor adaptation of the torch.nn.init.kaiming_uniform_ function
+    This implementation is a minor adaptation of the :external:py:func:`torch.nn.init.kaiming_uniform_` function
     """
 
     if 0 in tensor.shape:
@@ -131,11 +130,11 @@ def complex_xavier_uniform_(
     described in `Understanding the difficulty of training deep feedforward
     neural networks` - Glorot, X. & Bengio, Y. (2010), using a uniform
     distribution. The resulting tensor will have values sampled from
-    $\mathcal{U}(-a, a)$ where
+    :math:`\mathcal{U}(-a, a)` where
 
-    $$
-    a = \text{gain} \times \sqrt{\frac{6}{2(\text{fan_in} + \text{fan_out})}}
-    $$
+    .. math::
+
+        a = \text{gain} \times \sqrt{\frac{6}{2(\text{fan_in} + \text{fan_out})}}
 
     Also known as Glorot initialization.
 
@@ -148,7 +147,7 @@ def complex_xavier_uniform_(
         >>> w = torch.empty(3, 5, dtype=torch.complex64)
         >>> c_nn.init.complex_xavier_uniform_(w, nonlinearity='relu')
 
-    This implementation is a minor adaptation of the torch.nn.init.xavier_uniform_ function
+    This implementation is a minor adaptation of the :external:py:func:`torch.nn.init.xavier_uniform_` function
     """
     fan_in, fan_out = nn.init._calculate_fan_in_and_fan_out(tensor)
     gain = nn.init.calculate_gain(nonlinearity, a)
@@ -167,11 +166,11 @@ def complex_xavier_normal_(
     described in `Understanding the difficulty of training deep feedforward
     neural networks` - Glorot, X. & Bengio, Y. (2010), using a normal
     distribution. The resulting tensor will have values sampled from
-    $\mathcal{N}(0, \text{std}^2)$ where
+    :math:`\mathcal{N}(0, \text{std}^2)` where
 
-    $$
-    \text{std} = \text{gain} \times \sqrt{\frac{2}{2(\text{fan_in} + \text{fan_out})}}
-    $$
+    .. math::
+
+        \text{std} = \text{gain} \times \sqrt{\frac{2}{2(\text{fan_in} + \text{fan_out})}}
 
     Also known as Glorot initialization.
 
@@ -184,7 +183,7 @@ def complex_xavier_normal_(
         >>> w = torch.empty(3, 5, dtype=torch.complex64)
         >>> nn.init.complex_xavier_normal_(w, nonlinearity='relu')
 
-    This implementation is a minor adaptation of the torch.nn.init.xavier_normal_ function
+    This implementation is a minor adaptation of the :external:py:func:`torch.nn.init.xavier_normal_` function
     """
     fan_in, fan_out = nn.init._calculate_fan_in_and_fan_out(tensor)
     gain = nn.init.calculate_gain(nonlinearity, a)
