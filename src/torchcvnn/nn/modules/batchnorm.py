@@ -254,10 +254,10 @@ class _BatchNormNd(nn.Module):
             # Or for testing but using the batch stats for centering/scaling
 
             # Compute the means
-            mus = xc.mean(axis=-1)  # num_features means
+            mus = xc.mean(-1, keepdim=True)  # num_features means
 
             # Center the xc
-            xc_centered = xc - mus.unsqueeze(-1)  # num_features, BxHxW
+            xc_centered = xc - mus  # num_features, BxHxW
             xc_centered = torch.view_as_real(xc_centered)  # num_features, BxHxW, 2
 
             # Transform the complex numbers as 2 reals to compute the variances and
@@ -268,7 +268,7 @@ class _BatchNormNd(nn.Module):
             mus = self.running_mean
 
             # Center the xc
-            xc_centered = xc - mus.unsqueeze(-1)  # num_features, BxHxW
+            xc_centered = xc - mus  # num_features, BxHxW
             xc_centered = torch.view_as_real(xc_centered)  # num_features, BxHxW, 2
 
             # The variance/covariance come from the running stats
@@ -281,7 +281,6 @@ class _BatchNormNd(nn.Module):
         # So that the batch matrix multiply works as expected
         # where invsqrt_covs is (C, 2, 2)
         outz = torch.bmm(invsqrt_covs, xc_centered.transpose(1, 2))
-        outz = outz.contiguous()  # num_features, 2, BxHxW
 
         # Shift by beta and scale by gamma
         # weight is (num_features, 2, 2) real valued
