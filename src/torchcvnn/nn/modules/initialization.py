@@ -190,3 +190,21 @@ def complex_xavier_normal_(
     std = (gain * math.sqrt(2.0 / float(fan_in + fan_out))) / math.sqrt(2)
 
     return nn.init._no_grad_normal_(tensor, 0.0, std)
+
+
+def complex_constant_(
+    tensor: torch.Tensor, 
+    val: float
+) -> torch.Tensor:
+    r"""Fill the input Tensor with the value :math:`\text{val}`.
+
+    Args:
+        tensor: an n-dimensional `torch.Tensor`
+        val: the value to fill the tensor with
+
+    Examples:
+        >>> w = torch.empty(3, 5)
+        >>> nn.init.constant_(w, 0.3)
+    """
+    val = (val + 1j * val) / math.sqrt(2)
+    return nn.init._no_grad_fill_(tensor.to(torch.complex64), val)
