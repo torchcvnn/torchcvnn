@@ -20,4 +20,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .vision_transformer import vit_b, vit_l, vit_h
+from .vision_transformer import vit_t, vit_s, vit_b, vit_l, vit_h

@@ -28,6 +28,56 @@ import torch.nn as nn
 import torchcvnn.nn as c_nn
 
 
+def vit_t(
+    patch_embedder: nn.Module,
+    device: torch.device = None,
+    dtype: torch.dtype = torch.complex64,
+):
+    factory_kwargs = {"device": device, "dtype": dtype}
+    num_layers = 12
+    num_heads = 3
+    hidden_dim = 192
+    mlp_dim = 4 * 192
+    dropout = 0.0
+    attention_dropout = 0.0
+
+    return c_nn.ViT(
+        patch_embedder,
+        num_layers,
+        num_heads,
+        hidden_dim,
+        mlp_dim,
+        dropout=dropout,
+        attention_dropout=attention_dropout,
+        **factory_kwargs
+    )
+
+
+def vit_s(
+    patch_embedder: nn.Module,
+    device: torch.device = None,
+    dtype: torch.dtype = torch.complex64,
+):
+    factory_kwargs = {"device": device, "dtype": dtype}
+    num_layers = 12
+    num_heads = 6
+    hidden_dim = 384
+    mlp_dim = 4 * 384
+    dropout = 0.0
+    attention_dropout = 0.0
+
+    return c_nn.ViT(
+        patch_embedder,
+        num_layers,
+        num_heads,
+        hidden_dim,
+        mlp_dim,
+        dropout=dropout,
+        attention_dropout=attention_dropout,
+        **factory_kwargs
+    )
+
+
 def vit_b(
     patch_embedder: nn.Module,
     device: torch.device = None,
