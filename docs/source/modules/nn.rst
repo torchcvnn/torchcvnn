@@ -95,6 +95,15 @@ Transformer layers
    TransformerEncoderLayer
    TransformerDecoderLayer
 
+Vision Transformer
+------------------
+
+.. autosummary::
+   :toctree: _autosummary
+
+   ViTLayer
+   ViT
+
 Dropout layers
 --------------
 

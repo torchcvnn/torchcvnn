@@ -25,14 +25,29 @@ import torch
 import torch.nn as nn
 
 # Local imports
-from . import nn as c_nn
+import torchcvnn.nn as c_nn
 
 
 def vit_t(
     patch_embedder: nn.Module,
     device: torch.device = None,
     dtype: torch.dtype = torch.complex64,
-):
+) -> nn.Module:
+    """
+    Builds a ViT tiny model.
+
+    Args:
+        patch_embedder: PatchEmbedder instance.
+        device: Device to use.
+        dtype: Data type to use.
+
+    The patch_embedder is responsible for computing the embedding of the patch
+    as well as adding the positional encoding if required.
+
+    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number
+    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.
+
+    """
     factory_kwargs = {"device": device, "dtype": dtype}
     num_layers = 12
     num_heads = 3
@@ -59,7 +74,22 @@ def vit_s(
     patch_embedder: nn.Module,
     device: torch.device = None,
     dtype: torch.dtype = torch.complex64,
-):
+) -> nn.Module:
+    """
+    Builds a ViT small model.
+
+    Args:
+        patch_embedder: PatchEmbedder instance.
+        device: Device to use.
+        dtype: Data type to use.
+
+    The patch_embedder is responsible for computing the embedding of the patch
+    as well as adding the positional encoding if required.
+
+    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number
+    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.
+
+    """
     factory_kwargs = {"device": device, "dtype": dtype}
     num_layers = 12
     num_heads = 6
@@ -86,7 +116,22 @@ def vit_b(
     patch_embedder: nn.Module,
     device: torch.device = None,
     dtype: torch.dtype = torch.complex64,
-):
+) -> nn.Module:
+    """
+    Builds a ViT base model.
+
+    Args:
+        patch_embedder: PatchEmbedder instance.
+        device: Device to use.
+        dtype: Data type to use.
+
+    The patch_embedder is responsible for computing the embedding of the patch
+    as well as adding the positional encoding if required.
+
+    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number
+    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.
+
+    """
     factory_kwargs = {"device": device, "dtype": dtype}
     num_layers = 12
     num_heads = 12
@@ -113,7 +158,22 @@ def vit_l(
     patch_embedder: nn.Module,
     device: torch.device = None,
     dtype: torch.dtype = torch.complex64,
-):
+) -> nn.Module:
+    """
+    Builds a ViT large model.
+
+    Args:
+        patch_embedder: PatchEmbedder instance.
+        device: Device to use.
+        dtype: Data type to use.
+
+    The patch_embedder is responsible for computing the embedding of the patch
+    as well as adding the positional encoding if required.
+
+    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number
+    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.
+
+    """
     factory_kwargs = {"device": device, "dtype": dtype}
     num_layers = 24
     num_heads = 16
@@ -140,7 +200,22 @@ def vit_h(
     patch_embedder: nn.Module,
     device: torch.device = None,
     dtype: torch.dtype = torch.complex64,
-):
+) -> nn.Module:
+    """
+    Builds a ViT huge model.
+
+    Args:
+        patch_embedder: PatchEmbedder instance.
+        device: Device to use.
+        dtype: Data type to use.
+
+    The patch_embedder is responsible for computing the embedding of the patch
+    as well as adding the positional encoding if required.
+
+    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number
+    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.
+
+    """
     factory_kwargs = {"device": device, "dtype": dtype}
     num_layers = 32
     num_heads = 16
