@@ -17,7 +17,7 @@ If you want to bring in a new feature, it may be handy to install the package in
 
 .. code:: bash
 
-    git clone https://github.com/jeremyfix/torchcvnn.git
+    git clone https://github.com/torchcvnn/torchcvnn.git
     python3 -m venv venv
     source venv/bin/activate
     python -m pip install -e torchcvnn

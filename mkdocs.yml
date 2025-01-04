@@ -1,6 +1,6 @@
 site_name: Complex Valued Neural Networks in pytorch
-site_url: "https://jeremyfix.github.io/torchcvnn/"
-repo_url: "https://github.com/jeremyfix/torchcvnn"
+site_url: "https://torchcvnn.github.io/torchcvnn/"
+repo_url: "https://github.com/torchcvnn/torchcvnn"
 
 markdown_extensions:
     - attr_list
