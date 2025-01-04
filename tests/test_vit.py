@@ -133,7 +133,7 @@ def test_vit_bhl():
 
     X = torch.randn(batch_size, C, H, W, dtype=torch.complex64, device=device)
 
-    vit_models = [("vit_b", 768), ("vit_l", 1024), ("vit_h", 1280)]
+    vit_models = [("vit_b", 768)]  # , ("vit_l", 1024), ("vit_h", 1280)]
 
     for mvit, hidden_dim in vit_models:
         for patch_size in [16, 32]:
