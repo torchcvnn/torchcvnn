@@ -25,7 +25,7 @@ import torch
 import torch.nn as nn
 
 # Local imports
-import torchcvnn.nn as c_nn
+from . import nn as c_nn
 
 
 def vit_t(
@@ -40,6 +40,7 @@ def vit_t(
     mlp_dim = 4 * 192
     dropout = 0.0
     attention_dropout = 0.0
+    norm_layer = c_nn.RMSNorm
 
     return c_nn.ViT(
         patch_embedder,
@@ -49,6 +50,7 @@ def vit_t(
         mlp_dim,
         dropout=dropout,
         attention_dropout=attention_dropout,
+        norm_layer=norm_layer,
         **factory_kwargs
     )
 
@@ -65,6 +67,7 @@ def vit_s(
     mlp_dim = 4 * 384
     dropout = 0.0
     attention_dropout = 0.0
+    norm_layer = c_nn.RMSNorm
 
     return c_nn.ViT(
         patch_embedder,
@@ -74,6 +77,7 @@ def vit_s(
         mlp_dim,
         dropout=dropout,
         attention_dropout=attention_dropout,
+        norm_layer=norm_layer,
         **factory_kwargs
     )
 
@@ -90,6 +94,7 @@ def vit_b(
     mlp_dim = 3072
     dropout = 0.0
     attention_dropout = 0.0
+    norm_layer = c_nn.RMSNorm
 
     return c_nn.ViT(
         patch_embedder,
@@ -99,6 +104,7 @@ def vit_b(
         mlp_dim,
         dropout=dropout,
         attention_dropout=attention_dropout,
+        norm_layer=norm_layer,
         **factory_kwargs
     )
 
@@ -115,6 +121,7 @@ def vit_l(
     mlp_dim = 4096
     dropout = 0.0
     attention_dropout = 0.0
+    norm_layer = c_nn.RMSNorm
 
     return c_nn.ViT(
         patch_embedder,
@@ -124,6 +131,7 @@ def vit_l(
         mlp_dim,
         dropout=dropout,
         attention_dropout=attention_dropout,
+        norm_layer=norm_layer,
         **factory_kwargs
     )
 
@@ -140,6 +148,7 @@ def vit_h(
     mlp_dim = 5120
     dropout = 0.0
     attention_dropout = 0.0
+    norm_layer = c_nn.RMSNorm
 
     return c_nn.ViT(
         patch_embedder,
@@ -149,5 +158,6 @@ def vit_h(
         mlp_dim,
         dropout=dropout,
         attention_dropout=attention_dropout,
+        norm_layer=norm_layer,
         **factory_kwargs
     )
