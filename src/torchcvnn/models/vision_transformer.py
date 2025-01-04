@@ -38,9 +38,18 @@ def vit_b(
     num_heads = 12
     hidden_dim = 768
     mlp_dim = 3072
+    dropout = 0.0
+    attention_dropout = 0.0
 
     return c_nn.ViT(
-        patch_embedder, num_layers, num_heads, hidden_dim, mlp_dim, **factory_kwargs
+        patch_embedder,
+        num_layers,
+        num_heads,
+        hidden_dim,
+        mlp_dim,
+        dropout=dropout,
+        attention_dropout=attention_dropout,
+        **factory_kwargs
     )
 
 
@@ -54,9 +63,18 @@ def vit_l(
     num_heads = 16
     hidden_dim = 1024
     mlp_dim = 4096
+    dropout = 0.0
+    attention_dropout = 0.0
 
     return c_nn.ViT(
-        patch_embedder, num_layers, num_heads, hidden_dim, mlp_dim, **factory_kwargs
+        patch_embedder,
+        num_layers,
+        num_heads,
+        hidden_dim,
+        mlp_dim,
+        dropout=dropout,
+        attention_dropout=attention_dropout,
+        **factory_kwargs
     )
 
 
@@ -70,7 +88,16 @@ def vit_h(
     num_heads = 16
     hidden_dim = 1280
     mlp_dim = 5120
+    dropout = 0.0
+    attention_dropout = 0.0
 
     return c_nn.ViT(
-        patch_embedder, num_layers, num_heads, hidden_dim, mlp_dim, **factory_kwargs
+        patch_embedder,
+        num_layers,
+        num_heads,
+        hidden_dim,
+        mlp_dim,
+        dropout=dropout,
+        attention_dropout=attention_dropout,
+        **factory_kwargs
     )
