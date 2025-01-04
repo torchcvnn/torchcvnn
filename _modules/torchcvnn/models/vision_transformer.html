@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>torchcvnn.datasets.polsf - torchcvnn 0.7.0 documentation</title>
+        <title>torchcvnn.models.vision_transformer - torchcvnn 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -278,10 +278,10 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for torchcvnn.datasets.polsf</h1><div class="highlight"><pre>
+          <h1>Source code for torchcvnn.models.vision_transformer</h1><div class="highlight"><pre>
 <span></span><span class="c1"># MIT License</span>
 
-<span class="c1"># Copyright (c) 2024 Quentin Gabot</span>
+<span class="c1"># Copyright (c) 2025 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
 <span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
@@ -301,131 +301,236 @@
 <span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
 <span class="c1"># SOFTWARE.</span>
 
-<span class="c1"># Standard imports</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span>
-
 <span class="c1"># External imports</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 
 <span class="c1"># Local imports</span>
-<span class="kn">from</span> <span class="nn">.alos2</span> <span class="kn">import</span> <span class="n">ALOSDataset</span>
+<span class="kn">import</span> <span class="nn">torchcvnn.nn</span> <span class="k">as</span> <span class="nn">c_nn</span>
 
 
-<div class="viewcode-block" id="PolSFDataset">
-<a class="viewcode-back" href="../../../modules/datasets.html#torchcvnn.datasets.PolSFDataset">[docs]</a>
-<span class="k">class</span> <span class="nc">PolSFDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The Polarimetric SAR dataset with the labels provided by</span>
-<span class="sd">    https://ietr-lab.univ-rennes1.fr/polsarpro-bio/san-francisco/</span>
-
-<span class="sd">    We expect the data to be already downloaded and available on your drive.</span>
-
-<span class="sd">    Arguments:</span>
-<span class="sd">        root: the top root dir where the data are expected</span>
-<span class="sd">        transform : the transform applied the cropped image</span>
-<span class="sd">        patch_size: the dimensions of the patches to consider (rows, cols)</span>
-<span class="sd">        patch_stride: the shift between two consecutive patches, default:patch_size</span>
-
-<span class="sd">    Note:</span>
-<span class="sd">        An example usage :</span>
-
-<span class="sd">        .. code-block:: python</span>
-
-<span class="sd">            import torchcvnn</span>
-<span class="sd">            from torchcvnn.datasets import PolSFDataset</span>
-
-<span class="sd">            def transform_patches(patches):</span>
-<span class="sd">                # We keep all the patches and get the spectrum</span>
-<span class="sd">                # from it</span>
-<span class="sd">                # If you wish, you could filter out some polarizations</span>
-<span class="sd">                # PolSF provides the four HH, HV, VH, VV</span>
-<span class="sd">                patches = [np.abs(patchi) for _, patchi in patches.items()]</span>
-<span class="sd">                return np.stack(patches)</span>
-
-<span class="sd">            dataset = PolSFDataset(rootdir, patch_size=((512, 512)), transform=transform_patches</span>
-<span class="sd">            X, y = dataset[0]</span>
-
-<span class="sd">        Displayed below are example patches with patch sizes :math:`512 \times 512`</span>
-<span class="sd">        with the labels overlayed</span>
-
-<span class="sd">        .. figure:: ../assets/datasets/polsf.png</span>
-<span class="sd">           :alt: Patches from the PolSF dataset</span>
-<span class="sd">           :width: 100%</span>
-<span class="sd">           :align: center</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
+<div class="viewcode-block" id="vit_t">
+<a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_t">[docs]</a>
+<span class="k">def</span> <span class="nf">vit_t</span><span class="p">(</span>
+    <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class names</span>
+<span class="sd">    Builds a ViT tiny model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        patch_embedder: PatchEmbedder instance.</span>
+<span class="sd">        device: Device to use.</span>
+<span class="sd">        dtype: Data type to use.</span>
+
+<span class="sd">    The patch_embedder is responsible for computing the embedding of the patch</span>
+<span class="sd">    as well as adding the positional encoding if required.</span>
+
+<span class="sd">    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number</span>
+<span class="sd">    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;0 - unlabel&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;1 - Montain&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;2 - Water&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;3 - Vegetation&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;4 - High-Density Urban&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;5 - Low-Density Urban&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;6 - Developd&quot;</span><span class="p">,</span>
-    <span class="p">]</span>
+    <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+    <span class="n">num_layers</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">num_heads</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">hidden_dim</span> <span class="o">=</span> <span class="mi">192</span>
+    <span class="n">mlp_dim</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">192</span>
+    <span class="n">dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">attention_dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">norm_layer</span> <span class="o">=</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">RMSNorm</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">patch_size</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
-        <span class="n">patch_stride</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
+    <span class="k">return</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">ViT</span><span class="p">(</span>
+        <span class="n">patch_embedder</span><span class="p">,</span>
+        <span class="n">num_layers</span><span class="p">,</span>
+        <span class="n">num_heads</span><span class="p">,</span>
+        <span class="n">hidden_dim</span><span class="p">,</span>
+        <span class="n">mlp_dim</span><span class="p">,</span>
+        <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+        <span class="n">attention_dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+        <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">factory_kwargs</span>
+    <span class="p">)</span></div>
 
-        <span class="c1"># alos2_url = &quot;https://ietr-lab.univ-rennes1.fr/polsarpro-bio/san-francisco/dataset/SAN_FRANCISCO_ALOS2.zip&quot;</span>
-        <span class="c1"># labels_url = &quot;https://raw.githubusercontent.com/liuxuvip/PolSF/master/SF-ALOS2/SF-ALOS2-label2d.png&quot;</span>
 
-        <span class="n">crop_coordinates</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2832</span><span class="p">,</span> <span class="mi">736</span><span class="p">),</span> <span class="p">(</span><span class="mi">7888</span><span class="p">,</span> <span class="mi">3520</span><span class="p">))</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;VOL-ALOS2044980750-150324-HBQR1.1__A&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span> <span class="o">=</span> <span class="n">ALOSDataset</span><span class="p">(</span>
-            <span class="n">root</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">crop_coordinates</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">patch_stride</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;SF-ALOS2-label2d.png&quot;</span><span class="p">))[</span>
-            <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span>
-        <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># copy necessary as otherwise torch.from_numpy does not support</span>
-        <span class="c1"># negative stride</span>
 
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the total number of patches in the while image.</span>
+<div class="viewcode-block" id="vit_s">
+<a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_s">[docs]</a>
+<span class="k">def</span> <span class="nf">vit_s</span><span class="p">(</span>
+    <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Builds a ViT small model.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            the total number of patches in the dataset</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span><span class="p">)</span>
+<span class="sd">    Args:</span>
+<span class="sd">        patch_embedder: PatchEmbedder instance.</span>
+<span class="sd">        device: Device to use.</span>
+<span class="sd">        dtype: Data type to use.</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the indexes patch.</span>
+<span class="sd">    The patch_embedder is responsible for computing the embedding of the patch</span>
+<span class="sd">    as well as adding the positional encoding if required.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            idx (int): Index</span>
+<span class="sd">    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number</span>
+<span class="sd">    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            tuple: (patch, labels) where patch contains the 4 complex valued polarization HH, HV, VH, VV and labels contains the aligned semantic labels</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">alos_patch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+    <span class="n">num_layers</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">num_heads</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">hidden_dim</span> <span class="o">=</span> <span class="mi">384</span>
+    <span class="n">mlp_dim</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">384</span>
+    <span class="n">dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">attention_dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">norm_layer</span> <span class="o">=</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">RMSNorm</span>
 
-        <span class="n">row_stride</span><span class="p">,</span> <span class="n">col_stride</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span><span class="o">.</span><span class="n">patch_stride</span>
-        <span class="n">start_row</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span><span class="o">.</span><span class="n">nsamples_per_cols</span><span class="p">)</span> <span class="o">*</span> <span class="n">row_stride</span>
+    <span class="k">return</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">ViT</span><span class="p">(</span>
+        <span class="n">patch_embedder</span><span class="p">,</span>
+        <span class="n">num_layers</span><span class="p">,</span>
+        <span class="n">num_heads</span><span class="p">,</span>
+        <span class="n">hidden_dim</span><span class="p">,</span>
+        <span class="n">mlp_dim</span><span class="p">,</span>
+        <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+        <span class="n">attention_dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+        <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">factory_kwargs</span>
+    <span class="p">)</span></div>
 
-        <span class="n">start_col</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span><span class="o">.</span><span class="n">nsamples_per_cols</span><span class="p">)</span> <span class="o">*</span> <span class="n">col_stride</span>
-        <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span><span class="o">.</span><span class="n">patch_size</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span>
-            <span class="n">start_row</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_row</span> <span class="o">+</span> <span class="n">num_rows</span><span class="p">),</span> <span class="n">start_col</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_col</span> <span class="o">+</span> <span class="n">num_cols</span><span class="p">)</span>
-        <span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">alos_patch</span><span class="p">,</span> <span class="n">labels</span></div>
+
+<div class="viewcode-block" id="vit_b">
+<a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_b">[docs]</a>
+<span class="k">def</span> <span class="nf">vit_b</span><span class="p">(</span>
+    <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Builds a ViT base model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        patch_embedder: PatchEmbedder instance.</span>
+<span class="sd">        device: Device to use.</span>
+<span class="sd">        dtype: Data type to use.</span>
+
+<span class="sd">    The patch_embedder is responsible for computing the embedding of the patch</span>
+<span class="sd">    as well as adding the positional encoding if required.</span>
+
+<span class="sd">    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number</span>
+<span class="sd">    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+    <span class="n">num_layers</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">num_heads</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">hidden_dim</span> <span class="o">=</span> <span class="mi">768</span>
+    <span class="n">mlp_dim</span> <span class="o">=</span> <span class="mi">3072</span>
+    <span class="n">dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">attention_dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">norm_layer</span> <span class="o">=</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">RMSNorm</span>
+
+    <span class="k">return</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">ViT</span><span class="p">(</span>
+        <span class="n">patch_embedder</span><span class="p">,</span>
+        <span class="n">num_layers</span><span class="p">,</span>
+        <span class="n">num_heads</span><span class="p">,</span>
+        <span class="n">hidden_dim</span><span class="p">,</span>
+        <span class="n">mlp_dim</span><span class="p">,</span>
+        <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+        <span class="n">attention_dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+        <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">factory_kwargs</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="vit_l">
+<a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_l">[docs]</a>
+<span class="k">def</span> <span class="nf">vit_l</span><span class="p">(</span>
+    <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Builds a ViT large model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        patch_embedder: PatchEmbedder instance.</span>
+<span class="sd">        device: Device to use.</span>
+<span class="sd">        dtype: Data type to use.</span>
+
+<span class="sd">    The patch_embedder is responsible for computing the embedding of the patch</span>
+<span class="sd">    as well as adding the positional encoding if required.</span>
+
+<span class="sd">    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number</span>
+<span class="sd">    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+    <span class="n">num_layers</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">num_heads</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">hidden_dim</span> <span class="o">=</span> <span class="mi">1024</span>
+    <span class="n">mlp_dim</span> <span class="o">=</span> <span class="mi">4096</span>
+    <span class="n">dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">attention_dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">norm_layer</span> <span class="o">=</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">RMSNorm</span>
+
+    <span class="k">return</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">ViT</span><span class="p">(</span>
+        <span class="n">patch_embedder</span><span class="p">,</span>
+        <span class="n">num_layers</span><span class="p">,</span>
+        <span class="n">num_heads</span><span class="p">,</span>
+        <span class="n">hidden_dim</span><span class="p">,</span>
+        <span class="n">mlp_dim</span><span class="p">,</span>
+        <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+        <span class="n">attention_dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+        <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">factory_kwargs</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="vit_h">
+<a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_h">[docs]</a>
+<span class="k">def</span> <span class="nf">vit_h</span><span class="p">(</span>
+    <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Builds a ViT huge model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        patch_embedder: PatchEmbedder instance.</span>
+<span class="sd">        device: Device to use.</span>
+<span class="sd">        dtype: Data type to use.</span>
+
+<span class="sd">    The patch_embedder is responsible for computing the embedding of the patch</span>
+<span class="sd">    as well as adding the positional encoding if required.</span>
+
+<span class="sd">    It maps from :math:`(B, C, H, W)` to :math:`(B, hidden\_dim, N_h, N_w)` where :math:`N_h \times N_w` is the number</span>
+<span class="sd">    of patches in the image. The embedding dimension must match the expected hidden dimension of the transformer.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+    <span class="n">num_layers</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">num_heads</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">hidden_dim</span> <span class="o">=</span> <span class="mi">1280</span>
+    <span class="n">mlp_dim</span> <span class="o">=</span> <span class="mi">5120</span>
+    <span class="n">dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">attention_dropout</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">norm_layer</span> <span class="o">=</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">RMSNorm</span>
+
+    <span class="k">return</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">ViT</span><span class="p">(</span>
+        <span class="n">patch_embedder</span><span class="p">,</span>
+        <span class="n">num_layers</span><span class="p">,</span>
+        <span class="n">num_heads</span><span class="p">,</span>
+        <span class="n">hidden_dim</span><span class="p">,</span>
+        <span class="n">mlp_dim</span><span class="p">,</span>
+        <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+        <span class="n">attention_dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+        <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">factory_kwargs</span>
+    <span class="p">)</span></div>
 
 </pre></div>
         </article>

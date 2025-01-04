@@ -231,10 +231,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.Transformer.html">torchcvnn.nn.Transformer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.TransformerEncoderLayer.html">torchcvnn.nn.TransformerEncoderLayer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.TransformerDecoderLayer.html">torchcvnn.nn.TransformerDecoderLayer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.ViTLayer.html">torchcvnn.nn.ViTLayer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.ViT.html">torchcvnn.nn.ViT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.Dropout.html">torchcvnn.nn.Dropout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.Dropout2d.html">torchcvnn.nn.Dropout2d</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/models.html">torchcvnn.models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../modules/init.html">torchcvnn.nn.init</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -553,7 +556,9 @@
             <span class="n">covs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">running_var</span>
 
         <span class="c1"># Invert the covariance to scale</span>
-        <span class="n">invsqrt_covs</span> <span class="o">=</span> <span class="n">inv_sqrt_2x2</span><span class="p">(</span><span class="n">covs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span>  <span class="c1"># num_features, 2, 2</span>
+        <span class="n">invsqrt_covs</span> <span class="o">=</span> <span class="n">inv_sqrt_2x2</span><span class="p">(</span>
+            <span class="n">covs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">covs</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># num_features, 2, 2</span>
         <span class="c1"># Note: the xc_centered.transpose is to make</span>
         <span class="c1"># xc_centered from (C, BxHxW, 2) to (B, 2, BxHxW)</span>
         <span class="c1"># So that the batch matrix multiply works as expected</span>

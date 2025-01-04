@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="torchcvnn.nn.Mod" href="torchcvnn.nn.Mod.html" /><link rel="prev" title="torchcvnn.nn.CTanh" href="torchcvnn.nn.CTanh.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="torchcvnn.nn.Dropout" href="torchcvnn.nn.Dropout.html" /><link rel="prev" title="torchcvnn.nn.ViTLayer" href="torchcvnn.nn.ViTLayer.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>torchcvnn.nn.Cardioid - torchcvnn 0.7.0 documentation</title>
+        <title>torchcvnn.nn.ViT - torchcvnn 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -218,7 +218,7 @@
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.CPReLU.html">torchcvnn.nn.CPReLU</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.CSigmoid.html">torchcvnn.nn.CSigmoid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.CTanh.html">torchcvnn.nn.CTanh</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">torchcvnn.nn.Cardioid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.Cardioid.html">torchcvnn.nn.Cardioid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.Mod.html">torchcvnn.nn.Mod</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.modReLU.html">torchcvnn.nn.modReLU</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.zAbsReLU.html">torchcvnn.nn.zAbsReLU</a></li>
@@ -233,7 +233,7 @@
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.TransformerEncoderLayer.html">torchcvnn.nn.TransformerEncoderLayer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.TransformerDecoderLayer.html">torchcvnn.nn.TransformerDecoderLayer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.ViTLayer.html">torchcvnn.nn.ViTLayer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.ViT.html">torchcvnn.nn.ViT</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">torchcvnn.nn.ViT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.Dropout.html">torchcvnn.nn.Dropout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.Dropout2d.html">torchcvnn.nn.Dropout2d</a></li>
 </ul>
@@ -265,12 +265,12 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="https://github.com/jeremyfix/torchcvnn/blob/main/docs/source/modules/_autosummary/torchcvnn.nn.Cardioid.rst?plain=true" title="View this page">
+  <a class="muted-link" href="https://github.com/jeremyfix/torchcvnn/blob/main/docs/source/modules/_autosummary/torchcvnn.nn.ViT.rst?plain=true" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
 </div><div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/jeremyfix/torchcvnn/edit/main/docs/source/modules/_autosummary/torchcvnn.nn.Cardioid.rst" title="Edit this page">
+  <a class="muted-link" href="https://github.com/jeremyfix/torchcvnn/edit/main/docs/source/modules/_autosummary/torchcvnn.nn.ViT.rst" title="Edit this page">
     <svg><use href="#svg-pencil"></use></svg>
     <span class="visually-hidden">Edit this page</span>
   </a>
@@ -289,27 +289,63 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="torchcvnn-nn-cardioid">
-<h1>torchcvnn.nn.Cardioid<a class="headerlink" href="#torchcvnn-nn-cardioid" title="Link to this heading">¶</a></h1>
+          <section id="torchcvnn-nn-vit">
+<h1>torchcvnn.nn.ViT<a class="headerlink" href="#torchcvnn-nn-vit" title="Link to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="torchcvnn.nn.Cardioid">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.</span></span><span class="sig-name descname"><span class="pre">Cardioid</span></span><a class="reference internal" href="../../_modules/torchcvnn/nn/modules/activation.html#Cardioid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.Cardioid" title="Link to this definition">¶</a></dt>
-<dd><p>The cardioid activation function as proposed by Virtue et al. (2019) is given by :</p>
-<p><span class="math notranslate nohighlight">\(Cardioid(z) = \frac{1+\cos(\theta)}{2} z\)</span></p>
-<p>For real numbers, e.g. <span class="math notranslate nohighlight">\(\theta \in \{0, \pi\}\)</span>, it reduces to the ReLU :</p>
-<p><span class="math notranslate nohighlight">\(\forall r \in \mathbb{R}, \theta \in \{0, \pi\}, Cardioid(r e^{j \theta}) = ReLU(r) e^{j \theta} = ReLU(r)\)</span></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="torchcvnn.nn.Cardioid.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/nn/modules/activation.html#Cardioid.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.Cardioid.__init__" title="Link to this definition">¶</a></dt>
-<dd><p>Initialize internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dt class="sig sig-object py" id="torchcvnn.nn.ViT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.</span></span><span class="sig-name descname"><span class="pre">ViT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">patch_embedder:</span> <span class="pre">~torch.nn.modules.module.Module,</span> <span class="pre">num_layers:</span> <span class="pre">int,</span> <span class="pre">num_heads:</span> <span class="pre">int,</span> <span class="pre">hidden_dim:</span> <span class="pre">int,</span> <span class="pre">mlp_dim:</span> <span class="pre">int,</span> <span class="pre">dropout:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0,</span> <span class="pre">attention_dropout:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0,</span> <span class="pre">norm_layer:</span> <span class="pre">~typing.Callable[[...],</span> <span class="pre">~torch.nn.modules.module.Module]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torchcvnn.nn.modules.normalization.LayerNorm'&gt;,</span> <span class="pre">device:</span> <span class="pre">~torch.device</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">dtype:</span> <span class="pre">~torch.dtype</span> <span class="pre">=</span> <span class="pre">torch.complex64</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/nn/modules/vit.html#ViT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.ViT" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="torchcvnn.nn.ViT.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">patch_embedder:</span> <span class="pre">~torch.nn.modules.module.Module,</span> <span class="pre">num_layers:</span> <span class="pre">int,</span> <span class="pre">num_heads:</span> <span class="pre">int,</span> <span class="pre">hidden_dim:</span> <span class="pre">int,</span> <span class="pre">mlp_dim:</span> <span class="pre">int,</span> <span class="pre">dropout:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0,</span> <span class="pre">attention_dropout:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0,</span> <span class="pre">norm_layer:</span> <span class="pre">~typing.Callable[[...],</span> <span class="pre">~torch.nn.modules.module.Module]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torchcvnn.nn.modules.normalization.LayerNorm'&gt;,</span> <span class="pre">device:</span> <span class="pre">~torch.device</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">dtype:</span> <span class="pre">~torch.dtype</span> <span class="pre">=</span> <span class="pre">torch.complex64</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/nn/modules/vit.html#ViT.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.ViT.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Vision Transformer model. This implementation does not contain any head.</p>
+<p>For classification, you can for example compute a global average of the output embeddings :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">backbone</span> <span class="o">=</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">ViT</span><span class="p">(</span>
+    <span class="n">embedder</span><span class="p">,</span>
+    <span class="n">num_layers</span><span class="p">,</span>
+    <span class="n">num_heads</span><span class="p">,</span>
+    <span class="n">hidden_dim</span><span class="p">,</span>
+    <span class="n">mlp_dim</span><span class="p">,</span>
+    <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+    <span class="n">attention_dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+    <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># A Linear decoding head to project on the logits</span>
+<span class="n">head</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">),</span> <span class="n">c_nn</span><span class="o">.</span><span class="n">Mod</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">B</span> <span class="n">C</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">backbone</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># B, num_patches, hidden_dim</span>
+
+<span class="c1"># Global average pooling of the patches encoding</span>
+<span class="n">mean_features</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># B, hidden_dim</span>
+
+<span class="n">head</span><span class="p">(</span><span class="n">mean_features</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patch_embedder</strong> – PatchEmbedder instance.</p></li>
+<li><p><strong>num_layers</strong> – Number of layers in the transformer.</p></li>
+<li><p><strong>num_heads</strong> – Number of heads in the multi-head attention block.</p></li>
+<li><p><strong>hidden_dim</strong> – Hidden dimension of the transformer.</p></li>
+<li><p><strong>mlp_dim</strong> – Hidden dimension of the feed-forward network.</p></li>
+<li><p><strong>dropout</strong> – Dropout rate (default: 0.0).</p></li>
+<li><p><strong>attention_dropout</strong> – Dropout rate in the attention block (default: 0.0).</p></li>
+<li><p><strong>norm_layer</strong> – Normalization layer (default <a class="reference internal" href="torchcvnn.nn.LayerNorm.html#torchcvnn.nn.LayerNorm" title="torchcvnn.nn.LayerNorm"><code class="xref py py-class docutils literal notranslate"><span class="pre">LayerNorm</span></code></a>).</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <p class="rubric">Methods</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.nn.Cardioid.__init__" title="torchcvnn.nn.Cardioid.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
-<td><p>Initialize internal Module state, shared by both nn.Module and ScriptModule.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.nn.ViT.__init__" title="torchcvnn.nn.ViT.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(patch_embedder, num_layers, ...[, ...])</p></td>
+<td><p>Vision Transformer model.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_module</span></code>(name, module)</p></td>
 <td><p>Add a child module to the current module.</p></td>
@@ -347,8 +383,8 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>()</p></td>
 <td><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">float</span></code> datatype.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code>(z)</p></td>
-<td><p>Performs the forward pass.</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code>(x)</p></td>
+<td><p>Define the computation performed at every call.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_buffer</span></code>(target)</p></td>
 <td><p>Return the buffer given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throw an error.</p></td>
@@ -492,23 +528,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="torchcvnn.nn.Mod.html">
+          <a class="next-page" href="torchcvnn.nn.Dropout.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">torchcvnn.nn.Mod</div>
+                <div class="title">torchcvnn.nn.Dropout</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="torchcvnn.nn.CTanh.html">
+          <a class="prev-page" href="torchcvnn.nn.ViTLayer.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">torchcvnn.nn.CTanh</div>
+                <div class="title">torchcvnn.nn.ViTLayer</div>
                 
               </div>
             </a>
@@ -549,9 +585,9 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">torchcvnn.nn.Cardioid</a><ul>
-<li><a class="reference internal" href="#torchcvnn.nn.Cardioid"><code class="docutils literal notranslate"><span class="pre">Cardioid</span></code></a><ul>
-<li><a class="reference internal" href="#torchcvnn.nn.Cardioid.__init__"><code class="docutils literal notranslate"><span class="pre">Cardioid.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#">torchcvnn.nn.ViT</a><ul>
+<li><a class="reference internal" href="#torchcvnn.nn.ViT"><code class="docutils literal notranslate"><span class="pre">ViT</span></code></a><ul>
+<li><a class="reference internal" href="#torchcvnn.nn.ViT.__init__"><code class="docutils literal notranslate"><span class="pre">ViT.__init__()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -571,6 +607,5 @@
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

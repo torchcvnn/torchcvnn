@@ -1,0 +1,81 @@
+﻿torchcvnn.nn.ViTLayer
+=====================
+
+.. currentmodule:: torchcvnn.nn
+
+.. autoclass:: ViTLayer
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ViTLayer.__init__
+      ~ViTLayer.add_module
+      ~ViTLayer.apply
+      ~ViTLayer.bfloat16
+      ~ViTLayer.buffers
+      ~ViTLayer.children
+      ~ViTLayer.compile
+      ~ViTLayer.cpu
+      ~ViTLayer.cuda
+      ~ViTLayer.double
+      ~ViTLayer.eval
+      ~ViTLayer.extra_repr
+      ~ViTLayer.float
+      ~ViTLayer.forward
+      ~ViTLayer.get_buffer
+      ~ViTLayer.get_extra_state
+      ~ViTLayer.get_parameter
+      ~ViTLayer.get_submodule
+      ~ViTLayer.half
+      ~ViTLayer.ipu
+      ~ViTLayer.load_state_dict
+      ~ViTLayer.modules
+      ~ViTLayer.mtia
+      ~ViTLayer.named_buffers
+      ~ViTLayer.named_children
+      ~ViTLayer.named_modules
+      ~ViTLayer.named_parameters
+      ~ViTLayer.parameters
+      ~ViTLayer.register_backward_hook
+      ~ViTLayer.register_buffer
+      ~ViTLayer.register_forward_hook
+      ~ViTLayer.register_forward_pre_hook
+      ~ViTLayer.register_full_backward_hook
+      ~ViTLayer.register_full_backward_pre_hook
+      ~ViTLayer.register_load_state_dict_post_hook
+      ~ViTLayer.register_load_state_dict_pre_hook
+      ~ViTLayer.register_module
+      ~ViTLayer.register_parameter
+      ~ViTLayer.register_state_dict_post_hook
+      ~ViTLayer.register_state_dict_pre_hook
+      ~ViTLayer.requires_grad_
+      ~ViTLayer.set_extra_state
+      ~ViTLayer.set_submodule
+      ~ViTLayer.share_memory
+      ~ViTLayer.state_dict
+      ~ViTLayer.to
+      ~ViTLayer.to_empty
+      ~ViTLayer.train
+      ~ViTLayer.type
+      ~ViTLayer.xpu
+      ~ViTLayer.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ViTLayer.T_destination
+      ~ViTLayer.call_super_init
+      ~ViTLayer.dump_patches
+      ~ViTLayer.training
+   
+   

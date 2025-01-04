@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>torchcvnn.nn.modules.dropout - torchcvnn 0.7.0 documentation</title>
+        <title>torchcvnn.nn.modules.vit - torchcvnn 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -278,10 +278,10 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for torchcvnn.nn.modules.dropout</h1><div class="highlight"><pre>
+          <h1>Source code for torchcvnn.nn.modules.vit</h1><div class="highlight"><pre>
 <span></span><span class="c1"># MIT License</span>
 
-<span class="c1"># Copyright (c) 2023 Jérémie Levi, Victor Dhédin, Jeremy Fix</span>
+<span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
 <span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
@@ -302,81 +302,191 @@
 <span class="c1"># SOFTWARE.</span>
 
 <span class="c1"># Standard imports</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
 
 <span class="c1"># External imports</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">from</span> <span class="nn">torch.nn.common_types</span> <span class="kn">import</span> <span class="n">_size_2_t</span>
+
+<span class="c1"># Local imports</span>
+<span class="kn">from</span> <span class="nn">.normalization</span> <span class="kn">import</span> <span class="n">LayerNorm</span>
+<span class="kn">from</span> <span class="nn">.activation</span> <span class="kn">import</span> <span class="n">modReLU</span><span class="p">,</span> <span class="n">MultiheadAttention</span>
+<span class="kn">from</span> <span class="nn">.dropout</span> <span class="kn">import</span> <span class="n">Dropout</span>
 
 
-<div class="viewcode-block" id="Dropout">
-<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Dropout.html#torchcvnn.nn.Dropout">[docs]</a>
-<span class="k">class</span> <span class="nc">Dropout</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Applies dropout to zero out values of the inputs</span>
+<div class="viewcode-block" id="ViTLayer">
+<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.ViTLayer.html#torchcvnn.nn.ViTLayer">[docs]</a>
+<span class="k">class</span> <span class="nc">ViTLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 
-<span class="sd">    During training, randomly zeroes some of the elements of the input tensor</span>
-<span class="sd">    with probability :math:`p` using samples from a Bernouilli distribution. Each</span>
-<span class="sd">    channel will be zeroed out independently on every forward call.</span>
+<div class="viewcode-block" id="ViTLayer.__init__">
+<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.ViTLayer.html#torchcvnn.nn.ViTLayer.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">mlp_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">attention_dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">norm_layer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="n">LayerNorm</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The ViT layer cascades a multi-head attention block with a feed-forward network.</span>
 
-<span class="sd">    Furthermore, the outputs are scaled by a factor of :math:`\frac{1}{1-p}` during</span>
-<span class="sd">    training. This means that during evaluation the module simply computes an</span>
-<span class="sd">    identity function.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            num_heads: Number of heads in the multi-head attention block.</span>
+<span class="sd">            hidden_dim: Hidden dimension of the transformer.</span>
+<span class="sd">            mlp_dim: Hidden dimension of the feed-forward network.</span>
+<span class="sd">            dropout: Dropout rate (default: 0.0).</span>
+<span class="sd">            attention_dropout: Dropout rate in the attention block (default: 0.0).</span>
+<span class="sd">            norm_layer: Normalization layer (default :py:class:`LayerNorm`).</span>
 
-<span class="sd">    Note:</span>
-<span class="sd">        As for now, with torch 2.1.0 :external:py:class:`torch.nn.Dropout` cannot be applied on</span>
-<span class="sd">        complex valued tensors. However, our implementation relies on the torch</span>
-<span class="sd">        implementation by dropout out a tensor of ones used as a mask on the</span>
-<span class="sd">        input.</span>
+<span class="sd">        .. math::</span>
 
-<span class="sd">    Arguments:</span>
-<span class="sd">        p: probability of an element to be zeroed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">            x &amp; = x + \\text{attn}(\\text{norm1}(x))\\\\</span>
+<span class="sd">            x &amp; = x + \\text{ffn}(\\text{norm2}(x))</span>
 
-<div class="viewcode-block" id="Dropout.__init__">
-<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Dropout.html#torchcvnn.nn.Dropout.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span></div>
+<span class="sd">        The FFN block is a two-layer MLP with a modReLU activation function.</span>
 
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ViTLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">training</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">mask</span> <span class="o">*</span> <span class="n">z</span></div>
+        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
 
-
-
-<div class="viewcode-block" id="Dropout2d">
-<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Dropout2d.html#torchcvnn.nn.Dropout2d">[docs]</a>
-<span class="k">class</span> <span class="nc">Dropout2d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Applies dropout to zero out complete channels</span>
-
-<span class="sd">    Note:</span>
-<span class="sd">        As for now, with torch 2.1.0 :external:py:class:`torch.nn.Dropout2d` cannot be applied on</span>
-<span class="sd">        complex valued tensors. However, our implementation relies on the torch</span>
-<span class="sd">        implementation by dropout out a tensor of ones used as a mask on the</span>
-<span class="sd">        input.</span>
-
-<span class="sd">    Arguments:</span>
-<span class="sd">        p: probability of an element to be zeroed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="Dropout2d.__init__">
-<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Dropout2d.html#torchcvnn.nn.Dropout2d.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="n">MultiheadAttention</span><span class="p">(</span>
+            <span class="n">embed_dim</span><span class="o">=</span><span class="n">hidden_dim</span><span class="p">,</span>
+            <span class="n">dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+            <span class="n">num_heads</span><span class="o">=</span><span class="n">num_heads</span><span class="p">,</span>
+            <span class="n">batch_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">factory_kwargs</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ffn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">mlp_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">),</span>
+            <span class="n">norm_layer</span><span class="p">(</span><span class="n">mlp_dim</span><span class="p">),</span>
+            <span class="n">modReLU</span><span class="p">(),</span>
+            <span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">mlp_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">),</span>
+            <span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">),</span>
+        <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">dropout2d</span><span class="p">(</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">training</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">mask</span> <span class="o">*</span> <span class="n">z</span></div>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs the forward pass through the layer using pre-normalization.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: Input tensor of shape (B, seq_len, hidden_dim)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">norm_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attn</span><span class="p">(</span><span class="n">norm_x</span><span class="p">,</span> <span class="n">norm_x</span><span class="p">,</span> <span class="n">norm_x</span><span class="p">,</span> <span class="n">need_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ffn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">x</span></div>
+
+
+
+<div class="viewcode-block" id="ViT">
+<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.ViT.html#torchcvnn.nn.ViT">[docs]</a>
+<span class="k">class</span> <span class="nc">ViT</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ViT.__init__">
+<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.ViT.html#torchcvnn.nn.ViT.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">mlp_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">attention_dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">norm_layer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="n">LayerNorm</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Vision Transformer model. This implementation does not contain any head.</span>
+
+<span class="sd">        For classification, you can for example compute a global average of the output embeddings :</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            backbone = c_nn.ViT(</span>
+<span class="sd">                embedder,</span>
+<span class="sd">                num_layers,</span>
+<span class="sd">                num_heads,</span>
+<span class="sd">                hidden_dim,</span>
+<span class="sd">                mlp_dim,</span>
+<span class="sd">                dropout=dropout,</span>
+<span class="sd">                attention_dropout=attention_dropout,</span>
+<span class="sd">                norm_layer=norm_layer,</span>
+<span class="sd">            )</span>
+
+<span class="sd">            # A Linear decoding head to project on the logits</span>
+<span class="sd">            head = nn.Sequential(</span>
+<span class="sd">                nn.Linear(hidden_dim, 10, dtype=torch.complex64), c_nn.Mod()</span>
+<span class="sd">            )</span>
+
+<span class="sd">            x = torch.randn(B C, H, W)</span>
+<span class="sd">            features = backbone(x)  # B, num_patches, hidden_dim</span>
+
+<span class="sd">            # Global average pooling of the patches encoding</span>
+<span class="sd">            mean_features = features.mean(dim=1) # B, hidden_dim</span>
+
+<span class="sd">            head(mean_features)</span>
+
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            patch_embedder: PatchEmbedder instance.</span>
+<span class="sd">            num_layers: Number of layers in the transformer.</span>
+<span class="sd">            num_heads: Number of heads in the multi-head attention block.</span>
+<span class="sd">            hidden_dim: Hidden dimension of the transformer.</span>
+<span class="sd">            mlp_dim: Hidden dimension of the feed-forward network.</span>
+<span class="sd">            dropout: Dropout rate (default: 0.0).</span>
+<span class="sd">            attention_dropout: Dropout rate in the attention block (default: 0.0).</span>
+<span class="sd">            norm_layer: Normalization layer (default :py:class:`LayerNorm`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ViT</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">patch_embedder</span> <span class="o">=</span> <span class="n">patch_embedder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">([])</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ViTLayer</span><span class="p">(</span>
+                    <span class="n">num_heads</span><span class="o">=</span><span class="n">num_heads</span><span class="p">,</span>
+                    <span class="n">hidden_dim</span><span class="o">=</span><span class="n">hidden_dim</span><span class="p">,</span>
+                    <span class="n">mlp_dim</span><span class="o">=</span><span class="n">mlp_dim</span><span class="p">,</span>
+                    <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+                    <span class="n">attention_dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+                    <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">factory_kwargs</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># x : (B, C, H, W)</span>
+        <span class="n">embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_embedder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># (B, embed_dim, num_patch_H, num_patch_W)</span>
+
+        <span class="c1"># Transpose to (B, &quot;seq_len&quot;=num_patches, embed_dim)</span>
+        <span class="n">embedding</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">embedding</span><span class="p">))</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="c1"># Transpose to batch_first</span>
+        <span class="k">return</span> <span class="n">out</span></div>
 
 </pre></div>
         </article>
