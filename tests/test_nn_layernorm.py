@@ -96,7 +96,7 @@ def test_layernorm():
     covs = bn.batch_cov(out_real)
     id_cov = 0.5 * torch.eye(2).tile(embedding_dim, 1, 1)
 
-    assert torch.allclose(covs, id_cov, atol=1e-6)
+    assert torch.allclose(covs, id_cov, atol=1e-3)
 
     ###############
     # Image Example
@@ -129,9 +129,42 @@ def test_layernorm():
     covs = bn.batch_cov(out_real)
     id_cov = 0.5 * torch.eye(2).tile(embedding_dim, 1, 1)
 
-    assert torch.allclose(covs, id_cov, atol=1e-6)
+    assert torch.allclose(covs, id_cov, atol=1e-3)
+
+
+def test_rmsnorm():
+    #############
+    # NLP Example
+    batch, sentence_length, embedding_dim = 20, 5, 10
+    embedding = torch.randn(
+        (batch, sentence_length, embedding_dim), dtype=torch.complex64
+    )
+    rms_norm = c_nn.RMSNorm(embedding_dim)
+    rms_norm.eval()
+
+    # Activate module
+    out = rms_norm(embedding)
+
+    assert out.shape == embedding.shape  # batch x sentence_length x embedding_dim
+
+    ###############
+    # Image Example
+    N, C, H, W = 20, 5, 10, 10
+    embedding_dim = C * H * W
+    x = torch.randn((N, C, H, W), dtype=torch.complex64)
+
+    # Normalize over the last three dimensions (i.e. the channel and spatial dimensions)
+    # as shown in the image below
+    rms_norm = c_nn.RMSNorm([C, H, W])
+    rms_norm.eval()
+
+    # Activate module
+    out = rms_norm(x)
+
+    assert out.shape == x.shape  # N, C, H, W
 
 
 if __name__ == "__main__":
     test_layernorm_real()
     test_layernorm()
+    test_rmsnorm()

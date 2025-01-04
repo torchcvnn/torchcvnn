@@ -7,7 +7,9 @@ dependencies = [
 	"numpy",
 	"requests >= 2.31.0",
 	"tqdm >= 4.66.1",
-    "pillow"
+    "pillow",
+    "scipy>=1.14.1",
+    "h5py>=3.12.1"
 ]
 requires-python = ">= 3.8"
 authors = [

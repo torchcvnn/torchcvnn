@@ -31,18 +31,18 @@ from torch.nn.common_types import _size_2_t
 
 class Dropout(nn.Module):
     r"""
-    As from the upstream pytorch :
+    Applies dropout to zero out values of the inputs
 
     During training, randomly zeroes some of the elements of the input tensor
-    with probability `p` using samples from a Bernouilli distribution. Each
+    with probability :math:`p` using samples from a Bernouilli distribution. Each
     channel will be zeroed out independently on every forward call.
 
-    Furthermore, the outputs are scaled by a factor of $\frac{1}{1-p}$ during
+    Furthermore, the outputs are scaled by a factor of :math:`\frac{1}{1-p}` during
     training. This means that during evaluation the module simply computes an
     identity function.
 
     Note:
-        As for now, with torch 2.1.0 torch.nn.Dropout cannot be applied on
+        As for now, with torch 2.1.0 :external:py:class:`torch.nn.Dropout` cannot be applied on
         complex valued tensors. However, our implementation relies on the torch
         implementation by dropout out a tensor of ones used as a mask on the
         input.
@@ -64,10 +64,10 @@ class Dropout(nn.Module):
 
 class Dropout2d(nn.Module):
     r"""
-    As from the upstream pytorch : applies dropout to zero out complete channels
+    Applies dropout to zero out complete channels
 
     Note:
-        As for now, with torch 2.1.0 torch.nn.Dropout2d cannot be applied on
+        As for now, with torch 2.1.0 :external:py:class:`torch.nn.Dropout2d` cannot be applied on
         complex valued tensors. However, our implementation relies on the torch
         implementation by dropout out a tensor of ones used as a mask on the
         input.

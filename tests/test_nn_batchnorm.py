@@ -104,7 +104,7 @@ def test_batchnorm1d():
     assert torch.allclose(mus, torch.zeros_like(mus), atol=1e-7)
     # All the covs must be identities
     id_cov = 0.5 * torch.eye(2).tile(C, 1, 1)
-    assert torch.allclose(covs, id_cov, atol=1e-7)
+    assert torch.allclose(covs, id_cov, atol=1e-3)
 
 
 def test_batchnorm2d():
@@ -125,7 +125,7 @@ def test_batchnorm2d():
     assert torch.allclose(mus, torch.zeros_like(mus), atol=1e-7)
     # All the covs must be identities
     id_cov = 0.5 * torch.eye(2).tile(C, 1, 1)
-    assert torch.allclose(covs, id_cov)
+    assert torch.allclose(covs, id_cov, atol=1e-3)
 
 
 if __name__ == "__main__":

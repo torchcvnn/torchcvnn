@@ -8,10 +8,15 @@ from typing import Any, Dict
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+
 project = "torchcvnn"
 copyright = "2024, Jeremy Fix"
 author = "Jeremy Fix"
-release = "0.5.0"
+
+# Get the version of the package from the __init__.py file
+import torchcvnn
+
+release = torchcvnn.__version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

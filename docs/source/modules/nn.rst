@@ -43,6 +43,7 @@ These activation functions apply the same function independently to both real an
    CCELU
    CELU
    CGELU
+   CReLU
    CPReLU
    CSigmoid
    CTanh
@@ -65,6 +66,14 @@ The Type B activation functions take into account both the magnitude and phase o
     zReLU
 
 
+Attention
+^^^^^^^^^
+
+.. autosummary::
+   :toctree: _autosummary
+
+   MultiheadAttention
+
 Normalization layers
 --------------------
 
@@ -74,6 +83,33 @@ Normalization layers
    BatchNorm2d
    BatchNorm1d
    LayerNorm
+   RMSNorm
+
+Transformer layers
+------------------
+
+.. autosummary::
+   :toctree: _autosummary
+
+   Transformer
+   TransformerEncoderLayer
+   TransformerDecoderLayer
+
+Vision Transformer
+------------------
+
+.. autosummary::
+   :toctree: _autosummary
+
+   ViTLayer
+   ViT
 
 Dropout layers
 --------------
+
+
+.. autosummary::
+   :toctree: _autosummary
+
+   Dropout
+   Dropout2d
