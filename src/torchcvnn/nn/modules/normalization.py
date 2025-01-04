@@ -122,7 +122,9 @@ class LayerNorm(nn.Module):
         covs = bn.batch_cov(z_centered, centered=True)
 
         # Invert the covariance to scale
-        invsqrt_covs = bn.inv_sqrt_2x2(covs + self.eps)  # combined_dimensions, 2, 2
+        invsqrt_covs = bn.inv_sqrt_2x2(
+            covs + self.eps * torch.eye(2, device=covs.device)
+        )  # combined_dimensions, 2, 2
         # Note: the z_centered.transpose is to make
         # z_centered from (combined_dimensions, num_samples, 2) to (combined_dimensions, 2, num_samples)
         # So that the batch matrix multiply works as expected
@@ -209,7 +211,9 @@ class RMSNorm(nn.Module):
         covs = bn.batch_cov(z_ravel, centered=True)
 
         # Invert the covariance to scale
-        invsqrt_covs = bn.inv_sqrt_2x2(covs + self.eps)  # combined_dimensions, 2, 2
+        invsqrt_covs = bn.inv_sqrt_2x2(
+            covs + self.eps * torch.eye(2, device=covs.device)
+        )  # combined_dimensions, 2, 2
         # Note: the z_centered.transpose is to make
         # z_centered from (combined_dimensions, num_samples, 2) to (combined_dimensions, 2, num_samples)
         # So that the batch matrix multiply works as expected

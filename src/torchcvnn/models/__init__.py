@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2023 Jérémie Levi, Victor Dhédin, Jeremy Fix
+# Copyright (c) 2025 Jeremy Fix
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,34 +20,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .pooling import MaxPool2d, AvgPool2d
-from .dropout import Dropout, Dropout2d
-from .conv import ConvTranspose2d
-from .batchnorm import BatchNorm1d, BatchNorm2d
-from .upsampling import Upsample
-from .normalization import LayerNorm, RMSNorm
-from .transformer import (
-    TransformerEncoder,
-    TransformerEncoderLayer,
-    TransformerDecoderLayer,
-    Transformer,
-)
-from .vit import ViTLayer, ViT
-from . import initialization as init
-from .loss import ComplexMSELoss
-from .activation import (
-    CReLU,
-    CPReLU,
-    CELU,
-    CCELU,
-    CGELU,
-    CSigmoid,
-    CTanh,
-    zReLU,
-    zAbsReLU,
-    zLeakyReLU,
-    Mod,
-    modReLU,
-    Cardioid,
-    MultiheadAttention,
-)
+from .vision_transformer import vit_t, vit_s, vit_b, vit_l, vit_h

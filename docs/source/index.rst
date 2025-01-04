@@ -43,6 +43,7 @@ Pytorch based :
 
    modules/datasets
    modules/nn
+   modules/models
    modules/init
 
 .. toctree::

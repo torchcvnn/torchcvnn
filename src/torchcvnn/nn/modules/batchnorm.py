@@ -275,7 +275,9 @@ class _BatchNormNd(nn.Module):
             covs = self.running_var
 
         # Invert the covariance to scale
-        invsqrt_covs = inv_sqrt_2x2(covs + self.eps)  # num_features, 2, 2
+        invsqrt_covs = inv_sqrt_2x2(
+            covs + self.eps * torch.eye(2, device=covs.device)
+        )  # num_features, 2, 2
         # Note: the xc_centered.transpose is to make
         # xc_centered from (C, BxHxW, 2) to (B, 2, BxHxW)
         # So that the batch matrix multiply works as expected
