@@ -1,6 +1,6 @@
 # Complex-Valued Neural Networks (CVNN) - Pytorch
 
-[![docs](https://github.com/jeremyfix/torchcvnn/actions/workflows/doc.yml/badge.svg)](https://jeremyfix.github.io/torchcvnn/) ![pytest](https://github.com/jeremyfix/torchcvnn/actions/workflows/test.yml/badge.svg) [![PyPI version](https://badge.fury.io/py/torchcvnn.svg)](https://badge.fury.io/py/torchcvnn)
+[![docs](https://github.com/torchcvnn/torchcvnn/actions/workflows/doc.yml/badge.svg)](https://torchcvnn.github.io/torchcvnn/) ![pytest](https://github.com/torchcvnn/torchcvnn/actions/workflows/test.yml/badge.svg) [![PyPI version](https://badge.fury.io/py/torchcvnn.svg)](https://badge.fury.io/py/torchcvnn)
 
 This is a library that uses [pytorch](https://pytorch.org) as a back-end for complex valued neural networks.
 
@@ -19,7 +19,7 @@ python -m pip install torchcvnn
 To install when developping the library, within a virtual envrionment, you can :
 
 ```
-git clone git@github.com:jeremyfix/torchcvnn.git
+git clone git@github.com:torchcvnn/torchcvnn.git
 python3 -m venv torchcvnn-venv
 source torchcvnn-venv/bin/activate
 python -m pip install -e torchcvnn
