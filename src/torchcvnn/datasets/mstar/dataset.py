@@ -149,7 +149,6 @@ def gather_mstar_datafiles(rootdir: pathlib.Path, target_name_depth: int = 1) ->
 
         logging.debug(f"Successfully parsed {filename} as a {target_name} sample.")
         data_files[target_name].append(filename)
-
     return data_files
 
 
@@ -165,6 +164,7 @@ class MSTARTargets(Dataset):
     This dataset object expects all the datasets to be unpacked in the same directory. We can parse the following :
 
     - MSTAR_PUBLIC_T_72_VARIANTS_CD1 : https://www.sdms.afrl.af.mil/index.php?collection=mstar&page=variants
+    - MSTAR_PUBLIC_T_72_VARIANTS_CD2 : https://www.sdms.afrl.af.mil/index.php?collection=mstar&page=variants
     - MSTAR_PUBLIC_MIXED_TARGETS_CD1 : https://www.sdms.afrl.af.mil/index.php?collection=mstar&page=mixed
     - MSTAR_PUBLIC_MIXED_TARGETS_CD2 : https://www.sdms.afrl.af.mil/index.php?collection=mstar&page=mixed
     - MSTAR_PUBLIC_TARGETS_CHIPS_T72_BMP2_BTR70_SLICY :
@@ -214,6 +214,7 @@ class MSTARTargets(Dataset):
         # with respect to a datafile
         sub_datasets = {
             "MSTAR_PUBLIC_T_72_VARIANTS_CD1": 2,
+            "MSTAR_PUBLIC_T_72_VARIANTS_CD2": 2,
             "MSTAR_PUBLIC_MIXED_TARGETS_CD1": 2,
             "MSTAR_PUBLIC_MIXED_TARGETS_CD2": 2,
             "MSTAR_PUBLIC_TARGETS_CHIPS_T72_BMP2_BTR70_SLICY": 3,
