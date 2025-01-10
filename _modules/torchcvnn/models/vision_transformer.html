@@ -6,7 +6,7 @@
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>torchcvnn.models.vision_transformer - torchcvnn 0.8.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
@@ -302,16 +302,16 @@
 <span class="c1"># SOFTWARE.</span>
 
 <span class="c1"># External imports</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 
 <span class="c1"># Local imports</span>
-<span class="kn">import</span> <span class="nn">torchcvnn.nn</span> <span class="k">as</span> <span class="nn">c_nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torchcvnn.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">c_nn</span>
 
 
 <div class="viewcode-block" id="vit_t">
 <a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_t">[docs]</a>
-<span class="k">def</span> <span class="nf">vit_t</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vit_t</span><span class="p">(</span>
     <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
@@ -356,7 +356,7 @@
 
 <div class="viewcode-block" id="vit_s">
 <a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_s">[docs]</a>
-<span class="k">def</span> <span class="nf">vit_s</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vit_s</span><span class="p">(</span>
     <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
@@ -401,7 +401,7 @@
 
 <div class="viewcode-block" id="vit_b">
 <a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_b">[docs]</a>
-<span class="k">def</span> <span class="nf">vit_b</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vit_b</span><span class="p">(</span>
     <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
@@ -446,7 +446,7 @@
 
 <div class="viewcode-block" id="vit_l">
 <a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_l">[docs]</a>
-<span class="k">def</span> <span class="nf">vit_l</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vit_l</span><span class="p">(</span>
     <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
@@ -491,7 +491,7 @@
 
 <div class="viewcode-block" id="vit_h">
 <a class="viewcode-back" href="../../../modules/models.html#torchcvnn.models.vit_h">[docs]</a>
-<span class="k">def</span> <span class="nf">vit_h</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vit_h</span><span class="p">(</span>
     <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>

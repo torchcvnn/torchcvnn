@@ -6,7 +6,7 @@
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>torchcvnn.datasets.alos2.sar_image - torchcvnn 0.8.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?v=302659d7" />
@@ -302,13 +302,13 @@
 <span class="c1"># SOFTWARE.</span>
 
 <span class="c1"># Standard imports</span>
-<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
 
 <span class="c1"># External imports</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="c1"># Local imports</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">parse_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_utils</span>
 
 <span class="c1"># Format described p84 of</span>
 <span class="c1"># https://www.eorc.jaxa.jp/ALOS/en/alos-2/pdf/product_format_description/PALSAR-2_xx_Format_CEOS_E_g.pdf</span>
@@ -368,7 +368,7 @@
 <span class="n">data_record_header_length</span> <span class="o">=</span> <span class="mi">544</span>
 
 
-<span class="k">def</span> <span class="nf">parse_image_data</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">base_offset</span><span class="p">,</span> <span class="n">number_records</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_image_data</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">base_offset</span><span class="p">,</span> <span class="n">number_records</span><span class="p">):</span>
     <span class="c1"># For some reasons, the following which I expect to be faster</span>
     <span class="c1"># is taking much more memory than the line by line approach below</span>
     <span class="c1"># print(&quot;Parsing image data&quot;)</span>
@@ -419,12 +419,12 @@
 
 <div class="viewcode-block" id="SARImage">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.alos2.SARImage">[docs]</a>
-<span class="k">class</span> <span class="nc">SARImage</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SARImage</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processing of the SAR Image</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_records</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span>
@@ -451,14 +451,14 @@
             <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">num_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">num_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">[</span><span class="s2">&quot;number_data_records&quot;</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">num_cols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">num_cols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_records</span><span class="p">[</span><span class="s2">&quot;count_data_pixels&quot;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">read_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_line</span><span class="p">,</span> <span class="n">num_lines</span><span class="p">,</span> <span class="n">start_col</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_line</span><span class="p">,</span> <span class="n">num_lines</span><span class="p">,</span> <span class="n">start_col</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">):</span>
         <span class="n">number_of_pixels_per_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_records</span><span class="p">[</span><span class="s2">&quot;count_data_pixels&quot;</span><span class="p">]</span>
         <span class="n">base_offset</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">descriptor_record_length</span>
@@ -496,7 +496,7 @@
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cplx_datas</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">descriptor_txt</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">data_txt</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_records</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>

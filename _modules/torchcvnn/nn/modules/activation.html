@@ -6,7 +6,7 @@
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>torchcvnn.nn.modules.activation - torchcvnn 0.8.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?v=302659d7" />
@@ -302,19 +302,19 @@
 <span class="c1"># SOFTWARE.</span>
 
 <span class="c1"># Standard imports</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="c1"># External imports</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
 
 <span class="c1"># Local imports</span>
-<span class="kn">from</span> <span class="nn">torchcvnn.nn</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">c_F</span>
-<span class="kn">from</span> <span class="nn">.initialization</span> <span class="kn">import</span> <span class="n">complex_xavier_uniform_</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchcvnn.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">c_F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.initialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">complex_xavier_uniform_</span>
 
 
-<span class="k">class</span> <span class="nc">IndependentRealImag</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IndependentRealImag</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generic module to apply a real valued activation function independently</span>
 <span class="sd">    on both the real and imaginary part</span>
@@ -323,12 +323,12 @@
 <span class="sd">        fact: A nn.Module name of a real valued activation function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fact</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fact</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">act_real</span> <span class="o">=</span> <span class="n">fact</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">act_imag</span> <span class="o">=</span> <span class="n">fact</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Performs the forward pass</span>
 
@@ -340,7 +340,7 @@
 
 <div class="viewcode-block" id="CReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CReLU.html#torchcvnn.nn.CReLU">[docs]</a>
-<span class="k">class</span> <span class="nc">CReLU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CReLU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a ReLU independently on both the real and imaginary parts</span>
 
@@ -353,7 +353,7 @@
 
 <div class="viewcode-block" id="CReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CReLU.html#torchcvnn.nn.CReLU.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">)</span></div>
 </div>
 
@@ -361,7 +361,7 @@
 
 <div class="viewcode-block" id="CPReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CPReLU.html#torchcvnn.nn.CPReLU">[docs]</a>
-<span class="k">class</span> <span class="nc">CPReLU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CPReLU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a PReLU independently on both the real and imaginary parts</span>
 
@@ -370,7 +370,7 @@
 
 <div class="viewcode-block" id="CPReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CPReLU.html#torchcvnn.nn.CPReLU.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">PReLU</span><span class="p">)</span></div>
 </div>
 
@@ -378,7 +378,7 @@
 
 <div class="viewcode-block" id="CELU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CELU.html#torchcvnn.nn.CELU">[docs]</a>
-<span class="k">class</span> <span class="nc">CELU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CELU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a ELU independently on both the real and imaginary parts</span>
 
@@ -390,7 +390,7 @@
 
 <div class="viewcode-block" id="CELU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CELU.html#torchcvnn.nn.CELU.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">ELU</span><span class="p">)</span></div>
 </div>
 
@@ -398,7 +398,7 @@
 
 <div class="viewcode-block" id="CCELU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CCELU.html#torchcvnn.nn.CCELU">[docs]</a>
-<span class="k">class</span> <span class="nc">CCELU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CCELU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a CELU independently on both the real and imaginary parts</span>
 
@@ -407,7 +407,7 @@
 
 <div class="viewcode-block" id="CCELU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CCELU.html#torchcvnn.nn.CCELU.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">CELU</span><span class="p">)</span></div>
 </div>
 
@@ -415,7 +415,7 @@
 
 <div class="viewcode-block" id="CGELU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CGELU.html#torchcvnn.nn.CGELU">[docs]</a>
-<span class="k">class</span> <span class="nc">CGELU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CGELU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a GELU independently on both the real and imaginary parts</span>
 
@@ -424,7 +424,7 @@
 
 <div class="viewcode-block" id="CGELU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CGELU.html#torchcvnn.nn.CGELU.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">)</span></div>
 </div>
 
@@ -432,7 +432,7 @@
 
 <div class="viewcode-block" id="CSigmoid">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CSigmoid.html#torchcvnn.nn.CSigmoid">[docs]</a>
-<span class="k">class</span> <span class="nc">CSigmoid</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CSigmoid</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a Sigmoid independently on both the real and imaginary parts</span>
 
@@ -445,7 +445,7 @@
 
 <div class="viewcode-block" id="CSigmoid.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CSigmoid.html#torchcvnn.nn.CSigmoid.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">)</span></div>
 </div>
 
@@ -453,7 +453,7 @@
 
 <div class="viewcode-block" id="CTanh">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CTanh.html#torchcvnn.nn.CTanh">[docs]</a>
-<span class="k">class</span> <span class="nc">CTanh</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CTanh</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a Tanh independently on both the real and imaginary parts</span>
 
@@ -464,7 +464,7 @@
 
 <div class="viewcode-block" id="CTanh.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CTanh.html#torchcvnn.nn.CTanh.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">)</span></div>
 </div>
 
@@ -472,7 +472,7 @@
 
 <div class="viewcode-block" id="zReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zReLU.html#torchcvnn.nn.zReLU">[docs]</a>
-<span class="k">class</span> <span class="nc">zReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">zReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a zReLU</span>
 
@@ -484,11 +484,11 @@
 
 <div class="viewcode-block" id="zReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zReLU.html#torchcvnn.nn.zReLU.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Performs the forward pass.</span>
 
@@ -503,7 +503,7 @@
 
 <div class="viewcode-block" id="zAbsReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zAbsReLU.html#torchcvnn.nn.zAbsReLU">[docs]</a>
-<span class="k">class</span> <span class="nc">zAbsReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">zAbsReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a zAbsReLU</span>
 
@@ -515,14 +515,14 @@
 
 <div class="viewcode-block" id="zAbsReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zAbsReLU.html#torchcvnn.nn.zAbsReLU.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Performs the forward pass.</span>
 
@@ -536,7 +536,7 @@
 
 <div class="viewcode-block" id="zLeakyReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zLeakyReLU.html#torchcvnn.nn.zLeakyReLU">[docs]</a>
-<span class="k">class</span> <span class="nc">zLeakyReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">zLeakyReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a zLeakyReLU</span>
 
@@ -546,14 +546,14 @@
 
 <div class="viewcode-block" id="zLeakyReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zLeakyReLU.html#torchcvnn.nn.zLeakyReLU.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mf">0.2</span><span class="p">]),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Performs the forward pass.</span>
 
@@ -568,7 +568,7 @@
 
 <div class="viewcode-block" id="Mod">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Mod.html#torchcvnn.nn.Mod">[docs]</a>
-<span class="k">class</span> <span class="nc">Mod</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Mod</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extracts the magnitude of the complex input. It maps to :math:`\mathbb{R}`</span>
 
@@ -581,11 +581,11 @@
 
 <div class="viewcode-block" id="Mod.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Mod.html#torchcvnn.nn.Mod.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Performs the forward pass.</span>
 
@@ -598,7 +598,7 @@
 
 <div class="viewcode-block" id="modReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.modReLU.html#torchcvnn.nn.modReLU">[docs]</a>
-<span class="k">class</span> <span class="nc">modReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">modReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a ReLU with parametric offset on the amplitude, keeping the phase unchanged.</span>
 
@@ -607,12 +607,12 @@
 
 <div class="viewcode-block" id="modReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.modReLU.html#torchcvnn.nn.modReLU.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Performs the forward pass.</span>
 
@@ -625,7 +625,7 @@
 
 <div class="viewcode-block" id="Cardioid">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Cardioid.html#torchcvnn.nn.Cardioid">[docs]</a>
-<span class="k">class</span> <span class="nc">Cardioid</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cardioid</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The cardioid activation function as proposed by Virtue et al. (2019) is given by :</span>
 
@@ -638,12 +638,12 @@
 
 <div class="viewcode-block" id="Cardioid.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Cardioid.html#torchcvnn.nn.Cardioid.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Performs the forward pass.</span>
 
@@ -656,7 +656,7 @@
 
 <div class="viewcode-block" id="MultiheadAttention">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.MultiheadAttention.html#torchcvnn.nn.MultiheadAttention">[docs]</a>
-<span class="k">class</span> <span class="nc">MultiheadAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MultiheadAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    This class is adapted from torch.nn.MultiheadAttention to support complex valued tensors.</span>
@@ -711,7 +711,7 @@
 
 <div class="viewcode-block" id="MultiheadAttention.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.MultiheadAttention.html#torchcvnn.nn.MultiheadAttention.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">embed_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">num_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -789,7 +789,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_parameters</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_reset_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reset_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qkv_same_embed_dim</span><span class="p">:</span>
             <span class="n">complex_xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_proj_weight</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -805,7 +805,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bias_v</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">query</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">key</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
