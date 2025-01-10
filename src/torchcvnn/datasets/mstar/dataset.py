@@ -226,7 +226,13 @@ class MSTARTargets(Dataset):
             if not sub_dir.exists():
                 logging.warning(f"Directory {sub_dir} does not exist.")
                 continue
-            self.data_files.update(gather_mstar_datafiles(sub_dir, target_name_depth))
+            # Append the data files from the sub-dataset
+            for key, value in gather_mstar_datafiles(
+                sub_dir, target_name_depth
+            ).items():
+                if key not in self.data_files:
+                    self.data_files[key] = []
+                self.data_files[key].extend(value)
         self.class_names = list(self.data_files.keys())
 
         # We then count how many samples have been loaded for all the classes
