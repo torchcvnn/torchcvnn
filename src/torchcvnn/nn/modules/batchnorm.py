@@ -206,8 +206,9 @@ class _BatchNormNd(nn.Module):
                 "running_mean",
                 torch.zeros((num_features,), device=device, dtype=cdtype),
             )
+            # This will be overwritten by reset_running_stats
             self.register_buffer(
-                "running_var", torch.ones((num_features, 2, 2), device=device)
+                "running_var", torch.zeros((num_features, 2, 2), device=device)
             )
             self.register_buffer(
                 "num_batches_tracked", torch.tensor(0, dtype=torch.long, device=device)
@@ -225,8 +226,8 @@ class _BatchNormNd(nn.Module):
         if self.track_running_stats:
             self.running_mean.zero_()
             self.running_var.zero_()
-            self.running_var[:, 0, 0] = 1 / math.sqrt(2.0)
-            self.running_var[:, 1, 1] = 1 / math.sqrt(2.0)
+            self.running_var[:, 0, 0] = 1.0
+            self.running_var[:, 1, 1] = 1.0
 
     def reset_parameters(self) -> None:
         with torch.no_grad():

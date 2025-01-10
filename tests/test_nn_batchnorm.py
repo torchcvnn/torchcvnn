@@ -46,6 +46,20 @@ def test_inv():
     assert torch.allclose(inv, torch_inv)
 
 
+def test_inv_nosym():
+    # Take a positive semi-definite matrix
+    B = 1
+    X = torch.randn((B, 2, 2))
+    Xp = X + (0.01 * torch.eye(2)).unsqueeze(0)
+
+    # Compute its inverse square root
+    inv = bn.inv_2x2(Xp)
+    torch_inv = torch.linalg.inv(Xp)
+
+    # And check this is really the inerse of X
+    assert torch.allclose(inv, torch_inv)
+
+
 def test_inv_sqrt():
     # Take a positive semi-definite matrix
     B = 10
@@ -130,6 +144,7 @@ def test_batchnorm2d():
 
 if __name__ == "__main__":
     test_inv()
+    test_inv_nosym()
     test_inv_sqrt()
     # time_inv_sqrt()
     test_batchnorm1d()
