@@ -168,6 +168,8 @@ class SAMPLE(Dataset):
             ]
         }
 
+        meta = {k: v[0][0].astype(np.float32) for k, v in meta.items()}
+
         complex_img = data["complex_img"][:, :, np.newaxis]
 
         class_idx = self.class_names.index(key)
