@@ -162,6 +162,7 @@ class _BatchNormNd(nn.Module):
     Arguments:
         num_features: :math:`C` from an expected input of size :math:`(B, C)`
         eps: a value added to the denominator for numerical stability. Default :math:`1e-5`.
+        cond_tol: a matrix conditionning tolerance for ill-conditionned covariance matrices, do not apply variance normalization if above this treshold. Default:  :math: `1000`
         momentum: the value used for the running mean and running var computation. Can be set to `None` for cumulative moving average (i.e. simple average). Default: :math:`0.1`
         affine: a boolean value that when set to `True`, this module has learnable affine parameters. Default: `True`
         track_running_stats: a boolean value that when set to `True`, this module tracks the running mean and variance, and when set to`False`, this module does not track such statistics, and initializes statistics buffers running_mean and running_var as None. When these buffers are None, this module always uses batch statistics. in both training and eval modes. Default: `True`
@@ -172,6 +173,7 @@ class _BatchNormNd(nn.Module):
         self,
         num_features: int,
         eps: float = 1e-5,
+        cond_tol: float = 1e3,
         momentum: float = 0.1,
         affine: bool = True,
         track_running_stats: bool = True,
@@ -182,6 +184,7 @@ class _BatchNormNd(nn.Module):
 
         self.num_features = num_features
         self.eps = eps
+        self.cond_tol = cond_tol
         self.momentum = momentum
         self.affine = affine
         self.track_running_stats = track_running_stats
@@ -275,10 +278,27 @@ class _BatchNormNd(nn.Module):
             # The variance/covariance come from the running stats
             covs = self.running_var
 
+        # Check if ill conditionned covs matrix
+
+        matU, Sdiag, matV = torch.svd_lowrank(covs, q=2)
+        thresh = Sdiag[:,0]/Sdiag[:,1] 
+        mask = thresh > self.cond_tol
+        covs_tmp = covs
+
+        #Do not apply normalization on low eigenvalue space
+
+        if any(mask.reshape(-1)):
+            Sdiag[mask, 1] = 1 
+            covs_tmp = matU @ torch.diag_embed(Sdiag) @  matV.transpose(1,2)
+
+        invsqrt_covs = inv_sqrt_2x2(covs_tmp)
+
         # Invert the covariance to scale
-        invsqrt_covs = inv_sqrt_2x2(
-            covs + self.eps * torch.eye(2, device=covs.device)
-        )  # num_features, 2, 2
+        # invsqrt_covs = inv_sqrt_2x2(
+        #     covs + self.eps * torch.eye(2, device=covs.device)
+        # )  
+        
+        # num_features, 2, 2
         # Note: the xc_centered.transpose is to make
         # xc_centered from (C, BxHxW, 2) to (B, 2, BxHxW)
         # So that the batch matrix multiply works as expected
