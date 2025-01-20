@@ -30,53 +30,6 @@ import torch.nn.init as init
 
 
 
-
-def safe_inverse(x, epsilon=1E-12):
-    return x/(x**2 + epsilon)
-
-class SVD(torch.autograd.Function):
-    #Solving SVD/PCA backward issue 
-    #https://discuss.pytorch.org/t/svt-backward-error-for-low-rank-structure/192397/2
-    @staticmethod
-    def forward(self, A):
-        U, S, V = torch.svd(A)
-        self.save_for_backward(U, S, V)
-        return U, S, V
-
-    @staticmethod
-    def backward(self, dU, dS, dV):
-        U, S, V = self.saved_tensors
-        Vt = V.t()
-        Ut = U.t()
-        M = U.size(0)
-        N = V.size(0)
-        NS = len(S)
-
-        F = (S - S[:, None])
-        F = safe_inverse(F)
-        F.diagonal().fill_(0)
-
-        G = (S + S[:, None])
-        G.diagonal().fill_(np.inf)
-        G = 1/G 
-
-        UdU = Ut @ dU
-        VdV = Vt @ dV
-
-        Su = (F+G)*(UdU-UdU.t())/2
-        Sv = (F-G)*(VdV-VdV.t())/2
-
-        dA = U @ (Su + Sv + torch.diag(dS)) @ Vt 
-        if (M>NS):
-            dA = dA + (torch.eye(M, dtype=dU.dtype, device=dU.device) - U@Ut) @ (dU/S) @ Vt 
-        if (N>NS):
-            dA = dA + (U/S) @ dV.t() @ (torch.eye(N, dtype=dU.dtype, device=dU.device) - V@Vt)
-        return dA
-
-
-def svd_function(input_matrix: torch.Tensor) -> torch.Tensor:
-    return SVD.apply(input_matrix)
-
 def batch_cov(points: torch.Tensor, centered: bool = False) -> torch.Tensor:
     """
     Batched covariance computation
@@ -315,11 +268,6 @@ class _BatchNormNd(nn.Module):
             # Transform the complex numbers as 2 reals to compute the variances and
             # covariances
             covs = batch_cov(xc_centered, centered=True)  # 16 covariances matrices
-            # Invert the covariance to scale
-            invsqrt_covs = inv_sqrt_2x2(
-                covs + self.eps * torch.eye(2, device=covs.device)
-            )  # num_features, 2, 2
-
         else:
             # The means come from the running stats
             mus = self.running_mean
@@ -331,17 +279,12 @@ class _BatchNormNd(nn.Module):
             # The variance/covariance come from the running stats
             covs = self.running_var
 
-            matU, Sdiag, matV = torch.svd_lowrank(covs)
+        # Check if ill conditionned covs matrix
 
-            thresh = Sdiag[:,0]/Sdiag[:,1] 
-
-            mask = thresh > self.cond_tol
-            
-            if any(mask.reshape(-1)):
-                Sdiag[mask, 1] = 1 
-                covs = matU @ torch.diag_embed(Sdiag) @  matV.transpose(1,2)
-            invsqrt_covs = inv_sqrt_2x2(covs)
-
+        matU, Sdiag, matV = torch.svd_lowrank(covs)
+        Sdiag[:, 1] = nn.ReLU(Sdiag[:, 1] - Sdiag[:, 0]/self.cond_tol) + Sdiag[:, 0]/self.cond_tol
+        covs_tmp = matU @ torch.diag_embed(Sdiag) @  matV.transpose(1,2)
+        invsqrt_covs = inv_sqrt_2x2(covs_tmp)
 
         # Invert the covariance to scale
         # invsqrt_covs = inv_sqrt_2x2(
