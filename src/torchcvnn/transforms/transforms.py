@@ -1,3 +1,26 @@
+# MIT License
+
+# Copyright (c) 2025 Quentin Gabot
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# External imports
 import torch
 import numpy as np
 from scipy.ndimage import zoom
@@ -8,6 +31,10 @@ MAX_VALUE = 40
 
 
 class LogAmplitudeTransform:
+    """
+    Transform the amplitude of a complex tensor to a log scale between a min and max value.
+    """
+
     def __init__(self, min_value=MIN_VALUE, max_value=MAX_VALUE):
         self.min_value = min_value
         self.max_value = max_value
@@ -29,6 +56,10 @@ class LogAmplitudeTransform:
 
 
 class AmplitudeTransform:
+    """
+    Transform a complex tensor into a real tensor, based on its amplitude.
+    """
+
     def __init__(self):
         pass
 
@@ -38,6 +69,10 @@ class AmplitudeTransform:
 
 
 class RealImaginaryTransform:
+    """
+    Transform a complex tensor into a real tensor, based on its real and imaginary parts.
+    """
+
     def __init__(self):
         pass
 
@@ -50,6 +85,9 @@ class RealImaginaryTransform:
 
 
 class RandomPhaseTransform:
+    """
+    Transform a real tensor into a complex tensor, by applying a random phase to the tensor.
+    """
 
     def __call__(self, tensor) -> torch.Tensor:
         phase = torch.rand_like(tensor, dtype=torch.float64) * 2 * torch.pi
@@ -57,6 +95,10 @@ class RandomPhaseTransform:
 
 
 class ComplexResizeTransform:
+    """
+    Resize a complex tensor to a given size.
+    """
+
     def __init__(self, size):
         self.size = size
 
@@ -77,8 +119,9 @@ class ComplexResizeTransform:
 
 
 class PolSARtoArrayTransform:
-    def __init__(self):
-        pass
+    """
+    Transform a PolSAR image into a 3D numpy array.
+    """
 
     def __call__(self, element) -> torch.Tensor:
         if isinstance(element, np.ndarray):
@@ -119,6 +162,10 @@ class PolSARtoArrayTransform:
 
 
 class Unsqueeze:
+    """
+    Add a dimension to a tensor.
+    """
+
     def __init__(self, dim):
         self.dim = dim
 
@@ -130,6 +177,9 @@ class Unsqueeze:
 
 
 class ToTensor:
+    """
+    Convert a numpy array to a tensor.
+    """
 
     def __call__(self, element) -> torch.Tensor:
         if isinstance(element, np.ndarray):
