@@ -27,3 +27,4 @@ from .slc import SLCDataset
 from .mstar import MSTARTargets
 from .sample import SAMPLE
 from .miccai2023 import MICCAI2023
+from .s1slc import S1SLC
