@@ -143,8 +143,21 @@ class FFTResize:
 
             return array
 
-        resized_real = zoom(real_part)
-        resized_imaginary = zoom(imaginary_part)
+        if len(array.shape) == 2:
+            # We have a two dimensional tensor
+            resized_real = zoom(real_part)
+            resized_imaginary = zoom(imaginary_part)
+        else:
+            # We have three dimensions and therefore
+            # apply the resize to each channel iteratively
+            # We assume the first dimension is the channel
+            resized_real = []
+            resized_imaginary = []
+            for real, imaginary in zip(real_part, imaginary_part):
+                resized_real.append(zoom(real))
+                resized_imaginary.append(zoom(imaginary))
+            resized_real = np.stack(resized_real)
+            resized_imaginary = np.stack(resized_imaginary)
 
         resized_array = resized_real + 1j * resized_imaginary
 
@@ -187,8 +200,21 @@ class SpatialResize:
 
             return array
 
-        resized_real = zoom(real_part)
-        resized_imaginary = zoom(imaginary_part)
+        if len(array.shape) == 2:
+            # We have a two dimensional tensor
+            resized_real = zoom(real_part)
+            resized_imaginary = zoom(imaginary_part)
+        else:
+            # We have three dimensions and therefore
+            # apply the resize to each channel iteratively
+            # We assume the first dimension is the channel
+            resized_real = []
+            resized_imaginary = []
+            for real, imaginary in zip(real_part, imaginary_part):
+                resized_real.append(zoom(real))
+                resized_imaginary.append(zoom(imaginary))
+            resized_real = np.stack(resized_real)
+            resized_imaginary = np.stack(resized_imaginary)
 
         resized_array = resized_real + 1j * resized_imaginary
 
