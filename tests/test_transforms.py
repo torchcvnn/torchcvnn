@@ -28,12 +28,57 @@ import numpy as np
 import torchcvnn.transforms as transforms
 
 
+def test_fft_resize_ndarray():
+    # Create a random complex tensor
+    tensor = np.random.rand(100, 100) + 1j * np.random.rand(100, 100)
+
+    # Resize the tensor
+    target_size = (59, 49)
+    spatial_resize = transforms.FFTResize(target_size)
+    resized_tensor = spatial_resize(tensor)
+
+    assert resized_tensor.shape == target_size
+    assert type(resized_tensor) == np.ndarray
+    assert resized_tensor.dtype == np.complex128
+
+    # Resize the tensor
+    target_size = (123, 121)
+    spatial_resize = transforms.FFTResize(target_size)
+    resized_tensor = spatial_resize(tensor)
+    assert resized_tensor.shape == target_size
+    assert type(resized_tensor) == np.ndarray
+    assert resized_tensor.dtype == np.complex128
+
+
+def test_fft_resize_tensor():
+    # Create a random complex tensor
+    tensor = np.random.rand(100, 100) + 1j * np.random.rand(100, 100)
+    tensor = torch.as_tensor(tensor)
+
+    # Resize the tensor
+    target_size = (59, 49)
+    spatial_resize = transforms.FFTResize(target_size)
+    resized_tensor = spatial_resize(tensor)
+
+    assert resized_tensor.shape == target_size
+    assert type(resized_tensor) == torch.Tensor
+    assert resized_tensor.dtype == torch.complex128
+
+    # Resize the tensor
+    target_size = (123, 121)
+    spatial_resize = transforms.FFTResize(target_size)
+    resized_tensor = spatial_resize(tensor)
+    assert resized_tensor.shape == target_size
+    assert type(resized_tensor) == torch.Tensor
+    assert resized_tensor.dtype == torch.complex128
+
+
 def test_spatial_resize_ndarray():
     # Create a random complex tensor
     tensor = np.random.rand(100, 100) + 1j * np.random.rand(100, 100)
 
     # Resize the tensor
-    target_size = (50, 50)
+    target_size = (59, 48)
     spatial_resize = transforms.SpatialResize(target_size)
     resized_tensor = spatial_resize(tensor)
 
@@ -42,7 +87,7 @@ def test_spatial_resize_ndarray():
     assert resized_tensor.dtype == np.complex64
 
     # Resize the tensor
-    target_size = (121, 121)
+    target_size = (123, 121)
     spatial_resize = transforms.SpatialResize(target_size)
     resized_tensor = spatial_resize(tensor)
 
@@ -76,5 +121,7 @@ def test_spatial_resize_tensor():
 
 
 if __name__ == "__main__":
+    test_fft_resize_ndarray()
+    test_fft_resize_tensor()
     test_spatial_resize_ndarray()
     test_spatial_resize_tensor()
