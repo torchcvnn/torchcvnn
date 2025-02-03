@@ -26,16 +26,12 @@ import numpy as np
 from scipy.ndimage import zoom
 
 
-MIN_VALUE = 0.02
-MAX_VALUE = 40
-
-
-class LogAmplitudeTransform:
+class LogAmplitude:
     """
     Transform the amplitude of a complex tensor to a log scale between a min and max value.
     """
 
-    def __init__(self, min_value=MIN_VALUE, max_value=MAX_VALUE):
+    def __init__(self, min_value=0.02, max_value=40):
         self.min_value = min_value
         self.max_value = max_value
 
@@ -55,7 +51,7 @@ class LogAmplitudeTransform:
         return torch.as_tensor(np.stack(new_tensor), dtype=torch.complex64)
 
 
-class AmplitudeTransform:
+class Amplitude:
     """
     Transform a complex tensor into a real tensor, based on its amplitude.
     """
@@ -68,7 +64,7 @@ class AmplitudeTransform:
         return tensor
 
 
-class RealImaginaryTransform:
+class RealImaginary:
     """
     Transform a complex tensor into a real tensor, based on its real and imaginary parts.
     """
@@ -84,7 +80,7 @@ class RealImaginaryTransform:
         return tensor
 
 
-class RandomPhaseTransform:
+class RandomPhase:
     """
     Transform a real tensor into a complex tensor, by applying a random phase to the tensor.
     """
@@ -94,7 +90,7 @@ class RandomPhaseTransform:
         return tensor * torch.exp(1j * phase)
 
 
-class ComplexResizeTransform:
+class SpatialResize:
     """
     Resize a complex tensor to a given size.
     """
@@ -118,9 +114,9 @@ class ComplexResizeTransform:
         return resized_array
 
 
-class PolSARtoArrayTransform:
+class PolSARtoTensor:
     """
-    Transform a PolSAR image into a 3D numpy array.
+    Transform a PolSAR image into a 3D torch tensor.
     """
 
     def __call__(self, element) -> torch.Tensor:
