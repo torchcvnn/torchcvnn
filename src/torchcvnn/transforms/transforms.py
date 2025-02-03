@@ -20,10 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# Standard imports
+from typing import Union
+
 # External imports
 import torch
 import numpy as np
-from scipy.ndimage import zoom
+from PIL import Image
 
 
 class LogAmplitude:
@@ -98,18 +101,38 @@ class SpatialResize:
     def __init__(self, size):
         self.size = size
 
-    def __call__(self, tensor) -> torch.Tensor:
-        real_part = tensor.real
-        imaginary_part = tensor.imag
+    def __call__(
+        self, array: Union[np.array, torch.tensor]
+    ) -> Union[np.array, torch.Tensor]:
 
-        zoom_factors = (self.size / tensor.shape[0], self.size / tensor.shape[1])
+        is_torch = False
+        if isinstance(array, torch.Tensor):
+            is_torch = True
+            array = array.numpy()
 
-        resized_real = zoom(real_part, zoom_factors, order=3)  # Cubic interpolation
-        resized_imaginary = zoom(
-            imaginary_part, zoom_factors, order=3
-        )  # Cubic interpolation
+        real_part = array.real
+        imaginary_part = array.imag
+
+        def zoom(array):
+            # Convert the numpy array to a PIL image
+            image = Image.fromarray(array)
+
+            # Resize the image
+            image = image.resize(self.size)
+
+            # Convert the PIL image back to a numpy array
+            array = np.array(image)
+
+            return array
+
+        resized_real = zoom(real_part)
+        resized_imaginary = zoom(imaginary_part)
 
         resized_array = resized_real + 1j * resized_imaginary
+
+        # Convert the resized tensor back to a torch tensor if necessary
+        if is_torch:
+            resized_array = torch.as_tensor(resized_array)
 
         return resized_array
 
@@ -184,3 +207,40 @@ class ToTensor:
             return element
         else:
             raise ValueError("Element should be a numpy array or a tensor")
+
+
+def test_spatial_resize():
+    """
+    Test the SpatialResize transform with both
+    a np.array and torch.tensor.
+    """
+
+    # Create a random complex tensor
+    tensor = np.random.rand(100, 100) + 1j * np.random.rand(100, 100)
+    tensor = torch.as_tensor(tensor)
+
+    # Resize the tensor
+    spatial_resize = SpatialResize((50, 50))
+    resized_tensor = spatial_resize(tensor)
+
+    # Check the shape of the resized tensor
+    assert resized_tensor.shape == (3, 50, 50)
+
+    # Check the type of the resized tensor
+    assert isinstance(resized_tensor, torch.Tensor)
+
+    # Convert the tensor to a numpy array
+    tensor = tensor.numpy()
+
+    # Resize the tensor
+    resized_tensor = spatial_resize(tensor)
+
+    # Check the shape of the resized tensor
+    assert resized_tensor.shape == (3, 50, 50)
+
+    # Check the type of the resized tensor
+    assert isinstance(resized_tensor, np.ndarray)
+
+
+if __name__ == "__main__":
+    test_spatial_resize()
