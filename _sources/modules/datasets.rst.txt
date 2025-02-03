@@ -65,6 +65,15 @@ This class involves several parsers for parsing :
 .. autoclass:: torchcvnn.datasets.slc.slc_file.SLCFile
    :members:
 
+S1SLC
+-----
+
+S1SLC is a dataset built from Sentinel-1 SLC data. The dataset is provided at the following url `https://ieee-dataport.org/open-access/s1slccvdl-complex-valued-annotated-single-look-complex-sentinel-1-sar-dataset-complex`_.
+
+.. autoclass:: S1SLC
+   :members:
+   :show-inheritance:
+
 MSTAR
 -----
 
