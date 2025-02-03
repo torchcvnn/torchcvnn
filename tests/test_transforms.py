@@ -1,0 +1,80 @@
+# MIT License
+
+# Copyright (c) 2024 Jeremy Fix
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# External imports
+import torch
+import numpy as np
+
+# Local imports
+import torchcvnn.transforms as transforms
+
+
+def test_spatial_resize_ndarray():
+    # Create a random complex tensor
+    tensor = np.random.rand(100, 100) + 1j * np.random.rand(100, 100)
+
+    # Resize the tensor
+    target_size = (50, 50)
+    spatial_resize = transforms.SpatialResize(target_size)
+    resized_tensor = spatial_resize(tensor)
+
+    assert resized_tensor.shape == target_size
+    assert type(resized_tensor) == np.ndarray
+    assert resized_tensor.dtype == np.complex64
+
+    # Resize the tensor
+    target_size = (121, 121)
+    spatial_resize = transforms.SpatialResize(target_size)
+    resized_tensor = spatial_resize(tensor)
+
+    assert resized_tensor.shape == target_size
+    assert type(resized_tensor) == np.ndarray
+    assert resized_tensor.dtype == np.complex64
+
+
+def test_spatial_resize_tensor():
+    # Create a random complex tensor
+    tensor = np.random.rand(100, 100) + 1j * np.random.rand(100, 100)
+    tensor = torch.as_tensor(tensor)
+
+    # Resize the tensor
+    target_size = (50, 50)
+    spatial_resize = transforms.SpatialResize(target_size)
+    resized_tensor = spatial_resize(tensor)
+
+    assert resized_tensor.shape == target_size
+    assert type(resized_tensor) == torch.Tensor
+    assert resized_tensor.dtype == torch.complex64
+
+    # Resize the tensor
+    target_size = (121, 121)
+    spatial_resize = transforms.SpatialResize(target_size)
+    resized_tensor = spatial_resize(tensor)
+
+    assert resized_tensor.shape == target_size
+    assert type(resized_tensor) == torch.Tensor
+    assert resized_tensor.dtype == torch.complex64
+
+
+if __name__ == "__main__":
+    test_spatial_resize_ndarray()
+    test_spatial_resize_tensor()
