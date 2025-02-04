@@ -120,8 +120,77 @@ def test_spatial_resize_tensor():
     assert resized_tensor.dtype == torch.complex64
 
 
+def on_rgb_img():
+    """
+    Test the resize from an image
+    """
+    from PIL import Image
+    import matplotlib.pyplot as plt
+
+    im = Image.open("img_rgb.jpg")
+
+    array = np.array(im)
+    array = array - 1j * array
+    array = np.transpose(array, (2, 0, 1)) / 255.0
+
+    # 487, 565
+    target_size = (123, 456)
+
+    spatial_resize = transforms.SpatialResize(target_size)
+    resized1 = spatial_resize(array)
+
+    fft_resize = transforms.FFTResize(target_size)
+    resized2 = fft_resize(array)
+
+    plt.subplot(1, 3, 1)
+    plt.imshow(array.real.transpose(1, 2, 0), clim=(0, 1))
+    plt.title("Original")
+    plt.subplot(1, 3, 2)
+    plt.imshow(resized1.real.transpose(1, 2, 0), clim=(0, 1))
+    plt.title("Spatial resize")
+    plt.subplot(1, 3, 3)
+    plt.imshow(resized2.real.transpose(1, 2, 0), clim=(0, 1))
+    plt.title("FFT resize")
+    plt.show()
+
+
+def on_bw_img():
+    """
+    Test the resize from an image
+    """
+    from PIL import Image
+    import matplotlib.pyplot as plt
+
+    im = Image.open("img_bw.jpg")
+
+    array = np.array(im)
+    array = array - 1j * array
+    array = array / 255.0
+
+    target_size = (123, 456)
+
+    spatial_resize = transforms.SpatialResize(target_size)
+    resized1 = spatial_resize(array)
+
+    fft_resize = transforms.FFTResize(target_size)
+    resized2 = fft_resize(array)
+
+    plt.subplot(1, 3, 1)
+    plt.imshow(array.real, cmap="gray", clim=(0, 1))
+    plt.title("Original")
+    plt.subplot(1, 3, 2)
+    plt.imshow(resized1.real, cmap="gray", clim=(0, 1))
+    plt.title("Spatial resize")
+    plt.subplot(1, 3, 3)
+    plt.imshow(resized2.real, cmap="gray", clim=(0, 1))
+    plt.title("FFT resize")
+    plt.show()
+
+
 if __name__ == "__main__":
     test_fft_resize_ndarray()
     test_fft_resize_tensor()
     test_spatial_resize_ndarray()
     test_spatial_resize_tensor()
+    on_rgb_img()
+    on_bw_img()
