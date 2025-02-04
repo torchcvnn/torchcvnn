@@ -116,32 +116,36 @@ class FFTResize:
         def zoom(array):
             # Computes the 2D FFT of the array and center the zero frequency component
             array = np.fft.fftshift(np.fft.fft2(array))
+            original_size = array.shape
 
             # Either center crop or pad the array to the target size
             target_size = self.size
             if array.shape[0] < target_size[0]:
-                # Computes left and right padding
-                left_pad = (target_size[0] - array.shape[0]) // 2
-                right_pad = target_size[0] - array.shape[0] - left_pad
-                array = np.pad(array, ((left_pad, right_pad), (0, 0)))
+                # Computes top and bottom padding
+                top_pad = (target_size[0] - array.shape[0] + 1) // 2
+                bottom_pad = target_size[0] - array.shape[0] - top_pad
+                array = np.pad(array, ((top_pad, bottom_pad), (0, 0)))
             elif array.shape[0] > target_size[0]:
-                left_crop = (array.shape[0] - target_size[0]) // 2
-                right_crop = target_size[0] + left_crop
-                array = array[left_crop:right_crop, :]
+                top_crop = array.shape[0] // 2 - target_size[0] // 2
+                bottom_crop = top_crop + target_size[0]
+                array = array[top_crop:bottom_crop, :]
 
             if array.shape[1] < target_size[1]:
-                left_pad = (target_size[1] - array.shape[1]) // 2
+                left_pad = (target_size[1] - array.shape[1] + 1) // 2
                 right_pad = target_size[1] - array.shape[1] - left_pad
                 array = np.pad(array, ((0, 0), (left_pad, right_pad)))
             elif array.shape[1] > target_size[1]:
-                left_crop = (array.shape[1] - target_size[1]) // 2
-                right_crop = target_size[1] + left_crop
+                left_crop = array.shape[1] // 2 - target_size[1] // 2
+                right_crop = left_crop + target_size[1]
                 array = array[:, left_crop:right_crop]
 
             # Computes the inverse 2D FFT of the array
             array = np.fft.ifft2(np.fft.ifftshift(array))
+            scale = (target_size[0] * target_size[1]) / (
+                original_size[0] * original_size[1]
+            )
 
-            return array
+            return scale * array
 
         if len(array.shape) == 2:
             # We have a two dimensional tensor
