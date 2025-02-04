@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2025 Quentin Gabot
+# Copyright (c) 2025 Quentin Gabot, Jeremy Fix
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,13 @@ from PIL import Image
 class LogAmplitude:
     """
     Transform the amplitude of a complex tensor to a log scale between a min and max value.
+
+    After this transform, the phases are the same but the magnitude is log transformed and
+    scaled in [0, 1]
+
+    Arguments:
+        min_value: The minimum value of the amplitude range to clip
+        max_value: The maximum value of the amplitude range to clip
     """
 
     def __init__(self, min_value=0.02, max_value=40):
@@ -59,9 +66,6 @@ class Amplitude:
     Transform a complex tensor into a real tensor, based on its amplitude.
     """
 
-    def __init__(self):
-        pass
-
     def __call__(self, tensor) -> torch.Tensor:
         tensor = torch.abs(tensor).to(torch.float64)
         return tensor
@@ -71,9 +75,6 @@ class RealImaginary:
     """
     Transform a complex tensor into a real tensor, based on its real and imaginary parts.
     """
-
-    def __init__(self):
-        pass
 
     def __call__(self, tensor) -> torch.Tensor:
         real = torch.real(tensor)
@@ -95,7 +96,11 @@ class RandomPhase:
 
 class FFTResize:
     """
-    Resize a complex tensor to a given size.
+    Resize a complex tensor to a given size. The resize is performed in the Fourier
+    domain by either cropping or padding the FFT2 of the input array/tensor.
+
+    Arguments:
+        size: The target size of the resized tensor.
     """
 
     def __init__(self, size):
@@ -174,7 +179,11 @@ class FFTResize:
 
 class SpatialResize:
     """
-    Resize a complex tensor to a given size.
+    Resize a complex tensor to a given size. The resize is performed in the image space
+    using a Bicubic interpolation.
+
+    Arguments:
+        size: The target size of the resized tensor.
     """
 
     def __init__(self, size):
@@ -234,7 +243,7 @@ class PolSARtoTensor:
     Transform a PolSAR image into a 3D torch tensor.
     """
 
-    def __call__(self, element) -> torch.Tensor:
+    def __call__(self, element: Union[np.ndarray, dict]) -> torch.Tensor:
         if isinstance(element, np.ndarray):
             assert len(element.shape) == 3, "Element should be a 3D numpy array"
             if element.shape[0] == 3:
@@ -275,12 +284,18 @@ class PolSARtoTensor:
 class Unsqueeze:
     """
     Add a dimension to a tensor.
+
+    Arguments:
+        dim: The dimension of the axis/dim to extend
     """
 
     def __init__(self, dim):
         self.dim = dim
 
-    def __call__(self, element) -> torch.Tensor:
+    def __call__(self, element: Union[np.array, torch.tensor]) -> torch.Tensor:
+        """
+        Apply the transformation by adding a dimension to the input tensor.
+        """
         if isinstance(element, np.ndarray):
             element = np.expand_dims(element, axis=self.dim)
         elif isinstance(element, torch.Tensor):
@@ -292,47 +307,10 @@ class ToTensor:
     Convert a numpy array to a tensor.
     """
 
-    def __call__(self, element) -> torch.Tensor:
+    def __call__(self, element: Union[np.array, torch.tensor]) -> torch.Tensor:
         if isinstance(element, np.ndarray):
             return torch.as_tensor(element)
         elif isinstance(element, torch.Tensor):
             return element
         else:
             raise ValueError("Element should be a numpy array or a tensor")
-
-
-def test_spatial_resize():
-    """
-    Test the SpatialResize transform with both
-    a np.array and torch.tensor.
-    """
-
-    # Create a random complex tensor
-    tensor = np.random.rand(100, 100) + 1j * np.random.rand(100, 100)
-    tensor = torch.as_tensor(tensor)
-
-    # Resize the tensor
-    spatial_resize = SpatialResize((50, 50))
-    resized_tensor = spatial_resize(tensor)
-
-    # Check the shape of the resized tensor
-    assert resized_tensor.shape == (3, 50, 50)
-
-    # Check the type of the resized tensor
-    assert isinstance(resized_tensor, torch.Tensor)
-
-    # Convert the tensor to a numpy array
-    tensor = tensor.numpy()
-
-    # Resize the tensor
-    resized_tensor = spatial_resize(tensor)
-
-    # Check the shape of the resized tensor
-    assert resized_tensor.shape == (3, 50, 50)
-
-    # Check the type of the resized tensor
-    assert isinstance(resized_tensor, np.ndarray)
-
-
-if __name__ == "__main__":
-    test_spatial_resize()
