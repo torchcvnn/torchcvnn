@@ -42,6 +42,7 @@ Pytorch based :
    :hidden:
 
    modules/datasets
+   modules/transforms
    modules/nn
    modules/models
    modules/init
