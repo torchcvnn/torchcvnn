@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.LogAmplitude
+=================================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: LogAmplitude
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LogAmplitude.__init__
+   
+   
+
+   
+   
+   

@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.ToTensor
+=============================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: ToTensor
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ToTensor.__init__
+   
+   
+
+   
+   
+   

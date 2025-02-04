@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.Unsqueeze
+==============================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: Unsqueeze
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Unsqueeze.__init__
+   
+   
+
+   
+   
+   

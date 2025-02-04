@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.FFTResize
+==============================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: FFTResize
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FFTResize.__init__
+   
+   
+
+   
+   
+   

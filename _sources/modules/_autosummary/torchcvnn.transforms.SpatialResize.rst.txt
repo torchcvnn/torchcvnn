@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.SpatialResize
+==================================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: SpatialResize
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SpatialResize.__init__
+   
+   
+
+   
+   
+   
