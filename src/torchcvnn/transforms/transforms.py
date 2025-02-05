@@ -91,7 +91,7 @@ class RandomPhase:
 
     def __call__(self, tensor) -> torch.Tensor:
         phase = torch.rand_like(tensor, dtype=torch.float64) * 2 * torch.pi
-        return tensor * torch.exp(1j * phase)
+        return (tensor * torch.exp(1j * phase)).to(torch.complex64)
 
 
 class FFTResize:
