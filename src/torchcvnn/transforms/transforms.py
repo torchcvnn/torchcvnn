@@ -62,24 +62,24 @@ class LogAmplitude(BaseTransform):
         max_value: The maximum value of the amplitude range to clip
     """
 
-    def __init__(self, min_value=0.02, max_value=40):
+    def __init__(self, min_value: int | float = 0.02, max_value: int | float = 40, keep_phase: bool = True) -> None:
         self.min_value = min_value
         self.max_value = max_value
+        self.keep_phase = keep_phase
 
-    def __call__(self, tensor) -> torch.Tensor:
-        new_tensor = []
-        for idx, ch in enumerate(tensor):
-            amplitude = torch.abs(ch)
-            phase = torch.angle(ch)
-            amplitude = torch.clip(amplitude, self.min_value, self.max_value)
-            transformed_amplitude = (
-                torch.log10(amplitude) - torch.log10(torch.tensor([self.min_value]))
-            ) / (
-                torch.log10(torch.tensor([self.max_value]))
-                - torch.log10(torch.tensor([self.min_value]))
-            )
-            new_tensor.append(transformed_amplitude * torch.exp(1j * phase))
-        return torch.as_tensor(np.stack(new_tensor), dtype=torch.complex64)
+    def __call__(self, x: np.ndarray) -> np.ndarray:
+        self._check_input(x)
+        x = F.ensure_chw_format(x)
+        amplitude = np.abs(x)
+        phase = np.angle(x)
+        amplitude = np.clip(amplitude, self.min_value, self.max_value)
+        transformed_amplitude = (
+            np.log10(amplitude / self.min_value)
+        ) / (np.log10(self.max_value / self.min_value))
+        if self.keep_phase:
+            return transformed_amplitude * np.exp(1j * phase)
+        else:
+            return transformed_amplitude
 
 
 class Amplitude(BaseTransform):
