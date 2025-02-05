@@ -4,16 +4,17 @@ dynamic = ["version"]
 
 dependencies = [
 	"torch >= 2.0",
-	"numpy",
+	"numpy >= 2.0",
 	"requests >= 2.31.0",
 	"tqdm >= 4.66.1",
-    "pillow",
-    "scipy>=1.14.1",
+    "pillow >= 11.1.0",
+    "scipy>=1.6.0",
     "h5py>=3.12.1"
 ]
-requires-python = ">= 3.8"
+requires-python = ">= 3.9.10"
 authors = [
-{name= "Jeremy Fix", email="jeremy.fix@centralesupelec.fr" }
+{name= "Jeremy Fix", email="jeremy.fix@centralesupelec.fr" },
+{name= "Quentin Gabot", email="quentin.gabot@centralesupelec.fr" }
 ]
 maintainers = [
 {name= "Jeremy Fix", email="jeremy.fix@centralesupelec.fr" }
