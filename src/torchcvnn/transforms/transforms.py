@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2025 Quentin Gabot, Jeremy Fix
+# Copyright (c) 2025 Quentin Gabot, Jeremy Fix, Huy Nguyen
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,36 @@
 # SOFTWARE.
 
 # Standard imports
-from typing import Union
+from abc import ABC, abstractmethod
+from typing import Union, Any, Tuple
 
 # External imports
 import torch
 import numpy as np
 from PIL import Image
+from torchvision.transforms.v2 import Resize
+
+# Internal imports
+import torchcvnn.transforms.functional as F
 
 
-class LogAmplitude:
+class BaseTransform(ABC):
+    """Base class for transforms that handle numpy arrays and tensors."""
+    def __init__(self, dtype: type):
+        self.dtype = dtype
+    
+    def _check_input(self, x: Any) -> Any:
+        """Validate input is numpy array or tensor."""
+        if not isinstance(x, (np.ndarray, torch.Tensor)):
+            raise ValueError("Element should be a numpy array or a tensor")
+    
+    @abstractmethod
+    def __call__(self, x: Any):
+        """Apply transform to input."""
+        raise NotImplementedError
+    
+
+class LogAmplitude(BaseTransform):
     """
     Transform the amplitude of a complex tensor to a log scale between a min and max value.
 
@@ -61,17 +82,19 @@ class LogAmplitude:
         return torch.as_tensor(np.stack(new_tensor), dtype=torch.complex64)
 
 
-class Amplitude:
+class Amplitude(BaseTransform):
     """
     Transform a complex tensor into a real tensor, based on its amplitude.
     """
+    def __init__(self, dtype: type) -> None:
+        super().__init__(dtype)
 
     def __call__(self, tensor) -> torch.Tensor:
-        tensor = torch.abs(tensor).to(torch.float64)
+        tensor = torch.abs(tensor).to(self.dtype)
         return tensor
 
 
-class RealImaginary:
+class RealImaginary(BaseTransform):
     """
     Transform a complex tensor into a real tensor, based on its real and imaginary parts.
     """
@@ -84,17 +107,19 @@ class RealImaginary:
         return tensor
 
 
-class RandomPhase:
+class RandomPhase(BaseTransform):
     """
     Transform a real tensor into a complex tensor, by applying a random phase to the tensor.
     """
+    def __init__(self, dtype: type) -> None:
+        super().__init__(dtype)
 
     def __call__(self, tensor) -> torch.Tensor:
         phase = torch.rand_like(tensor, dtype=torch.float64) * 2 * torch.pi
-        return (tensor * torch.exp(1j * phase)).to(torch.complex64)
+        return (tensor * torch.exp(1j * phase)).to(self.dtype)
 
 
-class FFTResize:
+class FFTResize(BaseTransform):
     """
     Resize a complex tensor to a given size. The resize is performed in the Fourier
     domain by either cropping or padding the FFT2 of the input array/tensor.
@@ -103,13 +128,11 @@ class FFTResize:
         size: The target size of the resized tensor.
     """
 
-    def __init__(self, size):
+    def __init__(self, size: Tuple[int, ...]) -> None:
         self.size = size
 
-    def __call__(
-        self, array: Union[np.array, torch.tensor]
-    ) -> Union[np.array, torch.Tensor]:
-
+    def __call__(self, array: np.array | torch.Tensor) -> np.array | torch.Tensor:
+        self._check_input(array)
         is_torch = False
         if isinstance(array, torch.Tensor):
             is_torch = True
@@ -118,7 +141,7 @@ class FFTResize:
         real_part = array.real
         imaginary_part = array.imag
 
-        def zoom(array):
+        def zoom(array: np.ndarray) -> np.ndarray:
             # Computes the 2D FFT of the array and center the zero frequency component
             array = np.fft.fftshift(np.fft.fft2(array))
             original_size = array.shape
@@ -177,7 +200,7 @@ class FFTResize:
         return resized_array
 
 
-class SpatialResize:
+class SpatialResize(BaseTransform):
     """
     Resize a complex tensor to a given size. The resize is performed in the image space
     using a Bicubic interpolation.
@@ -238,10 +261,12 @@ class SpatialResize:
         return resized_array
 
 
-class PolSARtoTensor:
+class PolSARtoTensor(BaseTransform):
     """
     Transform a PolSAR image into a 3D torch tensor.
     """
+    def __init__(self, dtype: type) -> None:
+        super().__init__(dtype)
 
     def __call__(self, element: Union[np.ndarray, dict]) -> torch.Tensor:
         if isinstance(element, np.ndarray):
@@ -277,11 +302,11 @@ class PolSARtoTensor:
     def _create_tensor(self, *channels) -> torch.Tensor:
         return torch.as_tensor(
             np.stack(channels, axis=-1).transpose(2, 0, 1),
-            dtype=torch.complex64,
+            dtype=self.dtype,
         )
 
 
-class Unsqueeze:
+class Unsqueeze(BaseTransform):
     """
     Add a dimension to a tensor.
 
@@ -289,23 +314,27 @@ class Unsqueeze:
         dim: The dimension of the axis/dim to extend
     """
 
-    def __init__(self, dim):
+    def __init__(self, dim: int) -> None:
         self.dim = dim
 
-    def __call__(self, element: Union[np.array, torch.tensor]) -> torch.Tensor:
+    def __call__(self, element: np.array | torch.Tensor) -> torch.Tensor:
         """
         Apply the transformation by adding a dimension to the input tensor.
         """
+        self._check_input(element)
         if isinstance(element, np.ndarray):
-            element = np.expand_dims(element, axis=self.dim)
+            return np.expand_dims(element, axis=self.dim)
         elif isinstance(element, torch.Tensor):
-            element = element.unsqueeze(dim=self.dim)
+            return element.unsqueeze(dim=self.dim)
 
 
-class ToTensor:
+class ToTensor(BaseTransform):
     """
     Convert a numpy array to a tensor.
     """
+    def __init__(self, dtype: type) -> None:
+        super().__init__(dtype)
+
 
     def __call__(self, element: Union[np.array, torch.tensor]) -> torch.Tensor:
         if isinstance(element, np.ndarray):
@@ -314,3 +343,19 @@ class ToTensor:
             return element
         else:
             raise ValueError("Element should be a numpy array or a tensor")
+        
+    def __call__(self, element: Union[np.array, torch.tensor]) -> torch.Tensor:
+        if isinstance(element, np.ndarray):
+            return torch.as_tensor(element)
+        elif isinstance(element, torch.Tensor):
+            return element
+        else:
+            raise ValueError("Element should be a numpy array or a tensor")
+
+    def __call__(self, x: np.array | torch.Tensor) -> torch.Tensor:
+        self._check_input(x)
+        x = F.ensure_chw_format(x)
+        if isinstance(x, np.ndarray):
+            return torch.as_tensor(x, dtype=self.dtype)
+        elif isinstance(x, torch.Tensor):
+            return x.to(self.dtype)
