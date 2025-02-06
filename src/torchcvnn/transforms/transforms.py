@@ -35,7 +35,32 @@ import torchcvnn.transforms.functional as F
 
 
 class BaseTransform(ABC):
-    """Base class for transforms that handle numpy arrays and tensors."""
+    """Abstract base class for transforms that can handle both numpy arrays and PyTorch tensors.
+    This class serves as a template for implementing transforms that can be applied to both numpy arrays
+    and PyTorch tensors while maintaining consistent behavior. It enforces the input to be in CHW
+    (Channel, Height, Width) format.
+    Args:
+        dtype (str, optional): Data type to convert inputs to. Must be one of:
+            'float32', 'float64', 'complex64', 'complex128'. If None, no type conversion is performed.
+            Default: None.
+    Raises:
+        AssertionError: If dtype is not a string or not one of the allowed types.
+        ValueError: If input is neither a numpy array nor a PyTorch tensor.
+    Methods:
+        __call__(x): Apply the transform to the input array/tensor.
+        __call_numpy__(x): Abstract method to implement numpy array transform.
+        __call_torch__(x): Abstract method to implement PyTorch tensor transform.
+    Example:
+        >>> class MyTransform(BaseTransform):
+        >>>     def __call_numpy__(self, x):
+        >>>         # Implement numpy transform
+        >>>         pass
+        >>>     def __call_torch__(self, x):
+        >>>         # Implement torch transform
+        >>>         pass
+        >>> transform = MyTransform(dtype='float32')
+        >>> output = transform(input_data)  # Works with both numpy arrays and torch tensors
+    """
     def __init__(self, dtype: str | NoneType = None) -> None:
         if dtype is not None:
             assert isinstance(dtype, str), "dtype should be a string"
@@ -66,17 +91,35 @@ class BaseTransform(ABC):
     
 
 class LogAmplitude(BaseTransform):
+    """This transform applies a logarithmic scaling to the amplitude/magnitude of complex values
+    while optionally preserving the phase information. The amplitude is first clipped to 
+    [min_value, max_value] range, then log10-transformed and normalized to [0,1] range.
+
+    The transformation follows these steps:
+    1. Extract amplitude and phase from complex input
+    2. Clip amplitude between min_value and max_value 
+    3. Apply log10 transform and normalize to [0,1]
+    4. Optionally recombine with original phase
+
+    Args:
+        min_value (int | float, optional): Minimum amplitude value for clipping. 
+            Values below this will be clipped up. Defaults to 0.02.
+        max_value (int | float, optional): Maximum amplitude value for clipping.
+            Values above this will be clipped down. Defaults to 40.
+        keep_phase (bool, optional): Whether to preserve phase information.
+            If True, returns complex output with transformed amplitude and original phase.
+            If False, returns just the transformed amplitude. Defaults to True.
+    Returns:
+        np.ndarray | torch.Tensor: Transformed tensor with same shape as input.
+            If keep_phase=True: Complex tensor with log-scaled amplitude and original phase
+            If keep_phase=False: Real tensor with just the log-scaled amplitude
+    Example:
+        >>> transform = LogAmplitude(min_value=0.01, max_value=100)
+        >>> output = transform(input_tensor)  # Transforms amplitudes to log scale [0,1]
+    Note:
+        The transform works with both NumPy arrays and PyTorch tensors through
+        separate internal implementations (__call_numpy__ and __call_torch__).
     """
-    Transform the amplitude of a complex tensor to a log scale between a min and max value.
-
-    After this transform, the phases are the same but the magnitude is log transformed and
-    scaled in [0, 1]
-
-    Arguments:
-        min_value: The minimum value of the amplitude range to clip
-        max_value: The maximum value of the amplitude range to clip
-    """
-
     def __init__(self, min_value: int | float = 0.02, max_value: int | float = 40, keep_phase: bool = True) -> None:
         self.min_value = min_value
         self.max_value = max_value
@@ -108,8 +151,17 @@ class LogAmplitude(BaseTransform):
 
 
 class Amplitude(BaseTransform):
-    """
-    Transform a complex tensor into a real tensor, based on its amplitude.
+    """Transform a complex-valued tensor into its amplitude/magnitude.
+
+    This transform computes the absolute value (magnitude) of complex input data,
+    converting complex values to real values.
+
+    Args:
+        dtype (str): Data type for the output ('float32', 'float64', etc)
+
+    Returns:
+        np.ndarray | torch.Tensor: Real-valued tensor containing the amplitudes,
+            with same shape as input but real-valued type specified by dtype.
     """
     def __init__(self, dtype: str) -> None:
         super().__init__(dtype)
@@ -122,8 +174,15 @@ class Amplitude(BaseTransform):
 
 
 class RealImaginary(BaseTransform):
-    """
-    Transform a complex tensor into a real tensor, based on its real and imaginary parts.
+    """Transform a complex-valued tensor into its real and imaginary components.
+
+    This transform separates a complex-valued tensor into its real and imaginary parts,
+    stacking them along a new channel dimension. The output tensor has twice the number
+    of channels as the input.
+
+    Returns:
+        np.ndarray | torch.Tensor: Real-valued tensor containing real and imaginary parts,
+            with shape (2*C, H, W) where C is the original number of channels.
     """
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
         x = torch.stack([x.real, x.imag], dim=0) # CHW -> 2CHW
@@ -137,8 +196,31 @@ class RealImaginary(BaseTransform):
 
 
 class RandomPhase(BaseTransform):
-    """
-    Transform a real tensor into a complex tensor, by applying a random phase to the tensor.
+    """Randomly phase-shifts complex-valued input data.
+    This transform applies a random phase shift to complex-valued input tensors/arrays by 
+    multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π] 
+    or [-π, π] if centering is enabled.
+    Args:
+        dtype : str
+            Data type for the output. Must be one of the supported complex dtypes.
+        centering : bool, optional. 
+            If True, centers the random phase distribution around 0 by subtracting π from 
+            the generated phases. Default is False.
+    Returns
+        torch.Tensor or numpy.ndarray
+            Phase-shifted complex-valued data with the same shape as input.
+
+    Examples
+        >>> transform = RandomPhase(dtype='complex64')
+        >>> x = torch.ones(3,3, dtype=torch.complex64)
+        >>> output = transform(x)  # Applies random phase shifts
+
+    Notes
+        - Input data must be complex-valued
+        - The output maintains the same shape and complex dtype as input
+        - Phase shifts are uniformly distributed in:
+            - [0, 2π] when centering=False
+            - [-π, π] when centering=True
     """
     def __init__(self, dtype: str, centering: bool = False) -> None:
         super().__init__(dtype)
@@ -158,8 +240,19 @@ class RandomPhase(BaseTransform):
 
 
 class FFT2(BaseTransform):
-    """Apply 2D Fast Fourier Transform to the image"""
+    """Applies 2D Fast Fourier Transform (FFT) to the input.
+    This transform computes the 2D FFT along the last two dimensions of the input array/tensor.
+    It applies FFT2 and shifts zero-frequency components to the center.
 
+    Returns
+        numpy.ndarray or torch.Tensor: 
+            The 2D Fourier transformed input with zero-frequency components centered.
+            Output has the same shape as input.
+    Notes
+        - For numpy arrays, uses custom FFT2 implementation from functional module
+        - For PyTorch tensors, uses torch.fft.fft2 followed by torch.fft.fftshift
+        - Transform is applied along last two dimensions (-2, -1)
+    """
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
         return F.applyfft2(x, axis=(-2, -1))
     
@@ -168,8 +261,20 @@ class FFT2(BaseTransform):
     
 
 class IFFT2(BaseTransform):
-    """Apply 2D Inverse Fast Fourier Transform to the image"""
+    """Applies 2D inverse Fast Fourier Transform (IFFT) to the input.
+    This transform computes the 2D IFFT along the last two dimensions of the input array/tensor.
+    It applies inverse FFT shift before IFFT2.
 
+    Returns
+        numpy.ndarray or torch.Tensor: 
+            The inverse Fourier transformed input.
+            Output has the same shape as input.
+        
+    Notes:
+        - For numpy arrays, uses custom IFFT2 implementation from functional module 
+        - For PyTorch tensors, uses torch.fft.ifftshift followed by torch.fft.ifft2
+        - Transform is applied along last two dimensions (-2, -1)
+    """
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
         return F.applyifft2(x, axis=(-2, -1))
     
@@ -178,18 +283,26 @@ class IFFT2(BaseTransform):
 
 
 class PadIfNeeded(BaseTransform):
-    """
-    Pad an image if its dimensions are smaller than specified minimum dimensions.
+    """Pad an image if its dimensions are smaller than specified minimum dimensions.
 
-    This class extends BaseTransform and provides functionality to pad images 
-    that are smaller than the specified minimum height and width. The padding
-    can be applied with different border modes.
+    This transform pads images that are smaller than given minimum dimensions by adding
+    padding according to the specified border mode. The padding is added symmetrically
+    on both sides to reach the minimum dimensions.
 
-    Attributes:
+    Args:
+        min_height (int): Minimum required height. Images shorter than this will be
         min_height (int): Minimum height requirement for the image
         min_width (int): Minimum width requirement for the image
         border_mode (str): Type of padding to apply ('constant', 'reflect', etc.)
         dtype (str | NoneType): Data type for the output (optional)
+
+    Returns:
+        np.ndarray | torch.Tensor: Padded image with dimensions at least min_height x min_width.
+            Return type matches input type.
+
+    Example:
+        >>> transform = PadIfNeeded(min_height=256, min_width=256)
+        >>> padded_image = transform(small_image)  # Pads if image is smaller than 256x256
     """
     def __init__(
         self, 
@@ -211,16 +324,27 @@ class PadIfNeeded(BaseTransform):
 
 
 class CenterCrop(BaseTransform):
-    """
-    Crop the central part of the image.
+    """Center crops an input array/tensor to the specified size.
 
-    This class extends BaseTransform and provides functionality to crop the central
-    part of an image. The crop size is specified by the user.
+    This transform extracts a centered rectangular region from the input array/tensor
+    with the specified dimensions. The crop is centered on both height and width axes.
 
-    Attributes:
-        height (int): Height of the crop
-        width (int): Width of the crop
-        dtype (str | NoneType): Data type for the output (optional)
+    Args:
+        height (int): Target height of the cropped output
+        width (int): Target width of the cropped output
+
+    Returns:
+        np.ndarray | torch.Tensor: Center cropped array/tensor with shape (C, height, width), 
+            where C is the number of channels
+
+    Examples:
+        >>> transform = CenterCrop(height=224, width=224)
+        >>> output = transform(input_tensor)  # Center crops to 224x224
+
+    Notes:
+        - If input is smaller than crop size, it will return the original input
+        - Crop is applied identically to all channels
+        - Uses functional.center_crop() implementation for both numpy and torch
     """
     def __init__(self, height: int, width: int) -> None:
         self.height = height
@@ -421,13 +545,23 @@ class PolSARtoTensor:
 
 
 class Unsqueeze(BaseTransform):
-    """
-    Add a dimension to a tensor.
+    """Add a singleton dimension to the input array/tensor.
 
-    Arguments:
-        dim: The dimension of the axis/dim to extend
-    """
+    This transform inserts a new axis at the specified position, increasing 
+    the dimensionality of the input by one.
 
+    Args:
+        dim (int): Position where new axis should be inserted.
+
+    Returns:
+        np.ndarray | torch.Tensor: Input with new singleton dimension added.
+            Shape will be same as input but with a 1 inserted at position dim.
+
+    Example:
+        >>> transform = Unsqueeze(dim=0) 
+        >>> x = torch.randn(3,4)  # Shape (3,4)
+        >>> y = transform(x)      # Shape (1,3,4)
+    """
     def __init__(self, dim: int) -> None:
         self.dim = dim
 
@@ -439,8 +573,23 @@ class Unsqueeze(BaseTransform):
 
 
 class ToTensor(BaseTransform):
-    """
-    Convert a numpy array to a tensor.
+    """Converts numpy array or torch tensor to torch tensor of specified dtype.
+    This transform converts input data to a PyTorch tensor with the specified data type.
+    It handles both numpy arrays and existing PyTorch tensors as input.
+
+    Args:
+        dtype (str): Target data type for the output tensor. Should be one of PyTorch's
+            supported dtype strings (e.g. 'float32', 'float64', 'int32', etc.)
+
+    Returns:
+        torch.Tensor: The converted tensor with the specified dtype.
+        
+    Example:
+        >>> transform = ToTensor(dtype='float32')
+        >>> x_numpy = np.array([1, 2, 3])
+        >>> x_tensor = transform(x_numpy)  # converts to torch.FloatTensor
+        >>> x_existing = torch.tensor([1, 2, 3], dtype=torch.int32)
+        >>> x_converted = transform(x_existing)  # converts to torch.FloatTensor
     """
     def __init__(self, dtype: str) -> None:
         super().__init__(dtype)
