@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 # Standard imports
+from typing import Tuple
 
 # External imports
 import torch
@@ -51,11 +52,11 @@ def ensure_chw_format(image: np.ndarray | torch.Tensor) -> np.ndarray | torch.Te
     return image
 
 
-def applyfft2(image: np.ndarray) -> np.ndarray:
+def applyfft2(image: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     """Apply 2D FFT to image."""
-    return np.fft.fftshift(np.fft.fft2(image, axes=(0, 1)), axes=(0, 1))
+    return np.fft.fftshift(np.fft.fft2(image, axes=axis), axes=axis)
 
 
-def applyifft2(image: np.ndarray) -> np.ndarray:
+def applyifft2(image: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     """Apply 2D IFFT to image."""
-    return np.fft.ifft2(np.fft.ifftshift(image, axes=(0, 1)), axes=(0, 1))
+    return np.fft.ifft2(np.fft.ifftshift(image, axes=axis), axes=axis)
