@@ -22,6 +22,7 @@
 
 # Standard imports
 from abc import ABC, abstractmethod
+from types import NoneType
 
 # External imports
 import torch
@@ -33,7 +34,7 @@ import torchcvnn.transforms.functional as F
 
 class BaseTransform(ABC):
     """Base class for transforms that handle numpy arrays and tensors."""
-    def __init__(self, dtype: str | None = None) -> None:
+    def __init__(self, dtype: str | NoneType = None) -> None:
         if dtype is not None:
             assert isinstance(dtype, str), "dtype should be a string"
             assert dtype in ["float32", "float64", "complex64", "complex128"], "dtype should be float32 or float64"
@@ -174,6 +175,39 @@ class IFFT2(BaseTransform):
         return torch.fft.ifft2(torch.fft.ifftshift(x, dim=(-2, -1)))
 
 
+class PadIfNeeded(BaseTransform):
+    """
+    Pad an image if its dimensions are smaller than specified minimum dimensions.
+
+    This class extends BaseTransform and provides functionality to pad images 
+    that are smaller than the specified minimum height and width. The padding
+    can be applied with different border modes.
+
+    Attributes:
+        min_height (int): Minimum height requirement for the image
+        min_width (int): Minimum width requirement for the image
+        border_mode (str): Type of padding to apply ('constant', 'reflect', etc.)
+        dtype (str | NoneType): Data type for the output (optional)
+    """
+    def __init__(
+        self, 
+        min_height: int,
+        min_width: int,
+        border_mode: str = "constant",
+        pad_value: float = 0
+    ) -> None:
+        self.min_height = min_height
+        self.min_width = min_width
+        self.border_mode = border_mode
+        self.pad_value = pad_value
+
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return F.padifneeded(x, self.min_height, self.min_width, self.border_mode, self.pad_value)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return F.padifneeded(x, self.min_height, self.min_width, self.border_mode, self.pad_value)
+
+
 class FFTResize(BaseTransform):
     """
     Resize a complex tensor to a given size. The resize is performed in the Fourier
@@ -187,12 +221,6 @@ class FFTResize(BaseTransform):
         self.size = size
 
     def __call__(self, array: np.array | torch.Tensor) -> np.array | torch.Tensor:
-        self._check_input(array)
-        is_torch = False
-        if isinstance(array, torch.Tensor):
-            is_torch = True
-            array = array.numpy()
-
         real_part = array.real
         imaginary_part = array.imag
 
