@@ -154,6 +154,26 @@ class RandomPhase(BaseTransform):
         return (x * np.exp(1j * phase)).astype(self.np_dtype)
 
 
+class FFT2(BaseTransform):
+    """Apply 2D Fast Fourier Transform to the image"""
+
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return F.applyfft2(x, axis=(-2, -1))
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return torch.fft.fftshift(torch.fft.fft2(x), dim=(-2, -1))
+    
+
+class IFFT2(BaseTransform):
+    """Apply 2D Inverse Fast Fourier Transform to the image"""
+
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return F.applyifft2(x, axis=(-2, -1))
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return torch.fft.ifft2(torch.fft.ifftshift(x, dim=(-2, -1)))
+
+
 class FFTResize(BaseTransform):
     """
     Resize a complex tensor to a given size. The resize is performed in the Fourier
