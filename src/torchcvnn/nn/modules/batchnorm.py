@@ -254,7 +254,7 @@ class _BatchNormNd(nn.Module):
             # Or for testing but using the batch stats for centering/scaling
 
             # Compute the means
-            mus = xc.mean(-1)  # num_features means
+            mus = xc.mean(axis=-1)  # num_features means
 
             # Center the xc
             xc_centered = xc - mus.unsqueeze(-1)  # num_features, BxHxW
@@ -283,6 +283,7 @@ class _BatchNormNd(nn.Module):
         # So that the batch matrix multiply works as expected
         # where invsqrt_covs is (C, 2, 2)
         outz = torch.bmm(invsqrt_covs, xc_centered.transpose(1, 2))
+        outz = outz.contiguous()  # num_features, 2, BxHxW
 
         # Shift by beta and scale by gamma
         # weight is (num_features, 2, 2) real valued
