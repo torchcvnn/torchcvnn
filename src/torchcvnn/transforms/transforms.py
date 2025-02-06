@@ -22,11 +22,13 @@
 
 # Standard imports
 from abc import ABC, abstractmethod
+from typing import Tuple, Union
 from types import NoneType
 
 # External imports
 import torch
 import numpy as np
+from PIL import Image
 
 # Internal imports
 import torchcvnn.transforms.functional as F
@@ -220,7 +222,14 @@ class FFTResize(BaseTransform):
     def __init__(self, size: Tuple[int, ...]) -> None:
         self.size = size
 
-    def __call__(self, array: np.array | torch.Tensor) -> np.array | torch.Tensor:
+    def __call__(
+        self, array: Union[np.ndarray, torch.Tensor]
+    ) -> Union[np.ndarray, torch.Tensor]:
+        is_torch = False
+        if isinstance(array, torch.Tensor):
+            is_torch = True
+            array = array.numpy()
+
         real_part = array.real
         imaginary_part = array.imag
 
@@ -296,8 +305,8 @@ class SpatialResize(BaseTransform):
         self.size = size
 
     def __call__(
-        self, array: Union[np.array, torch.tensor]
-    ) -> Union[np.array, torch.Tensor]:
+        self, array: Union[np.ndarray, torch.Tensor]
+    ) -> Union[np.ndarray, torch.Tensor]:
 
         is_torch = False
         if isinstance(array, torch.Tensor):
@@ -400,15 +409,11 @@ class Unsqueeze(BaseTransform):
     def __init__(self, dim: int) -> None:
         self.dim = dim
 
-    def __call__(self, element: np.array | torch.Tensor) -> torch.Tensor:
-        """
-        Apply the transformation by adding a dimension to the input tensor.
-        """
-        self._check_input(element)
-        if isinstance(element, np.ndarray):
-            return np.expand_dims(element, axis=self.dim)
-        elif isinstance(element, torch.Tensor):
-            return element.unsqueeze(dim=self.dim)
+    def __call_numpy__(self, x: np.array | torch.Tensor) -> torch.Tensor:
+        return np.expand_dims(x, axis=self.dim)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return x.unsqueeze(dim=self.dim)
 
 
 class ToTensor(BaseTransform):
