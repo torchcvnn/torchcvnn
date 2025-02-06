@@ -28,7 +28,6 @@ from typing import Union, Any, Tuple
 import torch
 import numpy as np
 from PIL import Image
-from torchvision.transforms.v2 import Resize
 
 # Internal imports
 import torchcvnn.transforms.functional as F
@@ -39,14 +38,23 @@ class BaseTransform(ABC):
     def __init__(self, dtype: type):
         self.dtype = dtype
     
-    def _check_input(self, x: Any) -> Any:
-        """Validate input is numpy array or tensor."""
+    def __call__(self, x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
+        """Apply transform to input."""
         if not isinstance(x, (np.ndarray, torch.Tensor)):
             raise ValueError("Element should be a numpy array or a tensor")
+        elif isinstance(x, np.ndarray):
+            return self.__call_numpy__(x)
+        elif isinstance(x, torch.Tensor):
+            return self.__call_torch__(x)
+
+    @abstractmethod
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        """Apply transform to numpy array."""
+        raise NotImplementedError
     
     @abstractmethod
-    def __call__(self, x: Any):
-        """Apply transform to input."""
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        """Apply transform to torch tensor."""
         raise NotImplementedError
     
 
