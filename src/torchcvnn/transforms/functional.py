@@ -106,3 +106,12 @@ def padifneeded(
         mode=border_mode,
         value=pad_value
     )
+
+
+def center_crop(x: np.ndarray | torch.Tensor, height: int, width: int) -> np.ndarray | torch.Tensor:
+    # Center crop the image
+    l_h = max(0, x.shape[0] // 2 - height // 2)
+    l_w = max(0, x.shape[0] // 2 - width // 2)
+    r_h = l_h + height
+    r_w = l_w + width
+    return x[:, l_h:r_h, l_w:r_w]

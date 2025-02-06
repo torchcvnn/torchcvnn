@@ -210,6 +210,29 @@ class PadIfNeeded(BaseTransform):
         return F.padifneeded(x, self.min_height, self.min_width, self.border_mode, self.pad_value)
 
 
+class CenterCrop(BaseTransform):
+    """
+    Crop the central part of the image.
+
+    This class extends BaseTransform and provides functionality to crop the central
+    part of an image. The crop size is specified by the user.
+
+    Attributes:
+        height (int): Height of the crop
+        width (int): Width of the crop
+        dtype (str | NoneType): Data type for the output (optional)
+    """
+    def __init__(self, height: int, width: int) -> None:
+        self.height = height
+        self.width = width
+
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return F.center_crop(x, self.height, self.width)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return F.center_crop(x, self.height, self.width)
+
+
 class FFTResize:
     """
     Resize a complex tensor to a given size. The resize is performed in the Fourier
