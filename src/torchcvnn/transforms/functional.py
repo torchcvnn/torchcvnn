@@ -29,7 +29,25 @@ import numpy as np
 
 
 def is_chw_format(x: np.ndarray | torch.Tensor) -> bool:
-    """Check if image is in CHW format."""
+    """Check if image is in CHW format.
+    
+    Args:
+        x (Union[np.ndarray, torch.Tensor]): Input image to check format
+        
+    Returns:
+        bool: True if image is in CHW format, False if in HWC format
+        
+    Raises:
+        ValueError: If input is not a 3D array
+        
+    Example:
+        >>> img = np.zeros((3, 64, 64))  # CHW format
+        >>> is_chw_format(img)
+        True
+        >>> img = np.zeros((64, 64, 3))  # HWC format 
+        >>> is_chw_format(img)
+        False
+    """
     if len(x.shape) != 3:
         raise ValueError("Image must be 3D array")
     if min(x.shape) != x.shape[0]:
@@ -38,7 +56,22 @@ def is_chw_format(x: np.ndarray | torch.Tensor) -> bool:
 
 
 def ensure_chw_format(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
-    """Ensure image is in CHW format, convert if necessary."""
+    """Ensure image is in CHW format, convert if necessary.
+    
+    Args:
+        x (Union[np.ndarray, torch.Tensor]): Input image to check/convert format
+        
+    Returns:
+        Union[np.ndarray, torch.Tensor]: Image in CHW format
+        
+    Raises:
+        TypeError: If input is not numpy array or torch tensor
+        ValueError: If input is not a 3D array
+        
+    Example:
+        >>> img = np.zeros((64, 64, 3))  # HWC format
+        >>> chw_img = ensure_chw_format(img)  # Converts to (3, 64, 64)
+    """
     if not isinstance(x, (np.ndarray, torch.Tensor)):
         raise TypeError("Image must be numpy array or torch tensor")
     if len(x.shape) != 3:
@@ -53,12 +86,28 @@ def ensure_chw_format(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor
 
 
 def applyfft2(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
-    """Apply 2D FFT to image."""
+    """Apply 2D Fast Fourier Transform to image.
+    
+    Args:
+        x (np.ndarray): Input array to apply FFT to
+        axis (Tuple[int, ...]): Axes over which to compute the FFT
+        
+    Returns:
+        np.ndarray: The Fourier transformed array
+    """
     return np.fft.fftshift(np.fft.fft2(x, axes=axis), axes=axis)
 
 
 def applyifft2(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
-    """Apply 2D IFFT to image."""
+    """Apply 2D inverse Fast Fourier Transform to image.
+    
+    Args:
+        x (np.ndarray): Input array to apply IFFT to
+        axis (Tuple[int, ...]): Axes over which to compute the IFFT
+        
+    Returns:
+        np.ndarray: The inverse Fourier transformed array
+    """
     return np.fft.ifft2(np.fft.ifftshift(x, axes=axis), axes=axis)
 
 
@@ -70,15 +119,26 @@ def padifneeded(
     pad_value: float = 0
 ) -> np.ndarray | torch.Tensor:
     """Pad image if smaller than desired size.
-    
+
+    This function pads an image with zeros if its dimensions are smaller than the specified
+    minimum height and width. The padding is added equally on both sides where possible.
+
     Args:
-        x: Input image with shape (C,H,W)
-        min_height: Minimum height required
-        min_width: Minimum width required
-        border_mode: Padding mode ('constant', 'reflect', etc.)
-        
+        x (Union[np.ndarray, torch.Tensor]): Input image tensor/array with shape (C,H,W)
+        min_height (int): Minimum required height after padding
+        min_width (int): Minimum required width after padding 
+        border_mode (str): Padding mode ('constant', 'reflect', 'replicate', etc.)
+        pad_value (float): Value used for padding when border_mode is 'constant'. Default: 0
+
     Returns:
-        Padded image if needed, original otherwise
+        Union[np.ndarray, torch.Tensor]: Padded image if dimensions were smaller than 
+        minimum required, otherwise returns original image unchanged
+
+    Example:
+        >>> img = torch.randn(3, 50, 60)  # RGB image 50x60
+        >>> padded = padifneeded(img, 64, 64, 'constant')  # Pads to 64x64
+        >>> padded.shape
+        torch.Size([3, 64, 64])
     """
     _, h, w = x.shape
     # Calculate padding sizes
@@ -109,7 +169,27 @@ def padifneeded(
 
 
 def center_crop(x: np.ndarray | torch.Tensor, height: int, width: int) -> np.ndarray | torch.Tensor:
-    # Center crop the image
+    """
+    Center crops an image to the specified dimensions.
+
+    This function takes an image and crops it to the specified height and width, 
+    centered around the middle of the image. If the requested dimensions are larger 
+    than the image, it will use the maximum possible size.
+
+    Args:
+        x (Union[np.ndarray, torch.Tensor]): Input image tensor/array with shape (C, H, W)
+        height (int): Desired height of the cropped image
+        width (int): Desired width of the cropped image
+
+    Returns:
+        Union[np.ndarray, torch.Tensor]: Center cropped image with shape (C, height, width)
+
+    Example:
+        >>> img = torch.randn(3, 100, 100)  # RGB image 100x100
+        >>> cropped = center_crop(img, 60, 60)  # Returns center 60x60 crop
+        >>> cropped.shape
+        torch.Size([3, 60, 60])
+    """
     l_h = max(0, x.shape[0] // 2 - height // 2)
     l_w = max(0, x.shape[0] // 2 - width // 2)
     r_h = l_h + height
