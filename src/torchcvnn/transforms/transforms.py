@@ -22,12 +22,10 @@
 
 # Standard imports
 from abc import ABC, abstractmethod
-from typing import Union, Any, Tuple
 
 # External imports
 import torch
 import numpy as np
-from PIL import Image
 
 # Internal imports
 import torchcvnn.transforms.functional as F
@@ -38,6 +36,7 @@ class BaseTransform(ABC):
     def __init__(self, dtype: str | None = None) -> None:
         if dtype is not None:
             assert isinstance(dtype, str), "dtype should be a string"
+            assert dtype in ["float32", "float64", "complex64", "complex128"], "dtype should be float32 or float64"
             self.np_dtype = getattr(np, dtype)
             self.torch_dtype = getattr(torch, dtype)
     
@@ -138,12 +137,21 @@ class RandomPhase(BaseTransform):
     """
     Transform a real tensor into a complex tensor, by applying a random phase to the tensor.
     """
-    def __init__(self, dtype: type) -> None:
+    def __init__(self, dtype: str, centering: bool = False) -> None:
         super().__init__(dtype)
+        self.centering = centering
 
-    def __call__(self, tensor) -> torch.Tensor:
-        phase = torch.rand_like(tensor, dtype=torch.float64) * 2 * torch.pi
-        return (tensor * torch.exp(1j * phase)).to(self.dtype)
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        phase = torch.rand_like(x) * 2 * torch.pi
+        if self.centering:
+            phase = phase - torch.pi
+        return (x * torch.exp(1j * phase)).to(self.torch_dtype)
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        phase = np.random.rand(*x.shape) * 2 * np.pi
+        if self.centering:
+            phase = phase - np.pi
+        return (x * np.exp(1j * phase)).astype(self.np_dtype)
 
 
 class FFTResize(BaseTransform):
