@@ -210,7 +210,7 @@ class PadIfNeeded(BaseTransform):
         return F.padifneeded(x, self.min_height, self.min_width, self.border_mode, self.pad_value)
 
 
-class FFTResize(BaseTransform):
+class FFTResize:
     """
     Resize a complex tensor to a given size. The resize is performed in the Fourier
     domain by either cropping or padding the FFT2 of the input array/tensor.
@@ -219,12 +219,13 @@ class FFTResize(BaseTransform):
         size: The target size of the resized tensor.
     """
 
-    def __init__(self, size: Tuple[int, ...]) -> None:
+    def __init__(self, size):
         self.size = size
 
     def __call__(
-        self, array: Union[np.ndarray, torch.Tensor]
-    ) -> Union[np.ndarray, torch.Tensor]:
+        self, array: Union[np.array, torch.tensor]
+    ) -> Union[np.array, torch.Tensor]:
+
         is_torch = False
         if isinstance(array, torch.Tensor):
             is_torch = True
@@ -233,7 +234,7 @@ class FFTResize(BaseTransform):
         real_part = array.real
         imaginary_part = array.imag
 
-        def zoom(array: np.ndarray) -> np.ndarray:
+        def zoom(array):
             # Computes the 2D FFT of the array and center the zero frequency component
             array = np.fft.fftshift(np.fft.fft2(array))
             original_size = array.shape
@@ -292,7 +293,7 @@ class FFTResize(BaseTransform):
         return resized_array
 
 
-class SpatialResize(BaseTransform):
+class SpatialResize:
     """
     Resize a complex tensor to a given size. The resize is performed in the image space
     using a Bicubic interpolation.
@@ -305,8 +306,8 @@ class SpatialResize(BaseTransform):
         self.size = size
 
     def __call__(
-        self, array: Union[np.ndarray, torch.Tensor]
-    ) -> Union[np.ndarray, torch.Tensor]:
+        self, array: Union[np.array, torch.tensor]
+    ) -> Union[np.array, torch.Tensor]:
 
         is_torch = False
         if isinstance(array, torch.Tensor):
@@ -353,12 +354,10 @@ class SpatialResize(BaseTransform):
         return resized_array
 
 
-class PolSARtoTensor(BaseTransform):
+class PolSARtoTensor:
     """
     Transform a PolSAR image into a 3D torch tensor.
     """
-    def __init__(self, dtype: type) -> None:
-        super().__init__(dtype)
 
     def __call__(self, element: Union[np.ndarray, dict]) -> torch.Tensor:
         if isinstance(element, np.ndarray):
@@ -394,7 +393,7 @@ class PolSARtoTensor(BaseTransform):
     def _create_tensor(self, *channels) -> torch.Tensor:
         return torch.as_tensor(
             np.stack(channels, axis=-1).transpose(2, 0, 1),
-            dtype=self.dtype,
+            dtype=torch.complex64,
         )
 
 
