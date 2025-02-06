@@ -109,9 +109,11 @@ class Amplitude(BaseTransform):
     def __init__(self, dtype: type) -> None:
         super().__init__(dtype)
 
-    def __call__(self, tensor) -> torch.Tensor:
-        tensor = torch.abs(tensor).to(self.dtype)
-        return tensor
+    def __call_torch__(self, tensor: torch.Tensor) -> torch.Tensor:
+        return torch.abs(tensor).to(self.dtype)
+    
+    def __call_numpy__(self, tensor: np.ndarray) -> np.ndarray:
+        return np.abs(tensor).astype(self.dtype)
 
 
 class RealImaginary(BaseTransform):
