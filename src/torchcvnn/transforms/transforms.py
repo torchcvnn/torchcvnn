@@ -39,7 +39,7 @@ class BaseTransform(ABC):
     def __init__(self, dtype: str | NoneType = None) -> None:
         if dtype is not None:
             assert isinstance(dtype, str), "dtype should be a string"
-            assert dtype in ["float32", "float64", "complex64", "complex128"], "dtype should be float32 or float64"
+            assert dtype in ["float32", "float64", "complex64", "complex128"], "dtype should be one of float32, float64, complex64, complex128"
             self.np_dtype = getattr(np, dtype)
             self.torch_dtype = getattr(torch, dtype)
     
@@ -409,7 +409,7 @@ class Unsqueeze(BaseTransform):
     def __init__(self, dim: int) -> None:
         self.dim = dim
 
-    def __call_numpy__(self, x: np.array | torch.Tensor) -> torch.Tensor:
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
         return np.expand_dims(x, axis=self.dim)
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
@@ -420,30 +420,11 @@ class ToTensor(BaseTransform):
     """
     Convert a numpy array to a tensor.
     """
-    def __init__(self, dtype: type) -> None:
+    def __init__(self, dtype: str) -> None:
         super().__init__(dtype)
 
-
-    def __call__(self, element: Union[np.array, torch.tensor]) -> torch.Tensor:
-        if isinstance(element, np.ndarray):
-            return torch.as_tensor(element)
-        elif isinstance(element, torch.Tensor):
-            return element
-        else:
-            raise ValueError("Element should be a numpy array or a tensor")
-        
-    def __call__(self, element: Union[np.array, torch.tensor]) -> torch.Tensor:
-        if isinstance(element, np.ndarray):
-            return torch.as_tensor(element)
-        elif isinstance(element, torch.Tensor):
-            return element
-        else:
-            raise ValueError("Element should be a numpy array or a tensor")
-
-    def __call__(self, x: np.array | torch.Tensor) -> torch.Tensor:
-        self._check_input(x)
-        x = F.ensure_chw_format(x)
-        if isinstance(x, np.ndarray):
-            return torch.as_tensor(x, dtype=self.dtype)
-        elif isinstance(x, torch.Tensor):
-            return x.to(self.dtype)
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return torch.as_tensor(x, dtype=self.torch_dtype)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return x.to(self.torch_dtype)
