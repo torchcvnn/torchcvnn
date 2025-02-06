@@ -35,11 +35,15 @@ import torchcvnn.transforms.functional as F
 
 class BaseTransform(ABC):
     """Base class for transforms that handle numpy arrays and tensors."""
-    def __init__(self, dtype: type):
-        self.dtype = dtype
+    def __init__(self, dtype: str) -> None:
+        assert isinstance(dtype, str), "dtype should be a string"
+        self.np_dtype = getattr(np, dtype)
+        self.torch_dtype = getattr(torch, dtype)
     
     def __call__(self, x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
         """Apply transform to input."""
+        # Ensure the input is in CHW format
+        x = F.ensure_chw_format(x)
         if not isinstance(x, (np.ndarray, torch.Tensor)):
             raise ValueError("Element should be a numpy array or a tensor")
         elif isinstance(x, np.ndarray):
@@ -76,7 +80,6 @@ class LogAmplitude(BaseTransform):
         self.keep_phase = keep_phase
 
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
-        x = F.ensure_chw_format(x)
         amplitude = np.abs(x)
         phase = np.angle(x)
         amplitude = np.clip(amplitude, self.min_value, self.max_value)
@@ -89,7 +92,6 @@ class LogAmplitude(BaseTransform):
             return transformed_amplitude
         
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
-        x = F.ensure_chw_format(x)
         amplitude = torch.abs(x)
         phase = torch.angle(x)
         amplitude = torch.clip(amplitude, self.min_value, self.max_value)
@@ -106,14 +108,14 @@ class Amplitude(BaseTransform):
     """
     Transform a complex tensor into a real tensor, based on its amplitude.
     """
-    def __init__(self, dtype: type) -> None:
+    def __init__(self, dtype: str) -> None:
         super().__init__(dtype)
 
-    def __call_torch__(self, tensor: torch.Tensor) -> torch.Tensor:
-        return torch.abs(tensor).to(self.dtype)
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return torch.abs(x).to(self.torch_dtype)
     
-    def __call_numpy__(self, tensor: np.ndarray) -> np.ndarray:
-        return np.abs(tensor).astype(self.dtype)
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return np.abs(x).astype(self.np_dtype)
 
 
 class RealImaginary(BaseTransform):
