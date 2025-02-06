@@ -75,8 +75,7 @@ class LogAmplitude(BaseTransform):
         self.max_value = max_value
         self.keep_phase = keep_phase
 
-    def __call__(self, x: np.ndarray) -> np.ndarray:
-        self._check_input(x)
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
         x = F.ensure_chw_format(x)
         amplitude = np.abs(x)
         phase = np.angle(x)
@@ -86,6 +85,19 @@ class LogAmplitude(BaseTransform):
         ) / (np.log10(self.max_value / self.min_value))
         if self.keep_phase:
             return transformed_amplitude * np.exp(1j * phase)
+        else:
+            return transformed_amplitude
+        
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        x = F.ensure_chw_format(x)
+        amplitude = torch.abs(x)
+        phase = torch.angle(x)
+        amplitude = torch.clip(amplitude, self.min_value, self.max_value)
+        transformed_amplitude = (
+            torch.log10(amplitude / self.min_value)
+        ) / (np.log10(self.max_value / self.min_value))
+        if self.keep_phase:
+            return transformed_amplitude * torch.exp(1j * phase)
         else:
             return transformed_amplitude
 
