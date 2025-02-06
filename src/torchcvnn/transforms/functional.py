@@ -28,63 +28,6 @@ import torch
 import numpy as np
 
 
-def is_chw_format(x: np.ndarray | torch.Tensor) -> bool:
-    """Check if image is in CHW format.
-    
-    Args:
-        x (Union[np.ndarray, torch.Tensor]): Input image to check format
-        
-    Returns:
-        bool: True if image is in CHW format, False if in HWC format
-        
-    Raises:
-        ValueError: If input is not a 3D array
-        
-    Example:
-        >>> img = np.zeros((3, 64, 64))  # CHW format
-        >>> is_chw_format(img)
-        True
-        >>> img = np.zeros((64, 64, 3))  # HWC format 
-        >>> is_chw_format(img)
-        False
-    """
-    if len(x.shape) != 3:
-        raise ValueError("Image must be 3D array")
-    if min(x.shape) != x.shape[0]:
-        return False
-    return True
-
-
-def ensure_chw_format(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
-    """Ensure image is in CHW format, convert if necessary.
-    
-    Args:
-        x (Union[np.ndarray, torch.Tensor]): Input image to check/convert format
-        
-    Returns:
-        Union[np.ndarray, torch.Tensor]: Image in CHW format
-        
-    Raises:
-        TypeError: If input is not numpy array or torch tensor
-        ValueError: If input is not a 3D array
-        
-    Example:
-        >>> img = np.zeros((64, 64, 3))  # HWC format
-        >>> chw_img = ensure_chw_format(img)  # Converts to (3, 64, 64)
-    """
-    if not isinstance(x, (np.ndarray, torch.Tensor)):
-        raise TypeError("Image must be numpy array or torch tensor")
-    if len(x.shape) != 3:
-        raise ValueError("Image must be 3D array")
-        
-    if not is_chw_format(x):
-        # Convert from HWC to CHW
-        if isinstance(x, torch.Tensor):
-            return x.permute(2, 0, 1)
-        return x.transpose(2, 0, 1)
-    return x
-
-
 def applyfft2(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     """Apply 2D Fast Fourier Transform to image.
     
@@ -142,6 +85,7 @@ def padifneeded(
     """
     _, h, w = x.shape
     # Calculate padding sizes
+    #TODO Check with non pair and pair pad
     padding = [
         (min_height - h) // 2,  # top
         min_height - h - (min_height - h) // 2,  # bottom
@@ -151,7 +95,7 @@ def padifneeded(
     # Return original if no padding needed
     if all(p <= 0 for p in padding):
         return x
-    
+    #TODO Facteur d'échelle
     padding = [max(0, p) for p in padding]
     if isinstance(x, np.ndarray):
         return np.pad(

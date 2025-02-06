@@ -37,19 +37,23 @@ import torchcvnn.transforms.functional as F
 class BaseTransform(ABC):
     """Abstract base class for transforms that can handle both numpy arrays and PyTorch tensors.
     This class serves as a template for implementing transforms that can be applied to both numpy arrays
-    and PyTorch tensors while maintaining consistent behavior. It enforces the input to be in CHW
-    (Channel, Height, Width) format.
+    and PyTorch tensors while maintaining consistent behavior. 
+    Inputs must be in CHW (Channel, Height, Width) format.
+    
     Args:
         dtype (str, optional): Data type to convert inputs to. Must be one of:
             'float32', 'float64', 'complex64', 'complex128'. If None, no type conversion is performed.
             Default: None.
+            
     Raises:
         AssertionError: If dtype is not a string or not one of the allowed types.
         ValueError: If input is neither a numpy array nor a PyTorch tensor.
+        
     Methods:
         __call__(x): Apply the transform to the input array/tensor.
         __call_numpy__(x): Abstract method to implement numpy array transform.
         __call_torch__(x): Abstract method to implement PyTorch tensor transform.
+        
     Example:
         >>> class MyTransform(BaseTransform):
         >>>     def __call_numpy__(self, x):
@@ -70,8 +74,6 @@ class BaseTransform(ABC):
     
     def __call__(self, x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
         """Apply transform to input."""
-        # Ensure the input is in CHW format
-        x = F.ensure_chw_format(x)
         if not isinstance(x, (np.ndarray, torch.Tensor)):
             raise ValueError("Element should be a numpy array or a tensor")
         elif isinstance(x, np.ndarray):
@@ -253,11 +255,14 @@ class FFT2(BaseTransform):
         - For PyTorch tensors, uses torch.fft.fft2 followed by torch.fft.fftshift
         - Transform is applied along last two dimensions (-2, -1)
     """
+    def __init__(self, axis: Tuple[int, ...]):
+        self.axis = axis
+    
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
-        return F.applyfft2(x, axis=(-2, -1))
+        return F.applyfft2(x, axis=self.axis)
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.fft.fftshift(torch.fft.fft2(x), dim=(-2, -1))
+        return torch.fft.fftshift(torch.fft.fft2(x), dim=self.axis)
     
 
 class IFFT2(BaseTransform):
