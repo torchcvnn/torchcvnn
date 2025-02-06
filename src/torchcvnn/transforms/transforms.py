@@ -35,10 +35,11 @@ import torchcvnn.transforms.functional as F
 
 class BaseTransform(ABC):
     """Base class for transforms that handle numpy arrays and tensors."""
-    def __init__(self, dtype: str) -> None:
-        assert isinstance(dtype, str), "dtype should be a string"
-        self.np_dtype = getattr(np, dtype)
-        self.torch_dtype = getattr(torch, dtype)
+    def __init__(self, dtype: str | None = None) -> None:
+        if dtype is not None:
+            assert isinstance(dtype, str), "dtype should be a string"
+            self.np_dtype = getattr(np, dtype)
+            self.torch_dtype = getattr(torch, dtype)
     
     def __call__(self, x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
         """Apply transform to input."""
@@ -122,13 +123,15 @@ class RealImaginary(BaseTransform):
     """
     Transform a complex tensor into a real tensor, based on its real and imaginary parts.
     """
-
-    def __call__(self, tensor) -> torch.Tensor:
-        real = torch.real(tensor)
-        imaginary = torch.imag(tensor)
-        tensor_dual = torch.stack([real, imaginary], dim=0)
-        tensor = tensor_dual.flatten(0, 1)  # concatenate real and imaginary parts
-        return tensor
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        x = torch.stack([x.real, x.imag], dim=0) # CHW -> 2CHW
+        x = x.flatten(0, 1) # 2CHW -> 2C*H*W
+        return x
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        x = np.stack([x.real, x.imag], axis=0) # CHW -> 2CHW
+        x = x.reshape(-1, *x.shape[2:]) # 2CHW -> 2C*H*W
+        return x
 
 
 class RandomPhase(BaseTransform):
