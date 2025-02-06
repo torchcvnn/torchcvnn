@@ -243,32 +243,39 @@ class RandomPhase(BaseTransform):
 
 class FFT2(BaseTransform):
     """Applies 2D Fast Fourier Transform (FFT) to the input.
-    This transform computes the 2D FFT along the last two dimensions of the input array/tensor.
+    This transform computes the 2D FFT along specified dimensions of the input array/tensor.
     It applies FFT2 and shifts zero-frequency components to the center.
-
+    
+    Args
+        axis : Tuple[int, ...], optional
+            The axes over which to compute the FFT. Default is (-2, -1).
+        
     Returns
-        numpy.ndarray or torch.Tensor: 
+        numpy.ndarray or torch.Tensor
             The 2D Fourier transformed input with zero-frequency components centered.
             Output has the same shape as input.
+    
     Notes
-        - For numpy arrays, uses custom FFT2 implementation from functional module
-        - For PyTorch tensors, uses torch.fft.fft2 followed by torch.fft.fftshift
-        - Transform is applied along last two dimensions (-2, -1)
+        - Transform is applied along specified dimensions (`axis`).
     """
-    def __init__(self, axis: Tuple[int, ...]):
+    def __init__(self, axis: Tuple[int, ...] = (-2, -1)):
         self.axis = axis
     
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
-        return F.applyfft2(x, axis=self.axis)
+        return F.applyfft2_np(x, axis=self.axis)
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.fft.fftshift(torch.fft.fft2(x), dim=self.axis)
+        return F.applyfft2_torch(x, dim=self.axis)
     
 
 class IFFT2(BaseTransform):
     """Applies 2D inverse Fast Fourier Transform (IFFT) to the input.
     This transform computes the 2D IFFT along the last two dimensions of the input array/tensor.
     It applies inverse FFT shift before IFFT2.
+    
+    Args
+        axis : Tuple[int, ...], optional
+            The axes over which to compute the FFT. Default is (-2, -1).
 
     Returns
         numpy.ndarray or torch.Tensor: 
@@ -276,15 +283,16 @@ class IFFT2(BaseTransform):
             Output has the same shape as input.
         
     Notes:
-        - For numpy arrays, uses custom IFFT2 implementation from functional module 
-        - For PyTorch tensors, uses torch.fft.ifftshift followed by torch.fft.ifft2
-        - Transform is applied along last two dimensions (-2, -1)
+        - Transform is applied along specified dimensions (`axis`).
     """
+    def __init__(self, axis: Tuple[int, ...] = (-2, -1)):
+        self.axis = axis
+        
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
-        return F.applyifft2(x, axis=(-2, -1))
+        return F.applyifft2_np(x, axis=self.axis)
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.fft.ifft2(torch.fft.ifftshift(x, dim=(-2, -1)))
+        return F.applyifft2_torch(x, dim=self.axis)
 
 
 class PadIfNeeded(BaseTransform):

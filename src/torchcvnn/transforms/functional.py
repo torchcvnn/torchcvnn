@@ -28,7 +28,8 @@ import torch
 import numpy as np
 
 
-def applyfft2(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
+
+def applyfft2_np(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     """Apply 2D Fast Fourier Transform to image.
     
     Args:
@@ -41,7 +42,7 @@ def applyfft2(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     return np.fft.fftshift(np.fft.fft2(x, axes=axis), axes=axis)
 
 
-def applyifft2(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
+def applyifft2_np(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     """Apply 2D inverse Fast Fourier Transform to image.
     
     Args:
@@ -52,6 +53,32 @@ def applyifft2(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
         np.ndarray: The inverse Fourier transformed array
     """
     return np.fft.ifft2(np.fft.ifftshift(x, axes=axis), axes=axis)
+
+
+def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
+    """Apply 2D Fast Fourier Transform to image.
+    
+    Args:
+        x (np.ndarray): Input array to apply FFT to
+        axis (Tuple[int, ...]): Axes over which to compute the FFT
+        
+    Returns:
+        torch.Tensor: The Fourier transformed array
+    """
+    return torch.fft.fftshift(torch.fft.fft2(x, dim=dim), dim=dim)
+
+
+def applyifft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
+    """Apply 2D inverse Fast Fourier Transform to image.
+    
+    Args:
+        x (torch.Tensor): Input tensor to apply IFFT to
+        axis (Tuple[int, ...]): Axes over which to compute the IFFT
+        
+    Returns:
+        torch.Tensor: The inverse Fourier transformed array
+    """
+    return torch.fft.ifft2(torch.fft.ifftshift(x, dim=dim), dim=dim)
 
 
 def padifneeded(
