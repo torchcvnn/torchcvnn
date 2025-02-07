@@ -28,6 +28,29 @@ import torch
 import numpy as np
 
 
+def check_input(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
+    """Ensure image is in CHW format for 2D-tensors, convert if necessary.
+    
+    Args:
+        x (np.ndarray or torch.Tensor): Input image to check/convert format
+        
+    Returns:
+        np.ndarray or torch.Tensor: Image in CHW format
+        
+    Raises:
+        TypeError: If input is not numpy array or torch tensor
+        ValueError: If input is not a 3D array
+        
+    Example:
+        >>> img = np.zeros((64, 64, 3))  # HWC format
+        >>> chw_img = ensure_chw_format(img)  # Converts to (3, 64, 64)
+    """
+    if not isinstance(x, (np.ndarray, torch.Tensor)):
+        raise ValueError("Element should be a numpy array or a tensor")
+    if len(x.shape) == 2:
+        return x[np.newaxis, :, :]
+    return x
+
 
 def applyfft2_np(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     """Apply 2D Fast Fourier Transform to image.

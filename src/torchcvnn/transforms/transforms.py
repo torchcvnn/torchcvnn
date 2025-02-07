@@ -38,7 +38,8 @@ class BaseTransform(ABC):
     """Abstract base class for transforms that can handle both numpy arrays and PyTorch tensors.
     This class serves as a template for implementing transforms that can be applied to both numpy arrays
     and PyTorch tensors while maintaining consistent behavior. 
-    Inputs must be in CHW (Channel, Height, Width) format.
+    Inputs must be in CHW (Channel, Height, Width) format. If inputs have only 2 dimensions (Height, Width),
+    they will be converted to (1, Height, Width).
     
     Args:
         dtype (str, optional): Data type to convert inputs to. Must be one of:
@@ -74,9 +75,8 @@ class BaseTransform(ABC):
     
     def __call__(self, x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
         """Apply transform to input."""
-        if not isinstance(x, (np.ndarray, torch.Tensor)):
-            raise ValueError("Element should be a numpy array or a tensor")
-        elif isinstance(x, np.ndarray):
+        x = F.check_input(x)
+        if isinstance(x, np.ndarray):
             return self.__call_numpy__(x)
         elif isinstance(x, torch.Tensor):
             return self.__call_torch__(x)
