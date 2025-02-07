@@ -22,7 +22,7 @@
 
 # Standard imports
 from abc import ABC, abstractmethod
-from typing import Tuple, Union, Optional
+from typing import Tuple, Union, Optional, Dict
 from types import NoneType, ModuleType
 
 # External imports
@@ -537,6 +537,7 @@ class PolSAR(BaseTransform):
     """Handling Polarimetric Synthetic Aperture Radar (PolSAR) data channel conversions.
     This class provides functionality to convert between different channel representations of PolSAR data,
     supporting 1, 2, 3, and 4 output channel configurations. It can handle both NumPy arrays and PyTorch tensors.
+    If inputs is a dictionnary of type {'HH': data1, 'VV': data2}, it will stack all values along axis 0 to form a CHW array.
     
     Args:
         out_channel (int): Desired number of output channels (1, 2, 3, or 4)
@@ -559,7 +560,7 @@ class PolSAR(BaseTransform):
         >>> output = transform(input_data)  # Returns [HH, (HV+VH)/2, VV]
         
     Note:
-        Input data should have format Height x Width x Channels (HWC)
+        Input data should have format Channels x Height x Width (CHW)
     """
     def __init__(self, out_channel: int) -> None:
         self.out_channel = out_channel
@@ -594,7 +595,7 @@ class PolSAR(BaseTransform):
     
     def _convert_channels(
         self, 
-        x: np.ndarray | torch.Tensor, 
+        x: np.ndarray | torch.Tensor,
         out_channels: int, 
         backend: ModuleType
     ) -> np.ndarray | torch.Tensor:
@@ -603,7 +604,6 @@ class PolSAR(BaseTransform):
             2: self._handle_two_channels,
             4: lambda x, o: self._handle_four_channels(x, o, backend)
         }
-        #TODO handle dictionnar input
         result = handlers.get(x.shape[0], lambda x, o: None)(x, out_channels)
         if result is None:
             raise ValueError(f"Invalid conversion: {x.shape[0]} -> {out_channels} channels")
@@ -614,6 +614,10 @@ class PolSAR(BaseTransform):
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
         return self._convert_channels(x, self.out_channel, torch)
+    
+    def __call__(self, x: np.ndarray | torch.Tensor | Dict[str, np.ndarray]) -> np.ndarray | torch.Tensor:
+        x = F._polsar_dict_to_array(x)
+        return super().__call__(x)
 
 
 class PolSARtoTensor:

@@ -21,11 +21,37 @@
 # SOFTWARE.
 
 # Standard imports
-from typing import Tuple
+from typing import Tuple, Dict
 
 # External imports
 import torch
 import numpy as np
+
+
+def _polsar_dict_to_array(x: np.ndarray | torch.Tensor | Dict[str, np.ndarray]) -> np.ndarray | torch.Tensor:
+    """
+    Convert a dictionary of numpy arrays to a stacked array.
+
+    Args:
+        x (np.ndarray | torch.Tensor | Dict[str, np.ndarray]): The input data. 
+        It can be a single numpy array or PyTorch tensor, or a dictionary where keys are
+        one of 'HH', 'HV', 'VH', 'VV' and values are arrays.
+
+    Returns:
+        np.ndarray | torch.Tensor: A stacked array from the dictionary's values if input is a dictionary,
+        otherwise returns the input unchanged.
+    
+    Raises:
+        AssertionError: If any key in the dictionary is not one of 'HH', 'HV', 'VH', 'VV'.
+    """
+    if isinstance(x, Dict):
+        for k,v in x.items():
+            assert k in ['HH', 'HV', 'VH', 'VV'], f'Invalid key {k} in input'
+            assert isinstance(v, np.ndarray), "Values must be numpy arrays"
+        return np.stack([
+            v for v in x.values()
+        ])
+    return x
 
 
 def check_input(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
