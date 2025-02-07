@@ -22,7 +22,7 @@
 
 # Standard imports
 from abc import ABC, abstractmethod
-from typing import Tuple, Union
+from typing import Tuple, Union, Optional
 from types import NoneType
 
 # External imports
@@ -432,13 +432,14 @@ class FFTResize(BaseTransform):
         size: Tuple[int, ...], 
         axis: Tuple[int, ...] = (-2, -1), 
         scale: bool = False, 
-        dtype: str | NoneType = None
+        dtype: Optional[str] = "complex64"
     ) -> None:
+        if dtype is None or "complex" not in str(dtype):
+            dtype = "complex64"
+        
         super().__init__(dtype)
         assert isinstance(size, Tuple), "size must be a tuple"
         assert isinstance(axis, Tuple), "axis must be a tuple"
-        if dtype is not None:
-            assert "complex" in dtype, "FFTResize only accept complex64, complex128 dtype"
         self.height = size[0]
         self.width = size[1]
         self.axis = axis
