@@ -437,7 +437,8 @@ class FFTResize(BaseTransform):
         super().__init__(dtype)
         assert isinstance(size, Tuple), "size must be a tuple"
         assert isinstance(axis, Tuple), "axis must be a tuple"
-        assert "complex" in dtype, "FFTResize only accept complex64, complex128 dtype"
+        if dtype is not None:
+            assert "complex" in dtype, "FFTResize only accept complex64, complex128 dtype"
         self.height = size[0]
         self.width = size[1]
         self.axis = axis
