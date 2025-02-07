@@ -197,6 +197,24 @@ class RealImaginary(BaseTransform):
         return x
 
 
+class ToReal:
+    """Extracts the real part of a complex-valued input tensor.
+
+    The `ToReal` transform takes either a numpy array or a PyTorch tensor containing complex numbers 
+    and returns only their real parts. If the input is already real-valued, it remains unchanged.
+
+    Returns:
+        np.ndarray | torch.Tensor: A tensor with the same shape as the input but containing only 
+                                  the real components of each element.
+    
+    Example:
+        >>> to_real = ToReal()
+        >>> output = to_real(complex_tensor)
+    """
+    def __call__(self, x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
+        return x.real
+
+
 class RandomPhase(BaseTransform):
     """Randomly phase-shifts complex-valued input data.
     This transform applies a random phase shift to complex-valued input tensors/arrays by 
@@ -399,7 +417,7 @@ class FFTResize(BaseTransform):
     Notes:
         - Input must be a multi-dimensional array/tensor of shape Channel x Height x Width.
         - The output is complex-valued due to the nature of FFT operations. If you are working with real-valued data,
-        it is recommended to call
+        it is recommended to call ToReal after applying this transform.
     """
     def __init__(self, size: Tuple[int, ...], axis: Tuple[int, ...] = (-2, -1), scale: bool = False) -> None:
         assert isinstance(size, Tuple), "size must be a tuple"
