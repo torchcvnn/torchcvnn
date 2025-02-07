@@ -411,7 +411,7 @@ class FFTResize(BaseTransform):
             Resized image as a complex-valued array/tensor, maintaining shape (C, height, width).
 
     Examples:
-        >>> transform = FFTResize(size=(128, 128))
+        >>> transform = FFTResize((128, 128))
         >>> resized_image = transform(input_tensor)  # Resize to 128x128 using FFT
 
     Notes:
@@ -519,7 +519,7 @@ class PolSARtoTensor:
     """
     Transform a PolSAR image into a 3D torch tensor.
     """
-
+    #TODO
     def __call__(self, element: Union[np.ndarray, dict]) -> torch.Tensor:
         if isinstance(element, np.ndarray):
             assert len(element.shape) == 3, "Element should be a 3D numpy array"
