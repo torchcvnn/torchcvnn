@@ -107,7 +107,7 @@ def padifneeded(
     x: np.ndarray | torch.Tensor, 
     min_height: int, 
     min_width: int, 
-    border_mode: str,
+    border_mode: str = "constant",
     pad_value: float = 0
 ) -> np.ndarray | torch.Tensor:
     """Pad image if smaller than desired size.
