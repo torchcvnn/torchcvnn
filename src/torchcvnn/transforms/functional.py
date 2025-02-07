@@ -39,14 +39,13 @@ def check_input(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
         
     Raises:
         TypeError: If input is not numpy array or torch tensor
-        ValueError: If input is not a 3D array
         
     Example:
-        >>> img = np.zeros((64, 64, 3))  # HWC format
-        >>> chw_img = ensure_chw_format(img)  # Converts to (3, 64, 64)
+        >>> img = np.zeros((64, 64))  # HWC format
+        >>> chw_img = check_input(img)  # Converts to (1, 64, 64)
     """
     if not isinstance(x, (np.ndarray, torch.Tensor)):
-        raise ValueError("Element should be a numpy array or a tensor")
+        raise TypeError("Element should be a numpy array or a tensor")
     if len(x.shape) == 2:
         return x[np.newaxis, :, :]
     return x
