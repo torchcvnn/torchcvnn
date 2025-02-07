@@ -405,6 +405,10 @@ class FFTResize(BaseTransform):
         scale: bool, optional
             If True, scales the output amplitudes to maintain energy consistency with 
             respect to input size. Default is False.
+        dtype: torch.dtype or numpy.dtype, optional
+            Output data type. If None, maintains the input data type.
+            For PyTorch tensors: torch.complex64 or torch.complex128
+            For NumPy arrays: numpy.complex64 or numpy.complex128
 
     Returns:
         numpy.ndarray or torch.Tensor
@@ -416,12 +420,24 @@ class FFTResize(BaseTransform):
 
     Notes:
         - Input must be a multi-dimensional array/tensor of shape Channel x Height x Width.
+        - Spectral domain resizing preserves frequency characteristics better than spatial interpolation
+        - Operates on complex-valued data, preserving phase information
+        - Memory efficient for large downsampling ratios
+        - Based on the Fourier Transform properties of scaling and periodicity
         - The output is complex-valued due to the nature of FFT operations. If you are working with real-valued data,
         it is recommended to call ToReal after applying this transform.
     """
-    def __init__(self, size: Tuple[int, ...], axis: Tuple[int, ...] = (-2, -1), scale: bool = False) -> None:
+    def __init__(
+        self, 
+        size: Tuple[int, ...], 
+        axis: Tuple[int, ...] = (-2, -1), 
+        scale: bool = False, 
+        dtype: str | NoneType = None
+    ) -> None:
+        super().__init__(dtype)
         assert isinstance(size, Tuple), "size must be a tuple"
         assert isinstance(axis, Tuple), "axis must be a tuple"
+        assert "complex" in dtype, "FFTResize only accept complex64, complex128 dtype"
         self.height = size[0]
         self.width = size[1]
         self.axis = axis
@@ -438,16 +454,16 @@ class FFTResize(BaseTransform):
 
         if self.scale:
             return x * target_size / original_size
-        return x
+        return x.astype(self.np_dtype)
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
         original_size = x.shape[1] * x.shape[2]
         target_size = self.height * self.width
 
-        x = F.applyfft2_torch(x, axis=self.axis)
+        x = F.applyfft2_torch(x, dim=self.axis)
         x = F.padifneeded(x, self.height, self.width)
         x = F.center_crop(x, self.height, self.width)
-        x = F.applyifft2_np(x, axis=self.axis)
+        x = F.applyifft2_torch(x, dim=self.axis)
 
         if self.scale:
             return x * target_size / original_size
