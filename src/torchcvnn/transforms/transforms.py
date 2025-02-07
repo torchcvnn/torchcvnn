@@ -23,7 +23,7 @@
 # Standard imports
 from abc import ABC, abstractmethod
 from typing import Tuple, Union, Optional
-from types import NoneType
+from types import NoneType, ModuleType
 
 # External imports
 import torch
@@ -531,6 +531,89 @@ class SpatialResize:
             resized_array = torch.as_tensor(resized_array)
 
         return resized_array
+
+
+class PolSAR(BaseTransform):
+    """Handling Polarimetric Synthetic Aperture Radar (PolSAR) data channel conversions.
+    This class provides functionality to convert between different channel representations of PolSAR data,
+    supporting 1, 2, 3, and 4 output channel configurations. It can handle both NumPy arrays and PyTorch tensors.
+    
+    Args:
+        out_channel (int): Desired number of output channels (1, 2, 3, or 4)
+        
+    Supported conversions:
+        - 1 channel -> 1 channel: Identity
+        - 2 channels -> 1 or 2 channels
+        - 4 channels -> 1, 2, 3, or 4 channels where:
+            - 1 channel: Returns first channel only
+            - 2 channels: Returns [HH, VV] channels
+            - 3 channels: Returns [HH, (HV+VH)/2, VV]
+            - 4 channels: Returns all channels [HH, HV, VH, VV]
+            
+    Raises:
+        ValueError: If the requested channel conversion is invalid or not supported
+        
+    Example:
+        >>> transform = PolSAR(out_channel=3)
+        >>> # For 4-channel input [HH, HV, VH, VV]
+        >>> output = transform(input_data)  # Returns [HH, (HV+VH)/2, VV]
+        
+    Note:
+        Input data should have format Height x Width x Channels (HWC)
+    """
+    def __init__(self, out_channel: int) -> None:
+        self.out_channel = out_channel
+        
+    def _handle_single_channel(self, x: np.ndarray | torch.Tensor, out_channels: int) -> np.ndarray | torch.Tensor:
+        return x if out_channels == 1 else None
+
+    def _handle_two_channels(self, x: np.ndarray | torch.Tensor, out_channels: int) -> np.ndarray | torch.Tensor:
+        if out_channels == 2:
+            return x
+        elif out_channels == 1:
+            return x[0:1]
+        return None
+
+    def _handle_four_channels(
+        self, 
+        x: np.ndarray | torch.Tensor, 
+        out_channels: int, 
+        backend: ModuleType
+    ) -> np.ndarray | torch.Tensor:
+        channel_maps = {
+            1: lambda: x[0:1],
+            2: lambda: backend.stack((x[0], x[3])),
+            3: lambda: backend.stack((
+                x[0],
+                0.5 * (x[1] + x[2]),
+                x[3]
+            )),
+            4: lambda: x
+        }
+        return channel_maps.get(out_channels, lambda: None)()
+    
+    def _convert_channels(
+        self, 
+        x: np.ndarray | torch.Tensor, 
+        out_channels: int, 
+        backend: ModuleType
+    ) -> np.ndarray | torch.Tensor:
+        handlers = {
+            1: self._handle_single_channel,
+            2: self._handle_two_channels,
+            4: lambda x, o: self._handle_four_channels(x, o, backend)
+        }
+        #TODO handle dictionnar input
+        result = handlers.get(x.shape[0], lambda x, o: None)(x, out_channels)
+        if result is None:
+            raise ValueError(f"Invalid conversion: {x.shape[0]} -> {out_channels} channels")
+        return result
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return self._convert_channels(x, self.out_channel, np)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return self._convert_channels(x, self.out_channel, torch)
 
 
 class PolSARtoTensor:
