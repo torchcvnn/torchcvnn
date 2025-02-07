@@ -112,7 +112,6 @@ def padifneeded(
     """
     _, h, w = x.shape
     # Calculate padding sizes
-    #TODO Check with non pair and pair pad
     padding = [
         (min_height - h) // 2,  # top
         min_height - h - (min_height - h) // 2,  # bottom
@@ -122,7 +121,7 @@ def padifneeded(
     # Return original if no padding needed
     if all(p <= 0 for p in padding):
         return x
-    #TODO Facteur d'échelle
+
     padding = [max(0, p) for p in padding]
     if isinstance(x, np.ndarray):
         return np.pad(
