@@ -370,87 +370,70 @@ class CenterCrop(BaseTransform):
         return F.center_crop(x, self.height, self.width)
 
 
-class FFTResize:
+class FFTResize(BaseTransform):
+    """Resizes an input image in spectral domain with Fourier Transformations.
+
+    This transform first applies a 2D FFT to the input array/tensor of shape CHW along specified axes,
+    followed by padding or center cropping to achieve the target size, then applies
+    an inverse FFT to go back to spatial domain. Optionally, it scales the output amplitudes to maintain energy consistency 
+    between original and resized images.
+
+    Args:
+        size: Tuple[int, int]
+            Target dimensions (height, width) for resizing.
+        axis: Tuple[int, ...], optional
+            The axes over which to apply FFT. Default is (-2, -1). For a array / tensor of shape CHW,
+            it corresponds to the Height and Width axes.
+        scale: bool, optional
+            If True, scales the output amplitudes to maintain energy consistency with 
+            respect to input size. Default is False.
+
+    Returns:
+        numpy.ndarray or torch.Tensor
+            Resized image as a complex-valued array/tensor, maintaining shape (C, height, width).
+
+    Examples:
+        >>> transform = FFTResize(size=(128, 128))
+        >>> resized_image = transform(input_tensor)  # Resize to 128x128 using FFT
+
+    Notes:
+        - Input must be a multi-dimensional array/tensor of shape Channel x Height x Width.
+        - The output is complex-valued due to the nature of FFT operations. If you are working with real-valued data,
+        it is recommended to call
     """
-    Resize a complex tensor to a given size. The resize is performed in the Fourier
-    domain by either cropping or padding the FFT2 of the input array/tensor.
+    def __init__(self, size: Tuple[int, ...], axis: Tuple[int, ...] = (-2, -1), scale: bool = False) -> None:
+        assert isinstance(size, Tuple), "size must be a tuple"
+        assert isinstance(axis, Tuple), "axis must be a tuple"
+        self.height = size[0]
+        self.width = size[1]
+        self.axis = axis
+        self.scale = scale
 
-    Arguments:
-        size: The target size of the resized tensor.
-    """
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        original_size = x.shape[1] * x.shape[2]
+        target_size = self.height * self.width
 
-    def __init__(self, size):
-        self.size = size
+        x = F.applyfft2_np(x, axis=self.axis)
+        x = F.padifneeded(x, self.height, self.width)
+        x = F.center_crop(x, self.height, self.width)
+        x = F.applyifft2_np(x, axis=self.axis)
 
-    def __call__(
-        self, array: Union[np.array, torch.tensor]
-    ) -> Union[np.array, torch.Tensor]:
+        if self.scale:
+            return x * target_size / original_size
+        return x
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        original_size = x.shape[1] * x.shape[2]
+        target_size = self.height * self.width
 
-        is_torch = False
-        if isinstance(array, torch.Tensor):
-            is_torch = True
-            array = array.numpy()
+        x = F.applyfft2_torch(x, axis=self.axis)
+        x = F.padifneeded(x, self.height, self.width)
+        x = F.center_crop(x, self.height, self.width)
+        x = F.applyifft2_np(x, axis=self.axis)
 
-        real_part = array.real
-        imaginary_part = array.imag
-
-        def zoom(array):
-            # Computes the 2D FFT of the array and center the zero frequency component
-            array = np.fft.fftshift(np.fft.fft2(array))
-            original_size = array.shape
-
-            # Either center crop or pad the array to the target size
-            target_size = self.size
-            if array.shape[0] < target_size[0]:
-                # Computes top and bottom padding
-                top_pad = (target_size[0] - array.shape[0] + 1) // 2
-                bottom_pad = target_size[0] - array.shape[0] - top_pad
-                array = np.pad(array, ((top_pad, bottom_pad), (0, 0)))
-            elif array.shape[0] > target_size[0]:
-                top_crop = array.shape[0] // 2 - target_size[0] // 2
-                bottom_crop = top_crop + target_size[0]
-                array = array[top_crop:bottom_crop, :]
-
-            if array.shape[1] < target_size[1]:
-                left_pad = (target_size[1] - array.shape[1] + 1) // 2
-                right_pad = target_size[1] - array.shape[1] - left_pad
-                array = np.pad(array, ((0, 0), (left_pad, right_pad)))
-            elif array.shape[1] > target_size[1]:
-                left_crop = array.shape[1] // 2 - target_size[1] // 2
-                right_crop = left_crop + target_size[1]
-                array = array[:, left_crop:right_crop]
-
-            # Computes the inverse 2D FFT of the array
-            array = np.fft.ifft2(np.fft.ifftshift(array))
-            scale = (target_size[0] * target_size[1]) / (
-                original_size[0] * original_size[1]
-            )
-
-            return scale * array
-
-        if len(array.shape) == 2:
-            # We have a two dimensional tensor
-            resized_real = zoom(real_part)
-            resized_imaginary = zoom(imaginary_part)
-        else:
-            # We have three dimensions and therefore
-            # apply the resize to each channel iteratively
-            # We assume the first dimension is the channel
-            resized_real = []
-            resized_imaginary = []
-            for real, imaginary in zip(real_part, imaginary_part):
-                resized_real.append(zoom(real))
-                resized_imaginary.append(zoom(imaginary))
-            resized_real = np.stack(resized_real)
-            resized_imaginary = np.stack(resized_imaginary)
-
-        resized_array = resized_real + 1j * resized_imaginary
-
-        # Convert the resized tensor back to a torch tensor if necessary
-        if is_torch:
-            resized_array = torch.as_tensor(resized_array)
-
-        return resized_array
+        if self.scale:
+            return x * target_size / original_size
+        return x
 
 
 class SpatialResize:
