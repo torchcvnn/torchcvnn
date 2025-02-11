@@ -107,8 +107,8 @@ class FFTResize:
         self.size = size
 
     def __call__(
-        self, array: Union[np.array, torch.tensor]
-    ) -> Union[np.array, torch.Tensor]:
+        self, array: Union[np.ndarray, torch.Tensor]
+    ) -> Union[np.ndarray, torch.Tensor]:
 
         is_torch = False
         if isinstance(array, torch.Tensor):
@@ -190,8 +190,8 @@ class SpatialResize:
         self.size = size
 
     def __call__(
-        self, array: Union[np.array, torch.tensor]
-    ) -> Union[np.array, torch.Tensor]:
+        self, array: Union[np.ndarray, torch.Tensor]
+    ) -> Union[np.ndarray, torch.Tensor]:
 
         is_torch = False
         if isinstance(array, torch.Tensor):
@@ -292,7 +292,7 @@ class Unsqueeze:
     def __init__(self, dim):
         self.dim = dim
 
-    def __call__(self, element: Union[np.array, torch.tensor]) -> torch.Tensor:
+    def __call__(self, element: Union[np.ndarray, torch.Tensor]) -> torch.Tensor:
         """
         Apply the transformation by adding a dimension to the input tensor.
         """
@@ -307,7 +307,7 @@ class ToTensor:
     Convert a numpy array to a tensor.
     """
 
-    def __call__(self, element: Union[np.array, torch.tensor]) -> torch.Tensor:
+    def __call__(self, element: Union[np.ndarray, torch.Tensor]) -> torch.Tensor:
         if isinstance(element, np.ndarray):
             return torch.as_tensor(element)
         elif isinstance(element, torch.Tensor):
