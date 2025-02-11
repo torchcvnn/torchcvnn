@@ -63,6 +63,7 @@ class S1SLC(Dataset):
 
     def __init__(self, root, transform=None, lazy_loading=True):
         self.transform = transform
+        self.lazy_loading = lazy_loading
         # Get list of subfolders in the root path
         subfolders = [
             os.path.join(root, name)
@@ -121,7 +122,7 @@ class S1SLC(Dataset):
             hv_patch = hv[patch_idx]
 
             # Concatenate HH and HV to create a two-channel array
-            image = np.stack((hh_patch, hv_patch), axis=1)  # Shape: (B, 2, H, W)
+            image = np.stack((hh_patch, hv_patch), axis=0)  # Shape: (2, H, W)
         else:
             image = self.data[idx]
 
