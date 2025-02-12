@@ -167,16 +167,6 @@ class RealImaginary(BaseTransform):
         x = np.stack([x.real, x.imag], axis=0) # CHW -> 2CHW
         x = x.reshape(-1, *x.shape[2:]) # 2CHW -> 2C*H*W
         return x
-
-
-class RandomPhase:
-    """
-    Transform a real tensor into a complex tensor, by applying a random phase to the tensor.
-    """
-
-    def __call__(self, tensor) -> torch.Tensor:
-        phase = torch.rand_like(tensor, dtype=torch.float64) * 2 * torch.pi
-        return (tensor * torch.exp(1j * phase)).to(torch.complex64)
     
 
 class RandomPhase(BaseTransform):
