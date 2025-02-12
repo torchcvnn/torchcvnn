@@ -177,6 +177,38 @@ class RandomPhase:
     def __call__(self, tensor) -> torch.Tensor:
         phase = torch.rand_like(tensor, dtype=torch.float64) * 2 * torch.pi
         return (tensor * torch.exp(1j * phase)).to(torch.complex64)
+    
+
+class RandomPhase(BaseTransform):
+    """Randomly phase-shifts complex-valued input data.
+    This transform applies a random phase shift to complex-valued input tensors/arrays by 
+    multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π].
+    Args:
+        dtype : str
+            Data type for the output. Must be one of the supported complex dtypes.
+    Returns
+        torch.Tensor or numpy.ndarray
+            Phase-shifted complex-valued data with the same shape as input.
+
+    Examples
+        >>> transform = RandomPhase(dtype='complex64')
+        >>> x = torch.ones(3,3, dtype=torch.complex64)
+        >>> output = transform(x)  # Applies random phase shifts
+
+    Notes
+        - Input data must be complex-valued
+        - The output maintains the same shape and complex dtype as input
+    """
+    def __init__(self, dtype: str) -> None:
+        super().__init__(dtype)
+
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        phase = torch.rand_like(x) * 2 * torch.pi
+        return (x * torch.exp(1j * phase)).to(self.torch_dtype)
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        phase = np.random.rand(*x.shape) * 2 * np.pi
+        return (x * np.exp(1j * phase)).astype(self.np_dtype)
 
 
 class FFTResize:
