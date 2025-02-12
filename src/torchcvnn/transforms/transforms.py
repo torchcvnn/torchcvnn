@@ -398,36 +398,58 @@ class PolSARtoTensor:
         )
 
 
-class Unsqueeze:
-    """
-    Add a dimension to a tensor.
+class Unsqueeze(BaseTransform):
+    """Add a singleton dimension to the input array/tensor.
 
-    Arguments:
-        dim: The dimension of the axis/dim to extend
-    """
+    This transform inserts a new axis at the specified position, increasing 
+    the dimensionality of the input by one.
 
-    def __init__(self, dim):
+    Args:
+        dim (int): Position where new axis should be inserted.
+
+    Returns:
+        np.ndarray | torch.Tensor: Input with new singleton dimension added.
+            Shape will be same as input but with a 1 inserted at position dim.
+
+    Example:
+        >>> transform = Unsqueeze(dim=0) 
+        >>> x = torch.randn(3,4)  # Shape (3,4)
+        >>> y = transform(x)      # Shape (1,3,4)
+    """
+    def __init__(self, dim: int) -> None:
         self.dim = dim
 
-    def __call__(self, element: Union[np.ndarray, torch.Tensor]) -> torch.Tensor:
-        """
-        Apply the transformation by adding a dimension to the input tensor.
-        """
-        if isinstance(element, np.ndarray):
-            element = np.expand_dims(element, axis=self.dim)
-        elif isinstance(element, torch.Tensor):
-            element = element.unsqueeze(dim=self.dim)
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return np.expand_dims(x, axis=self.dim)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return x.unsqueeze(dim=self.dim)
 
 
-class ToTensor:
+class ToTensor(BaseTransform):
+    """Converts numpy array or torch tensor to torch tensor of specified dtype.
+    This transform converts input data to a PyTorch tensor with the specified data type.
+    It handles both numpy arrays and existing PyTorch tensors as input.
+
+    Args:
+        dtype (str): Target data type for the output tensor. Should be one of PyTorch's
+            supported dtype strings (e.g. 'float32', 'float64', 'int32', etc.)
+
+    Returns:
+        torch.Tensor: The converted tensor with the specified dtype.
+        
+    Example:
+        >>> transform = ToTensor(dtype='float32')
+        >>> x_numpy = np.array([1, 2, 3])
+        >>> x_tensor = transform(x_numpy)  # converts to torch.FloatTensor
+        >>> x_existing = torch.tensor([1, 2, 3], dtype=torch.int32)
+        >>> x_converted = transform(x_existing)  # converts to torch.FloatTensor
     """
-    Convert a numpy array to a tensor.
-    """
+    def __init__(self, dtype: str) -> None:
+        super().__init__(dtype)
 
-    def __call__(self, element: Union[np.ndarray, torch.Tensor]) -> torch.Tensor:
-        if isinstance(element, np.ndarray):
-            return torch.as_tensor(element)
-        elif isinstance(element, torch.Tensor):
-            return element
-        else:
-            raise ValueError("Element should be a numpy array or a tensor")
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return torch.as_tensor(x, dtype=self.torch_dtype)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return x.to(self.torch_dtype)
