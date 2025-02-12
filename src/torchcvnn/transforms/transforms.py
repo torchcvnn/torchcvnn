@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2025 Quentin Gabot, Jeremy Fix
+# Copyright (c) 2025 Quentin Gabot, Jeremy Fix, Huy Nguyen
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +21,75 @@
 # SOFTWARE.
 
 # Standard imports
-from typing import Union
+from abc import ABC, abstractmethod
+from typing import Tuple, Union, Optional, Dict
+from types import NoneType, ModuleType
 
 # External imports
 import torch
 import numpy as np
 from PIL import Image
+
+# Internal imports
+import torchcvnn.transforms.functional as F
+
+
+class BaseTransform(ABC):
+    """Abstract base class for transforms that can handle both numpy arrays and PyTorch tensors.
+    This class serves as a template for implementing transforms that can be applied to both numpy arrays
+    and PyTorch tensors while maintaining consistent behavior. 
+    Inputs must be in CHW (Channel, Height, Width) format. If inputs have only 2 dimensions (Height, Width),
+    they will be converted to (1, Height, Width).
+    
+    Args:
+        dtype (str, optional): Data type to convert inputs to. Must be one of:
+            'float32', 'float64', 'complex64', 'complex128'. If None, no type conversion is performed.
+            Default: None.
+            
+    Raises:
+        AssertionError: If dtype is not a string or not one of the allowed types.
+        ValueError: If input is neither a numpy array nor a PyTorch tensor.
+        
+    Methods:
+        __call__(x): Apply the transform to the input array/tensor.
+        __call_numpy__(x): Abstract method to implement numpy array transform.
+        __call_torch__(x): Abstract method to implement PyTorch tensor transform.
+        
+    Example:
+        >>> class MyTransform(BaseTransform):
+        >>>     def __call_numpy__(self, x):
+        >>>         # Implement numpy transform
+        >>>         pass
+        >>>     def __call_torch__(self, x):
+        >>>         # Implement torch transform
+        >>>         pass
+        >>> transform = MyTransform(dtype='float32')
+        >>> output = transform(input_data)  # Works with both numpy arrays and torch tensors
+    """
+    def __init__(self, dtype: str | NoneType = None) -> None:
+        if dtype is not None:
+            assert isinstance(dtype, str), "dtype should be a string"
+            assert dtype in ["float32", "float64", "complex64", "complex128"], "dtype should be one of float32, float64, complex64, complex128"
+            self.np_dtype = getattr(np, dtype)
+            self.torch_dtype = getattr(torch, dtype)
+    
+    def __call__(self, x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
+        """Apply transform to input."""
+        x = F.check_input(x)
+        if isinstance(x, np.ndarray):
+            return self.__call_numpy__(x)
+        elif isinstance(x, torch.Tensor):
+            return self.__call_torch__(x)
+
+    @abstractmethod
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        """Apply transform to numpy array."""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        """Apply transform to torch tensor."""
+        raise NotImplementedError
 
 
 class LogAmplitude:
