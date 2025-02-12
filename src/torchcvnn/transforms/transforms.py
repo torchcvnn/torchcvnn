@@ -147,17 +147,26 @@ class Amplitude(BaseTransform):
         return np.abs(x).astype(self.np_dtype)
 
 
-class RealImaginary:
-    """
-    Transform a complex tensor into a real tensor, based on its real and imaginary parts.
-    """
+class RealImaginary(BaseTransform):
+    """Transform a complex-valued tensor into its real and imaginary components.
 
-    def __call__(self, tensor) -> torch.Tensor:
-        real = torch.real(tensor)
-        imaginary = torch.imag(tensor)
-        tensor_dual = torch.stack([real, imaginary], dim=0)
-        tensor = tensor_dual.flatten(0, 1)  # concatenate real and imaginary parts
-        return tensor
+    This transform separates a complex-valued tensor into its real and imaginary parts,
+    stacking them along a new channel dimension. The output tensor has twice the number
+    of channels as the input.
+
+    Returns:
+        np.ndarray | torch.Tensor: Real-valued tensor containing real and imaginary parts,
+            with shape (2*C, H, W) where C is the original number of channels.
+    """
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        x = torch.stack([x.real, x.imag], dim=0) # CHW -> 2CHW
+        x = x.flatten(0, 1) # 2CHW -> 2C*H*W
+        return x
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        x = np.stack([x.real, x.imag], axis=0) # CHW -> 2CHW
+        x = x.reshape(-1, *x.shape[2:]) # 2CHW -> 2C*H*W
+        return x
 
 
 class RandomPhase:
