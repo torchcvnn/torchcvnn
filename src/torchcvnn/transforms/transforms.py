@@ -124,14 +124,27 @@ class LogAmplitude:
         return torch.as_tensor(np.stack(new_tensor), dtype=torch.complex64)
 
 
-class Amplitude:
-    """
-    Transform a complex tensor into a real tensor, based on its amplitude.
-    """
+class Amplitude(BaseTransform):
+    """Transform a complex-valued tensor into its amplitude/magnitude.
 
-    def __call__(self, tensor) -> torch.Tensor:
-        tensor = torch.abs(tensor).to(torch.float64)
-        return tensor
+    This transform computes the absolute value (magnitude) of complex input data,
+    converting complex values to real values.
+
+    Args:
+        dtype (str): Data type for the output ('float32', 'float64', etc)
+
+    Returns:
+        np.ndarray | torch.Tensor: Real-valued tensor containing the amplitudes,
+            with same shape as input but real-valued type specified by dtype.
+    """
+    def __init__(self, dtype: str) -> None:
+        super().__init__(dtype)
+
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return torch.abs(x).to(self.torch_dtype)
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return np.abs(x).astype(self.np_dtype)
 
 
 class RealImaginary:
