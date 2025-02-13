@@ -28,37 +28,51 @@ import torch
 import numpy as np
 from PIL import Image
 
+# Internal imports
+import torchcvnn.transforms.functional as F
 
-class LogAmplitude:
+
+class LogAmplitude(BaseTransform):
+    """This transform applies a logarithmic scaling to the amplitude/magnitude of complex values
+    while optionally preserving the phase information. The amplitude is first clipped to 
+    [min_value, max_value] range, then log10-transformed and normalized to [0,1] range.
+
+    The transformation follows these steps:
+    1. Extract amplitude and phase from complex input
+    2. Clip amplitude between min_value and max_value 
+    3. Apply log10 transform and normalize to [0,1]
+    4. Optionally recombine with original phase
+
+    Args:
+        min_value (int | float, optional): Minimum amplitude value for clipping. 
+            Values below this will be clipped up. Defaults to 0.02.
+        max_value (int | float, optional): Maximum amplitude value for clipping.
+            Values above this will be clipped down. Defaults to 40.
+        keep_phase (bool, optional): Whether to preserve phase information.
+            If True, returns complex output with transformed amplitude and original phase.
+            If False, returns just the transformed amplitude. Defaults to True.
+    Returns:
+        np.ndarray | torch.Tensor: Transformed tensor with same shape as input.
+            If keep_phase=True: Complex tensor with log-scaled amplitude and original phase
+            If keep_phase=False: Real tensor with just the log-scaled amplitude
+    Example:
+        >>> transform = LogAmplitude(min_value=0.01, max_value=100)
+        >>> output = transform(input_tensor)  # Transforms amplitudes to log scale [0,1]
+    Note:
+        The transform works with both NumPy arrays and PyTorch tensors through
+        separate internal implementations (__call_numpy__ and __call_torch__).
     """
-    Transform the amplitude of a complex tensor to a log scale between a min and max value.
-
-    After this transform, the phases are the same but the magnitude is log transformed and
-    scaled in [0, 1]
-
-    Arguments:
-        min_value: The minimum value of the amplitude range to clip
-        max_value: The maximum value of the amplitude range to clip
-    """
-
-    def __init__(self, min_value=0.02, max_value=40):
+    def __init__(self, min_value: int | float = 0.02, max_value: int | float = 40, keep_phase: bool = True) -> None:
         self.min_value = min_value
         self.max_value = max_value
+        self.keep_phase = keep_phase
 
-    def __call__(self, tensor) -> torch.Tensor:
-        new_tensor = []
-        for idx, ch in enumerate(tensor):
-            amplitude = torch.abs(ch)
-            phase = torch.angle(ch)
-            amplitude = torch.clip(amplitude, self.min_value, self.max_value)
-            transformed_amplitude = (
-                torch.log10(amplitude) - torch.log10(torch.tensor([self.min_value]))
-            ) / (
-                torch.log10(torch.tensor([self.max_value]))
-                - torch.log10(torch.tensor([self.min_value]))
-            )
-            new_tensor.append(transformed_amplitude * torch.exp(1j * phase))
-        return torch.as_tensor(np.stack(new_tensor), dtype=torch.complex64)
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return F.log_normalize_amplitude(x, np, self.keep_phase, self.min_value, self.max_value)
+        
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return F.log_normalize_amplitude(x, torch, self.keep_phase, self.min_value, self.max_value)
+
 
 
 class Amplitude:
