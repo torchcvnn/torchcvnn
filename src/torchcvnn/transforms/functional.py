@@ -164,9 +164,35 @@ def applyifft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
 
 
 def get_padding(current_size: int, target_size: int) -> Tuple[int, ...]:
+    """Calculate padding required to reach target size from current size.
+    
+    Calculates padding values for both sides of an axis to reach a target size.
+    Handles both even and odd target sizes by adjusting padding distribution.
+    
+    Args:
+        current_size (int): Current dimension size
+        target_size (int): Desired dimension size after padding
+        
+    Returns:
+        Tuple[int, ...]: Padding values for (before, after) positions
+        
+    Example:
+        >>> get_padding(5, 7)  # Pad 5->7
+        (1, 1)  # Add 1 padding on each side
+        >>> get_padding(3, 6)  # Pad 3->6 (even target)
+        (2, 1)  # More padding before for even targets
+    
+    Note:
+        For even target sizes, the padding is distributed with one extra
+        pad value before the content to maintain proper centering.
+    """
+    # Adjust offset for even-sized targets to maintain centering
     offset = 1 if target_size % 2 == 0 else 0
+    # Calculate total padding needed
     pad_total = target_size - current_size
+    # Calculate padding before, accounting for even-size offset
     pad_before = (pad_total + offset) // 2
+    # Calculate padding after as remainder
     pad_after = pad_total - pad_before
     return pad_before, pad_after
 
