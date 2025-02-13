@@ -186,7 +186,7 @@ def get_padding(current_size: int, target_size: int) -> Tuple[int, ...]:
         For even target sizes, the padding is distributed with one extra
         pad value before the content to maintain proper centering.
     """
-    # Adjust offset for even-sized targets to maintain centering
+    # Adjust offset for even-sized targets or odd-sized targets
     offset = 1 if target_size % 2 == 0 else 0
     # Calculate total padding needed
     pad_total = target_size - current_size
@@ -208,7 +208,6 @@ def padifneeded(
 
     This function pads an image with zeros if its dimensions are smaller than the specified
     minimum height and width. The padding is added equally on both sides where possible.
-    If the padding is uneven, the right and the bottom sides will receive an extra padding of 1 compare to the left and the top sides.
 
     Args:
         x (Union[np.ndarray, torch.Tensor]): Input image tensor/array with shape (C,H,W)
