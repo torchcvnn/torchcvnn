@@ -309,13 +309,13 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.Unsqueeze.html#torchcvnn.transforms.Unsqueeze" title="torchcvnn.transforms.Unsqueeze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unsqueeze</span></code></a>(dim)</p></td>
-<td><p>Add a dimension to a tensor.</p></td>
+<td><p>Add a singleton dimension to the input array/tensor.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.ToTensor.html#torchcvnn.transforms.ToTensor" title="torchcvnn.transforms.ToTensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToTensor</span></code></a>()</p></td>
-<td><p>Convert a numpy array to a tensor.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.ToTensor.html#torchcvnn.transforms.ToTensor" title="torchcvnn.transforms.ToTensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToTensor</span></code></a>(dtype)</p></td>
+<td><p>Converts numpy array or torch tensor to torch tensor of specified dtype.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.RealImaginary.html#torchcvnn.transforms.RealImaginary" title="torchcvnn.transforms.RealImaginary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RealImaginary</span></code></a>()</p></td>
-<td><p>Transform a complex tensor into a real tensor, based on its real and imaginary parts.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.RealImaginary.html#torchcvnn.transforms.RealImaginary" title="torchcvnn.transforms.RealImaginary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RealImaginary</span></code></a>([dtype])</p></td>
+<td><p>Transform a complex-valued tensor into its real and imaginary components.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.PolSARtoTensor.html#torchcvnn.transforms.PolSARtoTensor" title="torchcvnn.transforms.PolSARtoTensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PolSARtoTensor</span></code></a>()</p></td>
 <td><p>Transform a PolSAR image into a 3D torch tensor.</p></td>
@@ -332,11 +332,11 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.LogAmplitude.html#torchcvnn.transforms.LogAmplitude" title="torchcvnn.transforms.LogAmplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LogAmplitude</span></code></a>([min_value, max_value])</p></td>
 <td><p>Transform the amplitude of a complex tensor to a log scale between a min and max value.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.Amplitude.html#torchcvnn.transforms.Amplitude" title="torchcvnn.transforms.Amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Amplitude</span></code></a>()</p></td>
-<td><p>Transform a complex tensor into a real tensor, based on its amplitude.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.Amplitude.html#torchcvnn.transforms.Amplitude" title="torchcvnn.transforms.Amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Amplitude</span></code></a>(dtype)</p></td>
+<td><p>Transform a complex-valued tensor into its amplitude/magnitude.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.RandomPhase.html#torchcvnn.transforms.RandomPhase" title="torchcvnn.transforms.RandomPhase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomPhase</span></code></a>()</p></td>
-<td><p>Transform a real tensor into a complex tensor, by applying a random phase to the tensor.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.RandomPhase.html#torchcvnn.transforms.RandomPhase" title="torchcvnn.transforms.RandomPhase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomPhase</span></code></a>(dtype)</p></td>
+<td><p>Randomly phase-shifts complex-valued input data. This transform applies a random phase shift to complex-valued input tensors/arrays by multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π]. :param dtype: str               Data type for the output. Must be one of the supported complex dtypes.</p></td>
 </tr>
 </tbody>
 </table>

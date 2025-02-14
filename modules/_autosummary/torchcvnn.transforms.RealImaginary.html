@@ -305,18 +305,33 @@
 <h1>torchcvnn.transforms.RealImaginary<a class="headerlink" href="#torchcvnn-transforms-realimaginary" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchcvnn.transforms.RealImaginary">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.transforms.</span></span><span class="sig-name descname"><span class="pre">RealImaginary</span></span><a class="reference internal" href="../../_modules/torchcvnn/transforms/transforms.html#RealImaginary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.transforms.RealImaginary" title="Link to this definition">¶</a></dt>
-<dd><p>Transform a complex tensor into a real tensor, based on its real and imaginary parts.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.transforms.</span></span><span class="sig-name descname"><span class="pre">RealImaginary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/transforms/transforms.html#RealImaginary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.transforms.RealImaginary" title="Link to this definition">¶</a></dt>
+<dd><p>Transform a complex-valued tensor into its real and imaginary components.</p>
+<p>This transform separates a complex-valued tensor into its real and imaginary parts,
+stacking them along a new channel dimension. The output tensor has twice the number
+of channels as the input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Real-valued tensor containing real and imaginary parts,</dt><dd><p>with shape (2*C, H, W) where C is the original number of channels.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray | <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.6)">torch.Tensor</a></p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchcvnn.transforms.RealImaginary.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#torchcvnn.transforms.RealImaginary.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#torchcvnn.transforms.RealImaginary.__init__" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.transforms.RealImaginary.__init__" title="torchcvnn.transforms.RealImaginary.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.transforms.RealImaginary.__init__" title="torchcvnn.transforms.RealImaginary.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([dtype])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>

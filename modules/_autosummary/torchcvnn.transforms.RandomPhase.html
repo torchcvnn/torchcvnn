@@ -305,18 +305,42 @@
 <h1>torchcvnn.transforms.RandomPhase<a class="headerlink" href="#torchcvnn-transforms-randomphase" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchcvnn.transforms.RandomPhase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.transforms.</span></span><span class="sig-name descname"><span class="pre">RandomPhase</span></span><a class="reference internal" href="../../_modules/torchcvnn/transforms/transforms.html#RandomPhase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.transforms.RandomPhase" title="Link to this definition">¶</a></dt>
-<dd><p>Transform a real tensor into a complex tensor, by applying a random phase to the tensor.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.transforms.</span></span><span class="sig-name descname"><span class="pre">RandomPhase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/transforms/transforms.html#RandomPhase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.transforms.RandomPhase" title="Link to this definition">¶</a></dt>
+<dd><p>Randomly phase-shifts complex-valued input data.
+This transform applies a random phase shift to complex-valued input tensors/arrays by
+multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π].
+:param dtype: str</p>
+<blockquote>
+<div><p>Data type for the output. Must be one of the supported complex dtypes.</p>
+</div></blockquote>
+<dl>
+<dt>Returns</dt><dd><dl class="simple">
+<dt>torch.Tensor or numpy.ndarray</dt><dd><p>Phase-shifted complex-valued data with the same shape as input.</p>
+</dd>
+</dl>
+</dd>
+<dt>Examples</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="n">RandomPhase</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;complex64&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Applies random phase shifts</span>
+</pre></div>
+</div>
+</dd>
+<dt>Notes</dt><dd><ul class="simple">
+<li><p>Input data must be complex-valued</p></li>
+<li><p>The output maintains the same shape and complex dtype as input</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchcvnn.transforms.RandomPhase.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#torchcvnn.transforms.RandomPhase.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/torchcvnn/transforms/transforms.html#RandomPhase.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.transforms.RandomPhase.__init__" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.transforms.RandomPhase.__init__" title="torchcvnn.transforms.RandomPhase.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.transforms.RandomPhase.__init__" title="torchcvnn.transforms.RandomPhase.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(dtype)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
