@@ -223,12 +223,6 @@ class RandomPhase(BaseTransform):
         if self.centering:
             phase = phase - np.pi
         return (x * np.exp(1j * phase)).astype(self.np_dtype)
-    def __call__(self, tensor) -> torch.Tensor:
-        real = torch.real(tensor)
-        imaginary = torch.imag(tensor)
-        tensor_dual = torch.stack([real, imaginary], dim=0)
-        tensor = tensor_dual.flatten(0, 1)  # concatenate real and imaginary parts
-        return tensor
     
 
 class ToReal:
