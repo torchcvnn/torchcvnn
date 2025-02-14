@@ -482,10 +482,14 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">RandomPhase</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly phase-shifts complex-valued input data.</span>
 <span class="sd">    This transform applies a random phase shift to complex-valued input tensors/arrays by </span>
-<span class="sd">    multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π].</span>
+<span class="sd">    multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π] </span>
+<span class="sd">    or [-π, π] if centering is enabled.</span>
 <span class="sd">    Args:</span>
 <span class="sd">        dtype : str</span>
 <span class="sd">            Data type for the output. Must be one of the supported complex dtypes.</span>
+<span class="sd">        centering : bool, optional. </span>
+<span class="sd">            If True, centers the random phase distribution around 0 by subtracting π from </span>
+<span class="sd">            the generated phases. Default is False.</span>
 <span class="sd">    Returns</span>
 <span class="sd">        torch.Tensor or numpy.ndarray</span>
 <span class="sd">            Phase-shifted complex-valued data with the same shape as input.</span>
@@ -498,19 +502,27 @@
 <span class="sd">    Notes</span>
 <span class="sd">        - Input data must be complex-valued</span>
 <span class="sd">        - The output maintains the same shape and complex dtype as input</span>
+<span class="sd">        - Phase shifts are uniformly distributed in:</span>
+<span class="sd">            - [0, 2π] when centering=False</span>
+<span class="sd">            - [-π, π] when centering=True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="RandomPhase.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.RandomPhase.html#torchcvnn.transforms.RandomPhase.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">centering</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centering</span> <span class="o">=</span> <span class="n">centering</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">phase</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">centering</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="n">phase</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phase</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">torch_dtype</span><span class="p">)</span>
     
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">centering</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="n">phase</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phase</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np_dtype</span><span class="p">)</span></div>
 
 

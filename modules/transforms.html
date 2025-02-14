@@ -335,8 +335,8 @@
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.Amplitude.html#torchcvnn.transforms.Amplitude" title="torchcvnn.transforms.Amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Amplitude</span></code></a>(dtype)</p></td>
 <td><p>Transform a complex-valued tensor into its amplitude/magnitude.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.RandomPhase.html#torchcvnn.transforms.RandomPhase" title="torchcvnn.transforms.RandomPhase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomPhase</span></code></a>(dtype)</p></td>
-<td><p>Randomly phase-shifts complex-valued input data. This transform applies a random phase shift to complex-valued input tensors/arrays by multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π]. :param dtype: str               Data type for the output. Must be one of the supported complex dtypes.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.RandomPhase.html#torchcvnn.transforms.RandomPhase" title="torchcvnn.transforms.RandomPhase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomPhase</span></code></a>(dtype[, centering])</p></td>
+<td><p>Randomly phase-shifts complex-valued input data. This transform applies a random phase shift to complex-valued input tensors/arrays by multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π] or [-π, π] if centering is enabled. :param dtype: str               Data type for the output. Must be one of the supported complex dtypes. :param centering: bool, optional. If True, centers the random phase distribution around 0 by subtracting π from                   the generated phases. Default is False.</p></td>
 </tr>
 </tbody>
 </table>
