@@ -92,7 +92,6 @@ class BaseTransform(ABC):
         raise NotImplementedError
 
 
-
 class LogAmplitude(BaseTransform):
     """This transform applies a logarithmic scaling to the amplitude/magnitude of complex values
     while optionally preserving the phase information. The amplitude is first clipped to 
@@ -133,7 +132,6 @@ class LogAmplitude(BaseTransform):
         
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
         return F.log_normalize_amplitude(x, torch, self.keep_phase, self.min_value, self.max_value)
-
 
 
 class Amplitude(BaseTransform):
