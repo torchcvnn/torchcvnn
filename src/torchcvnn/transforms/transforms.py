@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2025 Quentin Gabot, Jeremy Fix
+# Copyright (c) 2025 Quentin Gabot, Jeremy Fix, Huy Nguyen
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +21,75 @@
 # SOFTWARE.
 
 # Standard imports
-from typing import Union
+from abc import ABC, abstractmethod
+from typing import Tuple, Union, Optional, Dict
+from types import NoneType, ModuleType
 
 # External imports
 import torch
 import numpy as np
 from PIL import Image
+
+# Internal imports
+import torchcvnn.transforms.functional as F
+
+
+class BaseTransform(ABC):
+    """Abstract base class for transforms that can handle both numpy arrays and PyTorch tensors.
+    This class serves as a template for implementing transforms that can be applied to both numpy arrays
+    and PyTorch tensors while maintaining consistent behavior. 
+    Inputs must be in CHW (Channel, Height, Width) format. If inputs have only 2 dimensions (Height, Width),
+    they will be converted to (1, Height, Width).
+    
+    Args:
+        dtype (str, optional): Data type to convert inputs to. Must be one of:
+            'float32', 'float64', 'complex64', 'complex128'. If None, no type conversion is performed.
+            Default: None.
+            
+    Raises:
+        AssertionError: If dtype is not a string or not one of the allowed types.
+        ValueError: If input is neither a numpy array nor a PyTorch tensor.
+        
+    Methods:
+        __call__(x): Apply the transform to the input array/tensor.
+        __call_numpy__(x): Abstract method to implement numpy array transform.
+        __call_torch__(x): Abstract method to implement PyTorch tensor transform.
+        
+    Example:
+        >>> class MyTransform(BaseTransform):
+        >>>     def __call_numpy__(self, x):
+        >>>         # Implement numpy transform
+        >>>         pass
+        >>>     def __call_torch__(self, x):
+        >>>         # Implement torch transform
+        >>>         pass
+        >>> transform = MyTransform(dtype='float32')
+        >>> output = transform(input_data)  # Works with both numpy arrays and torch tensors
+    """
+    def __init__(self, dtype: str | NoneType = None) -> None:
+        if dtype is not None:
+            assert isinstance(dtype, str), "dtype should be a string"
+            assert dtype in ["float32", "float64", "complex64", "complex128"], "dtype should be one of float32, float64, complex64, complex128"
+            self.np_dtype = getattr(np, dtype)
+            self.torch_dtype = getattr(torch, dtype)
+    
+    def __call__(self, x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
+        """Apply transform to input."""
+        x = F.check_input(x)
+        if isinstance(x, np.ndarray):
+            return self.__call_numpy__(x)
+        elif isinstance(x, torch.Tensor):
+            return self.__call_torch__(x)
+
+    @abstractmethod
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        """Apply transform to numpy array."""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        """Apply transform to torch tensor."""
+        raise NotImplementedError
 
 
 class LogAmplitude:
@@ -61,37 +124,81 @@ class LogAmplitude:
         return torch.as_tensor(np.stack(new_tensor), dtype=torch.complex64)
 
 
-class Amplitude:
+class Amplitude(BaseTransform):
+    """Transform a complex-valued tensor into its amplitude/magnitude.
+
+    This transform computes the absolute value (magnitude) of complex input data,
+    converting complex values to real values.
+
+    Args:
+        dtype (str): Data type for the output ('float32', 'float64', etc)
+
+    Returns:
+        np.ndarray | torch.Tensor: Real-valued tensor containing the amplitudes,
+            with same shape as input but real-valued type specified by dtype.
     """
-    Transform a complex tensor into a real tensor, based on its amplitude.
+    def __init__(self, dtype: str) -> None:
+        super().__init__(dtype)
+
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return torch.abs(x).to(self.torch_dtype)
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return np.abs(x).astype(self.np_dtype)
+
+
+class RealImaginary(BaseTransform):
+    """Transform a complex-valued tensor into its real and imaginary components.
+
+    This transform separates a complex-valued tensor into its real and imaginary parts,
+    stacking them along a new channel dimension. The output tensor has twice the number
+    of channels as the input.
+
+    Returns:
+        np.ndarray | torch.Tensor: Real-valued tensor containing real and imaginary parts,
+            with shape (2*C, H, W) where C is the original number of channels.
     """
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        x = torch.stack([x.real, x.imag], dim=0) # CHW -> 2CHW
+        x = x.flatten(0, 1) # 2CHW -> 2C*H*W
+        return x
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        x = np.stack([x.real, x.imag], axis=0) # CHW -> 2CHW
+        x = x.reshape(-1, *x.shape[2:]) # 2CHW -> 2C*H*W
+        return x
+    
 
-    def __call__(self, tensor) -> torch.Tensor:
-        tensor = torch.abs(tensor).to(torch.float64)
-        return tensor
+class RandomPhase(BaseTransform):
+    """Randomly phase-shifts complex-valued input data.
+    This transform applies a random phase shift to complex-valued input tensors/arrays by 
+    multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π].
+    Args:
+        dtype : str
+            Data type for the output. Must be one of the supported complex dtypes.
+    Returns
+        torch.Tensor or numpy.ndarray
+            Phase-shifted complex-valued data with the same shape as input.
 
+    Examples
+        >>> transform = RandomPhase(dtype='complex64')
+        >>> x = torch.ones(3,3, dtype=torch.complex64)
+        >>> output = transform(x)  # Applies random phase shifts
 
-class RealImaginary:
+    Notes
+        - Input data must be complex-valued
+        - The output maintains the same shape and complex dtype as input
     """
-    Transform a complex tensor into a real tensor, based on its real and imaginary parts.
-    """
+    def __init__(self, dtype: str) -> None:
+        super().__init__(dtype)
 
-    def __call__(self, tensor) -> torch.Tensor:
-        real = torch.real(tensor)
-        imaginary = torch.imag(tensor)
-        tensor_dual = torch.stack([real, imaginary], dim=0)
-        tensor = tensor_dual.flatten(0, 1)  # concatenate real and imaginary parts
-        return tensor
-
-
-class RandomPhase:
-    """
-    Transform a real tensor into a complex tensor, by applying a random phase to the tensor.
-    """
-
-    def __call__(self, tensor) -> torch.Tensor:
-        phase = torch.rand_like(tensor, dtype=torch.float64) * 2 * torch.pi
-        return (tensor * torch.exp(1j * phase)).to(torch.complex64)
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        phase = torch.rand_like(x) * 2 * torch.pi
+        return (x * torch.exp(1j * phase)).to(self.torch_dtype)
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        phase = np.random.rand(*x.shape) * 2 * np.pi
+        return (x * np.exp(1j * phase)).astype(self.np_dtype)
 
 
 class FFTResize:
@@ -281,36 +388,58 @@ class PolSARtoTensor:
         )
 
 
-class Unsqueeze:
-    """
-    Add a dimension to a tensor.
+class Unsqueeze(BaseTransform):
+    """Add a singleton dimension to the input array/tensor.
 
-    Arguments:
-        dim: The dimension of the axis/dim to extend
-    """
+    This transform inserts a new axis at the specified position, increasing 
+    the dimensionality of the input by one.
 
-    def __init__(self, dim):
+    Args:
+        dim (int): Position where new axis should be inserted.
+
+    Returns:
+        np.ndarray | torch.Tensor: Input with new singleton dimension added.
+            Shape will be same as input but with a 1 inserted at position dim.
+
+    Example:
+        >>> transform = Unsqueeze(dim=0) 
+        >>> x = torch.randn(3,4)  # Shape (3,4)
+        >>> y = transform(x)      # Shape (1,3,4)
+    """
+    def __init__(self, dim: int) -> None:
         self.dim = dim
 
-    def __call__(self, element: Union[np.ndarray, torch.Tensor]) -> torch.Tensor:
-        """
-        Apply the transformation by adding a dimension to the input tensor.
-        """
-        if isinstance(element, np.ndarray):
-            element = np.expand_dims(element, axis=self.dim)
-        elif isinstance(element, torch.Tensor):
-            element = element.unsqueeze(dim=self.dim)
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return np.expand_dims(x, axis=self.dim)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return x.unsqueeze(dim=self.dim)
 
 
-class ToTensor:
+class ToTensor(BaseTransform):
+    """Converts numpy array or torch tensor to torch tensor of specified dtype.
+    This transform converts input data to a PyTorch tensor with the specified data type.
+    It handles both numpy arrays and existing PyTorch tensors as input.
+
+    Args:
+        dtype (str): Target data type for the output tensor. Should be one of PyTorch's
+            supported dtype strings (e.g. 'float32', 'float64', 'int32', etc.)
+
+    Returns:
+        torch.Tensor: The converted tensor with the specified dtype.
+        
+    Example:
+        >>> transform = ToTensor(dtype='float32')
+        >>> x_numpy = np.array([1, 2, 3])
+        >>> x_tensor = transform(x_numpy)  # converts to torch.FloatTensor
+        >>> x_existing = torch.tensor([1, 2, 3], dtype=torch.int32)
+        >>> x_converted = transform(x_existing)  # converts to torch.FloatTensor
     """
-    Convert a numpy array to a tensor.
-    """
+    def __init__(self, dtype: str) -> None:
+        super().__init__(dtype)
 
-    def __call__(self, element: Union[np.ndarray, torch.Tensor]) -> torch.Tensor:
-        if isinstance(element, np.ndarray):
-            return torch.as_tensor(element)
-        elif isinstance(element, torch.Tensor):
-            return element
-        else:
-            raise ValueError("Element should be a numpy array or a tensor")
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return torch.as_tensor(x, dtype=self.torch_dtype)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return x.to(self.torch_dtype)
