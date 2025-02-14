@@ -154,28 +154,17 @@ class RealImaginary(BaseTransform):
     stacking them along a new channel dimension. The output tensor has twice the number
     of channels as the input.
 
-    Returns:
-        np.ndarray | torch.Tensor: Real-valued tensor containing real and imaginary parts,
-            with shape (2*C, H, W) where C is the original number of channels.
-    """
-    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
-        x = torch.stack([x.real, x.imag], dim=0) # CHW -> 2CHW
-        x = x.flatten(0, 1) # 2CHW -> 2C*H*W
-        return x
-    
-    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
-        x = np.stack([x.real, x.imag], axis=0) # CHW -> 2CHW
-        x = x.reshape(-1, *x.shape[2:]) # 2CHW -> 2C*H*W
-        return x
-    
-
 class RandomPhase(BaseTransform):
     """Randomly phase-shifts complex-valued input data.
     This transform applies a random phase shift to complex-valued input tensors/arrays by 
-    multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π].
+    multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π] 
+    or [-π, π] if centering is enabled.
     Args:
         dtype : str
             Data type for the output. Must be one of the supported complex dtypes.
+        centering : bool, optional. 
+            If True, centers the random phase distribution around 0 by subtracting π from 
+            the generated phases. Default is False.
     Returns
         torch.Tensor or numpy.ndarray
             Phase-shifted complex-valued data with the same shape as input.
@@ -188,16 +177,24 @@ class RandomPhase(BaseTransform):
     Notes
         - Input data must be complex-valued
         - The output maintains the same shape and complex dtype as input
+        - Phase shifts are uniformly distributed in:
+            - [0, 2π] when centering=False
+            - [-π, π] when centering=True
     """
-    def __init__(self, dtype: str) -> None:
+    def __init__(self, dtype: str, centering: bool = False) -> None:
         super().__init__(dtype)
+        self.centering = centering
 
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
         phase = torch.rand_like(x) * 2 * torch.pi
+        if self.centering:
+            phase = phase - torch.pi
         return (x * torch.exp(1j * phase)).to(self.torch_dtype)
     
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
         phase = np.random.rand(*x.shape) * 2 * np.pi
+        if self.centering:
+            phase = phase - np.pi
         return (x * np.exp(1j * phase)).astype(self.np_dtype)
 
 
