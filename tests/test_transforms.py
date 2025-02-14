@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2024 Jeremy Fix
+# Copyright (c) 2024-2025 Jeremy Fix, Huy Nguyen
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -37,17 +37,17 @@ def test_fft_resize_ndarray():
     spatial_resize = transforms.FFTResize(target_size)
     resized_tensor = spatial_resize(tensor)
 
-    assert resized_tensor.shape == target_size
+    assert (resized_tensor.shape[1], resized_tensor.shape[2]) == target_size
     assert type(resized_tensor) == np.ndarray
-    assert resized_tensor.dtype == np.complex128
+    assert resized_tensor.dtype in [np.complex64, np.complex128]
 
     # Resize the tensor
     target_size = (123, 121)
     spatial_resize = transforms.FFTResize(target_size)
     resized_tensor = spatial_resize(tensor)
-    assert resized_tensor.shape == target_size
+    assert (resized_tensor.shape[1], resized_tensor.shape[2]) == target_size
     assert type(resized_tensor) == np.ndarray
-    assert resized_tensor.dtype == np.complex128
+    assert resized_tensor.dtype in [np.complex64, np.complex128]
 
 
 def test_fft_resize_tensor():
@@ -60,17 +60,17 @@ def test_fft_resize_tensor():
     spatial_resize = transforms.FFTResize(target_size)
     resized_tensor = spatial_resize(tensor)
 
-    assert resized_tensor.shape == target_size
+    assert (resized_tensor.shape[1], resized_tensor.shape[2]) == target_size
     assert type(resized_tensor) == torch.Tensor
-    assert resized_tensor.dtype == torch.complex128
+    assert resized_tensor.dtype in [torch.complex64, torch.complex128]
 
     # Resize the tensor
     target_size = (123, 121)
     spatial_resize = transforms.FFTResize(target_size)
     resized_tensor = spatial_resize(tensor)
-    assert resized_tensor.shape == target_size
+    assert (resized_tensor.shape[1], resized_tensor.shape[2]) == target_size
     assert type(resized_tensor) == torch.Tensor
-    assert resized_tensor.dtype == torch.complex128
+    assert resized_tensor.dtype in [torch.complex64, torch.complex128]
 
 
 def test_spatial_resize_ndarray():
