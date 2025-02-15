@@ -122,7 +122,7 @@ class LogAmplitude(BaseTransform):
         The transform works with both NumPy arrays and PyTorch tensors through
         separate internal implementations (__call_numpy__ and __call_torch__).
     """
-    def __init__(self, min_value: int | float = 0.02, max_value: int | float = 40, keep_phase: bool = True) -> None:
+    def __init__(self, min_value: float = 0.02, max_value: float = 40, keep_phase: bool = True) -> None:
         self.min_value = min_value
         self.max_value = max_value
         self.keep_phase = keep_phase
