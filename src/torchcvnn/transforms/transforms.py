@@ -33,6 +33,9 @@ from PIL import Image
 # Internal imports
 import torchcvnn.transforms.functional as F
 
+# Internal imports
+import torchcvnn.transforms.functional as F
+
 
 class BaseTransform(ABC):
     """Abstract base class for transforms that can handle both numpy arrays and PyTorch tensors.
@@ -389,87 +392,88 @@ class CenterCrop(BaseTransform):
         return F.center_crop(x, self.height, self.width)
 
 
-class FFTResize:
+class FFTResize(BaseTransform):
+    """Resizes an input image in spectral domain with Fourier Transformations.
+
+    This transform first applies a 2D FFT to the input array/tensor of shape CHW along specified axes,
+    followed by padding or center cropping to achieve the target size, then applies
+    an inverse FFT to go back to spatial domain. Optionally, it scales the output amplitudes to maintain energy consistency 
+    between original and resized images.
+
+    Args:
+        size: Tuple[int, int]
+            Target dimensions (height, width) for resizing.
+        axis: Tuple[int, ...], optional
+            The axes over which to apply FFT. Default is (-2, -1). For a array / tensor of shape CHW,
+            it corresponds to the Height and Width axes.
+        scale: bool, optional
+            If True, scales the output amplitudes to maintain energy consistency with 
+            respect to input size. Default is False.
+        dtype: torch.dtype or numpy.dtype, optional
+            Output data type. If None, maintains the input data type.
+            For PyTorch tensors: torch.complex64 or torch.complex128
+            For NumPy arrays: numpy.complex64 or numpy.complex128
+
+    Returns:
+        numpy.ndarray or torch.Tensor
+            Resized image as a complex-valued array/tensor, maintaining shape (C, height, width).
+
+    Examples:
+        >>> transform = FFTResize((128, 128))
+        >>> resized_image = transform(input_tensor)  # Resize to 128x128 using FFT
+
+    Notes:
+        - Input must be a multi-dimensional array/tensor of shape Channel x Height x Width.
+        - Spectral domain resizing preserves frequency characteristics better than spatial interpolation
+        - Operates on complex-valued data, preserving phase information
+        - Memory efficient for large downsampling ratios
+        - Based on the Fourier Transform properties of scaling and periodicity
+        - The output is complex-valued due to the nature of FFT operations. If you are working with real-valued data,
+        it is recommended to call ToReal after applying this transform.
     """
-    Resize a complex tensor to a given size. The resize is performed in the Fourier
-    domain by either cropping or padding the FFT2 of the input array/tensor.
+    def __init__(
+        self, 
+        size: Tuple[int, ...], 
+        axis: Tuple[int, ...] = (-2, -1), 
+        scale: bool = False, 
+        dtype: Optional[str] = "complex64"
+    ) -> None:
+        if dtype is None or "complex" not in str(dtype):
+            dtype = "complex64"
+        
+        super().__init__(dtype)
+        assert isinstance(size, Tuple), "size must be a tuple"
+        assert isinstance(axis, Tuple), "axis must be a tuple"
+        self.height = size[0]
+        self.width = size[1]
+        self.axis = axis
+        self.scale = scale
 
-    Arguments:
-        size: The target size of the resized tensor.
-    """
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        original_size = x.shape[1] * x.shape[2]
+        target_size = self.height * self.width
 
-    def __init__(self, size):
-        self.size = size
+        x = F.applyfft2_np(x, axis=self.axis)
+        x = F.padifneeded(x, self.height, self.width)
+        x = F.center_crop(x, self.height, self.width)
+        x = F.applyifft2_np(x, axis=self.axis)
 
-    def __call__(
-        self, array: Union[np.ndarray, torch.Tensor]
-    ) -> Union[np.ndarray, torch.Tensor]:
+        if self.scale:
+            return x * target_size / original_size
+        return x.astype(self.np_dtype)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        original_size = x.shape[1] * x.shape[2]
+        target_size = self.height * self.width
 
-        is_torch = False
-        if isinstance(array, torch.Tensor):
-            is_torch = True
-            array = array.numpy()
+        x = F.applyfft2_torch(x, dim=self.axis)
+        x = F.padifneeded(x, self.height, self.width)
+        x = F.center_crop(x, self.height, self.width)
+        x = F.applyifft2_torch(x, dim=self.axis)
 
-        real_part = array.real
-        imaginary_part = array.imag
-
-        def zoom(array):
-            # Computes the 2D FFT of the array and center the zero frequency component
-            array = np.fft.fftshift(np.fft.fft2(array))
-            original_size = array.shape
-
-            # Either center crop or pad the array to the target size
-            target_size = self.size
-            if array.shape[0] < target_size[0]:
-                # Computes top and bottom padding
-                top_pad = (target_size[0] - array.shape[0] + 1) // 2
-                bottom_pad = target_size[0] - array.shape[0] - top_pad
-                array = np.pad(array, ((top_pad, bottom_pad), (0, 0)))
-            elif array.shape[0] > target_size[0]:
-                top_crop = array.shape[0] // 2 - target_size[0] // 2
-                bottom_crop = top_crop + target_size[0]
-                array = array[top_crop:bottom_crop, :]
-
-            if array.shape[1] < target_size[1]:
-                left_pad = (target_size[1] - array.shape[1] + 1) // 2
-                right_pad = target_size[1] - array.shape[1] - left_pad
-                array = np.pad(array, ((0, 0), (left_pad, right_pad)))
-            elif array.shape[1] > target_size[1]:
-                left_crop = array.shape[1] // 2 - target_size[1] // 2
-                right_crop = left_crop + target_size[1]
-                array = array[:, left_crop:right_crop]
-
-            # Computes the inverse 2D FFT of the array
-            array = np.fft.ifft2(np.fft.ifftshift(array))
-            scale = (target_size[0] * target_size[1]) / (
-                original_size[0] * original_size[1]
-            )
-
-            return scale * array
-
-        if len(array.shape) == 2:
-            # We have a two dimensional tensor
-            resized_real = zoom(real_part)
-            resized_imaginary = zoom(imaginary_part)
-        else:
-            # We have three dimensions and therefore
-            # apply the resize to each channel iteratively
-            # We assume the first dimension is the channel
-            resized_real = []
-            resized_imaginary = []
-            for real, imaginary in zip(real_part, imaginary_part):
-                resized_real.append(zoom(real))
-                resized_imaginary.append(zoom(imaginary))
-            resized_real = np.stack(resized_real)
-            resized_imaginary = np.stack(resized_imaginary)
-
-        resized_array = resized_real + 1j * resized_imaginary
-
-        # Convert the resized tensor back to a torch tensor if necessary
-        if is_torch:
-            resized_array = torch.as_tensor(resized_array)
-
-        return resized_array
+        if self.scale:
+            return x * target_size / original_size
+        return x.to(self.torch_dtype)
 
 
 class SpatialResize:
@@ -533,47 +537,92 @@ class SpatialResize:
         return resized_array
 
 
-class PolSARtoTensor:
+class PolSAR(BaseTransform):
+    """Handling Polarimetric Synthetic Aperture Radar (PolSAR) data channel conversions.
+    This class provides functionality to convert between different channel representations of PolSAR data,
+    supporting 1, 2, 3, and 4 output channel configurations. It can handle both NumPy arrays and PyTorch tensors.
+    If inputs is a dictionnary of type {'HH': data1, 'VV': data2}, it will stack all values along axis 0 to form a CHW array.
+    
+    Args:
+        out_channel (int): Desired number of output channels (1, 2, 3, or 4)
+        
+    Supported conversions:
+        - 1 channel -> 1 channel: Identity
+        - 2 channels -> 1 or 2 channels
+        - 4 channels -> 1, 2, 3, or 4 channels where:
+            - 1 channel: Returns first channel only
+            - 2 channels: Returns [HH, VV] channels
+            - 3 channels: Returns [HH, (HV+VH)/2, VV]
+            - 4 channels: Returns all channels [HH, HV, VH, VV]
+            
+    Raises:
+        ValueError: If the requested channel conversion is invalid or not supported
+        
+    Example:
+        >>> transform = PolSAR(out_channel=3)
+        >>> # For 4-channel input [HH, HV, VH, VV]
+        >>> output = transform(input_data)  # Returns [HH, (HV+VH)/2, VV]
+        
+    Note:
+        - Input data should have format Channels x Height x Width (CHW).
+        - By default, PolSAR always return HH polarization if out_channel is 1.
     """
-    Transform a PolSAR image into a 3D torch tensor.
-    """
+    def __init__(self, out_channel: int) -> None:
+        self.out_channel = out_channel
+        
+    def _handle_single_channel(self, x: np.ndarray | torch.Tensor, out_channels: int) -> np.ndarray | torch.Tensor:
+        return x if out_channels == 1 else None
 
-    def __call__(self, element: Union[np.ndarray, dict]) -> torch.Tensor:
-        if isinstance(element, np.ndarray):
-            assert len(element.shape) == 3, "Element should be a 3D numpy array"
-            if element.shape[0] == 3:
-                return self._create_tensor(element[0], element[1], element[2])
-            if element.shape[0] == 2:
-                return self._create_tensor(element[0], element[1])
-            elif element.shape[0] == 4:
-                return self._create_tensor(
-                    element[0], (element[1] + element[2]) / 2, element[3]
-                )
+    def _handle_two_channels(self, x: np.ndarray | torch.Tensor, out_channels: int) -> np.ndarray | torch.Tensor:
+        if out_channels == 2:
+            return x
+        elif out_channels == 1:
+            return x[0:1]
+        return None
 
-        elif isinstance(element, dict):
-            if len(element) == 3:
-                return self._create_tensor(element["HH"], element["HV"], element["VV"])
-            elif len(element) == 2:
-                if "HH" in element:
-                    return self._create_tensor(element["HH"], element["HV"])
-                elif "VV" in element:
-                    return self._create_tensor(element["HV"], element["VV"])
-                else:
-                    raise ValueError(
-                        "Dictionary should contain keys HH, HV, VV or HH, VV"
-                    )
-            elif len(element) == 4:
-                return self._create_tensor(
-                    element["HH"], (element["HV"] + element["VH"]) / 2, element["VV"]
-                )
-        else:
-            raise ValueError("Element should be a numpy array or a dictionary")
-
-    def _create_tensor(self, *channels) -> torch.Tensor:
-        return torch.as_tensor(
-            np.stack(channels, axis=-1).transpose(2, 0, 1),
-            dtype=torch.complex64,
-        )
+    def _handle_four_channels(
+        self, 
+        x: np.ndarray | torch.Tensor, 
+        out_channels: int, 
+        backend: ModuleType
+    ) -> np.ndarray | torch.Tensor:
+        channel_maps = {
+            1: lambda: x[0:1],
+            2: lambda: backend.stack((x[0], x[3])),
+            3: lambda: backend.stack((
+                x[0],
+                0.5 * (x[1] + x[2]),
+                x[3]
+            )),
+            4: lambda: x
+        }
+        return channel_maps.get(out_channels, lambda: None)()
+    
+    def _convert_channels(
+        self, 
+        x: np.ndarray | torch.Tensor,
+        out_channels: int, 
+        backend: ModuleType
+    ) -> np.ndarray | torch.Tensor:
+        handlers = {
+            1: self._handle_single_channel,
+            2: self._handle_two_channels,
+            4: lambda x, o: self._handle_four_channels(x, o, backend)
+        }
+        result = handlers.get(x.shape[0], lambda x, o: None)(x, out_channels)
+        if result is None:
+            raise ValueError(f"Invalid conversion: {x.shape[0]} -> {out_channels} channels")
+        return result
+    
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        return self._convert_channels(x, self.out_channel, np)
+    
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        return self._convert_channels(x, self.out_channel, torch)
+    
+    def __call__(self, x: np.ndarray | torch.Tensor | Dict[str, np.ndarray]) -> np.ndarray | torch.Tensor:
+        x = F.polsar_dict_to_array(x)
+        return super().__call__(x)
 
 
 class Unsqueeze(BaseTransform):
