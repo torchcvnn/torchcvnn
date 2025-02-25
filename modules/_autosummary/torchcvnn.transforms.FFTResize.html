@@ -305,24 +305,62 @@
 <h1>torchcvnn.transforms.FFTResize<a class="headerlink" href="#torchcvnn-transforms-fftresize" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchcvnn.transforms.FFTResize">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.transforms.</span></span><span class="sig-name descname"><span class="pre">FFTResize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/transforms/transforms.html#FFTResize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.transforms.FFTResize" title="Link to this definition">¶</a></dt>
-<dd><p>Resize a complex tensor to a given size. The resize is performed in the Fourier
-domain by either cropping or padding the FFT2 of the input array/tensor.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.transforms.</span></span><span class="sig-name descname"><span class="pre">FFTResize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(-2,</span> <span class="pre">-1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'complex64'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/transforms/transforms.html#FFTResize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.transforms.FFTResize" title="Link to this definition">¶</a></dt>
+<dd><p>Resizes an input image in spectral domain with Fourier Transformations.</p>
+<p>This transform first applies a 2D FFT to the input array/tensor of shape CHW along specified axes,
+followed by padding or center cropping to achieve the target size, then applies
+an inverse FFT to go back to spatial domain. Optionally, it scales the output amplitudes to maintain energy consistency
+between original and resized images.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>size</strong> – The target size of the resized tensor.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> – Tuple[int, int]
+Target dimensions (height, width) for resizing.</p></li>
+<li><p><strong>axis</strong> – Tuple[int, …], optional
+The axes over which to apply FFT. Default is (-2, -1). For a array / tensor of shape CHW,
+it corresponds to the Height and Width axes.</p></li>
+<li><p><strong>scale</strong> – bool, optional
+If True, scales the output amplitudes to maintain energy consistency with
+respect to input size. Default is False.</p></li>
+<li><p><strong>dtype</strong> – torch.dtype or numpy.dtype, optional
+Output data type. If None, maintains the input data type.
+For PyTorch tensors: torch.complex64 or torch.complex128
+For NumPy arrays: numpy.complex64 or numpy.complex128</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>numpy.ndarray or torch.Tensor</dt><dd><p>Resized image as a complex-valued array/tensor, maintaining shape (C, height, width).</p>
 </dd>
 </dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="n">FFTResize</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resized_image</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>  <span class="c1"># Resize to 128x128 using FFT</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Input must be a multi-dimensional array/tensor of shape Channel x Height x Width.</p></li>
+<li><p>Spectral domain resizing preserves frequency characteristics better than spatial interpolation</p></li>
+<li><p>Operates on complex-valued data, preserving phase information</p></li>
+<li><p>Memory efficient for large downsampling ratios</p></li>
+<li><p>Based on the Fourier Transform properties of scaling and periodicity</p></li>
+<li><p>The output is complex-valued due to the nature of FFT operations. If you are working with real-valued data,</p></li>
+</ul>
+<p>it is recommended to call ToReal after applying this transform.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchcvnn.transforms.FFTResize.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/transforms/transforms.html#FFTResize.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.transforms.FFTResize.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(-2,</span> <span class="pre">-1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'complex64'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/torchcvnn/transforms/transforms.html#FFTResize.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.transforms.FFTResize.__init__" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.transforms.FFTResize.__init__" title="torchcvnn.transforms.FFTResize.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(size)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.transforms.FFTResize.__init__" title="torchcvnn.transforms.FFTResize.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(size[, axis, scale, dtype])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>

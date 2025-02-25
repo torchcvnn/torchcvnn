@@ -705,90 +705,91 @@
 
 <div class="viewcode-block" id="FFTResize">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.FFTResize.html#torchcvnn.transforms.FFTResize">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">FFTResize</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Resize a complex tensor to a given size. The resize is performed in the Fourier</span>
-<span class="sd">    domain by either cropping or padding the FFT2 of the input array/tensor.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FFTResize</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resizes an input image in spectral domain with Fourier Transformations.</span>
 
-<span class="sd">    Arguments:</span>
-<span class="sd">        size: The target size of the resized tensor.</span>
+<span class="sd">    This transform first applies a 2D FFT to the input array/tensor of shape CHW along specified axes,</span>
+<span class="sd">    followed by padding or center cropping to achieve the target size, then applies</span>
+<span class="sd">    an inverse FFT to go back to spatial domain. Optionally, it scales the output amplitudes to maintain energy consistency </span>
+<span class="sd">    between original and resized images.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        size: Tuple[int, int]</span>
+<span class="sd">            Target dimensions (height, width) for resizing.</span>
+<span class="sd">        axis: Tuple[int, ...], optional</span>
+<span class="sd">            The axes over which to apply FFT. Default is (-2, -1). For a array / tensor of shape CHW,</span>
+<span class="sd">            it corresponds to the Height and Width axes.</span>
+<span class="sd">        scale: bool, optional</span>
+<span class="sd">            If True, scales the output amplitudes to maintain energy consistency with </span>
+<span class="sd">            respect to input size. Default is False.</span>
+<span class="sd">        dtype: torch.dtype or numpy.dtype, optional</span>
+<span class="sd">            Output data type. If None, maintains the input data type.</span>
+<span class="sd">            For PyTorch tensors: torch.complex64 or torch.complex128</span>
+<span class="sd">            For NumPy arrays: numpy.complex64 or numpy.complex128</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.ndarray or torch.Tensor</span>
+<span class="sd">            Resized image as a complex-valued array/tensor, maintaining shape (C, height, width).</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; transform = FFTResize((128, 128))</span>
+<span class="sd">        &gt;&gt;&gt; resized_image = transform(input_tensor)  # Resize to 128x128 using FFT</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - Input must be a multi-dimensional array/tensor of shape Channel x Height x Width.</span>
+<span class="sd">        - Spectral domain resizing preserves frequency characteristics better than spatial interpolation</span>
+<span class="sd">        - Operates on complex-valued data, preserving phase information</span>
+<span class="sd">        - Memory efficient for large downsampling ratios</span>
+<span class="sd">        - Based on the Fourier Transform properties of scaling and periodicity</span>
+<span class="sd">        - The output is complex-valued due to the nature of FFT operations. If you are working with real-valued data,</span>
+<span class="sd">        it is recommended to call ToReal after applying this transform.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
 <div class="viewcode-block" id="FFTResize.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.FFTResize.html#torchcvnn.transforms.FFTResize.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> 
+        <span class="n">size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> 
+        <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> 
+        <span class="n">scale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
+        <span class="n">dtype</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;complex64&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s2">&quot;complex&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="s2">&quot;complex64&quot;</span>
+        
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">),</span> <span class="s2">&quot;size must be a tuple&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">),</span> <span class="s2">&quot;axis must be a tuple&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">original_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">target_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
 
-        <span class="n">is_torch</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-            <span class="n">is_torch</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">applyfft2_np</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">padifneeded</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">center_crop</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">applyifft2_np</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span>
 
-        <span class="n">real_part</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">real</span>
-        <span class="n">imaginary_part</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">imag</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">target_size</span> <span class="o">/</span> <span class="n">original_size</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np_dtype</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">original_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">target_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
 
-        <span class="k">def</span><span class="w"> </span><span class="nf">zoom</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-            <span class="c1"># Computes the 2D FFT of the array and center the zero frequency component</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">array</span><span class="p">))</span>
-            <span class="n">original_size</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">applyfft2_torch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">padifneeded</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">center_crop</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">applyifft2_torch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span>
 
-            <span class="c1"># Either center crop or pad the array to the target size</span>
-            <span class="n">target_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
-            <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="c1"># Computes top and bottom padding</span>
-                <span class="n">top_pad</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
-                <span class="n">bottom_pad</span> <span class="o">=</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">top_pad</span>
-                <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="p">((</span><span class="n">top_pad</span><span class="p">,</span> <span class="n">bottom_pad</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
-            <span class="k">elif</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="n">top_crop</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
-                <span class="n">bottom_crop</span> <span class="o">=</span> <span class="n">top_crop</span> <span class="o">+</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">array</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">top_crop</span><span class="p">:</span><span class="n">bottom_crop</span><span class="p">,</span> <span class="p">:]</span>
-
-            <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">left_pad</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
-                <span class="n">right_pad</span> <span class="o">=</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">left_pad</span>
-                <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">left_pad</span><span class="p">,</span> <span class="n">right_pad</span><span class="p">)))</span>
-            <span class="k">elif</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">left_crop</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
-                <span class="n">right_crop</span> <span class="o">=</span> <span class="n">left_crop</span> <span class="o">+</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">array</span> <span class="o">=</span> <span class="n">array</span><span class="p">[:,</span> <span class="n">left_crop</span><span class="p">:</span><span class="n">right_crop</span><span class="p">]</span>
-
-            <span class="c1"># Computes the inverse 2D FFT of the array</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">array</span><span class="p">))</span>
-            <span class="n">scale</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">target_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span>
-                <span class="n">original_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">original_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="p">)</span>
-
-            <span class="k">return</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">array</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="c1"># We have a two dimensional tensor</span>
-            <span class="n">resized_real</span> <span class="o">=</span> <span class="n">zoom</span><span class="p">(</span><span class="n">real_part</span><span class="p">)</span>
-            <span class="n">resized_imaginary</span> <span class="o">=</span> <span class="n">zoom</span><span class="p">(</span><span class="n">imaginary_part</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># We have three dimensions and therefore</span>
-            <span class="c1"># apply the resize to each channel iteratively</span>
-            <span class="c1"># We assume the first dimension is the channel</span>
-            <span class="n">resized_real</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">resized_imaginary</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">real</span><span class="p">,</span> <span class="n">imaginary</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">real_part</span><span class="p">,</span> <span class="n">imaginary_part</span><span class="p">):</span>
-                <span class="n">resized_real</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zoom</span><span class="p">(</span><span class="n">real</span><span class="p">))</span>
-                <span class="n">resized_imaginary</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zoom</span><span class="p">(</span><span class="n">imaginary</span><span class="p">))</span>
-            <span class="n">resized_real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">resized_real</span><span class="p">)</span>
-            <span class="n">resized_imaginary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">resized_imaginary</span><span class="p">)</span>
-
-        <span class="n">resized_array</span> <span class="o">=</span> <span class="n">resized_real</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">resized_imaginary</span>
-
-        <span class="c1"># Convert the resized tensor back to a torch tensor if necessary</span>
-        <span class="k">if</span> <span class="n">is_torch</span><span class="p">:</span>
-            <span class="n">resized_array</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">resized_array</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">resized_array</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">target_size</span> <span class="o">/</span> <span class="n">original_size</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">torch_dtype</span><span class="p">)</span></div>
 
 
 
