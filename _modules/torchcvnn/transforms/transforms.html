@@ -209,7 +209,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.Unsqueeze.html">torchcvnn.transforms.Unsqueeze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.ToTensor.html">torchcvnn.transforms.ToTensor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.RealImaginary.html">torchcvnn.transforms.RealImaginary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.PolSARtoTensor.html">torchcvnn.transforms.PolSARtoTensor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.LogAmplitude.html">torchcvnn.transforms.LogAmplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.Amplitude.html">torchcvnn.transforms.Amplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.RandomPhase.html">torchcvnn.transforms.RandomPhase</a></li>
@@ -860,50 +859,92 @@
 
 
 
-<div class="viewcode-block" id="PolSARtoTensor">
-<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.PolSARtoTensor.html#torchcvnn.transforms.PolSARtoTensor">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">PolSARtoTensor</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transform a PolSAR image into a 3D torch tensor.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PolSAR</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handling Polarimetric Synthetic Aperture Radar (PolSAR) data channel conversions.</span>
+<span class="sd">    This class provides functionality to convert between different channel representations of PolSAR data,</span>
+<span class="sd">    supporting 1, 2, 3, and 4 output channel configurations. It can handle both NumPy arrays and PyTorch tensors.</span>
+<span class="sd">    If inputs is a dictionnary of type {&#39;HH&#39;: data1, &#39;VV&#39;: data2}, it will stack all values along axis 0 to form a CHW array.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        out_channel (int): Desired number of output channels (1, 2, 3, or 4)</span>
+<span class="sd">        </span>
+<span class="sd">    Supported conversions:</span>
+<span class="sd">        - 1 channel -&gt; 1 channel: Identity</span>
+<span class="sd">        - 2 channels -&gt; 1 or 2 channels</span>
+<span class="sd">        - 4 channels -&gt; 1, 2, 3, or 4 channels where:</span>
+<span class="sd">            - 1 channel: Returns first channel only</span>
+<span class="sd">            - 2 channels: Returns [HH, VV] channels</span>
+<span class="sd">            - 3 channels: Returns [HH, (HV+VH)/2, VV]</span>
+<span class="sd">            - 4 channels: Returns all channels [HH, HV, VH, VV]</span>
+<span class="sd">            </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the requested channel conversion is invalid or not supported</span>
+<span class="sd">        </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; transform = PolSAR(out_channel=3)</span>
+<span class="sd">        &gt;&gt;&gt; # For 4-channel input [HH, HV, VH, VV]</span>
+<span class="sd">        &gt;&gt;&gt; output = transform(input_data)  # Returns [HH, (HV+VH)/2, VV]</span>
+<span class="sd">        </span>
+<span class="sd">    Note:</span>
+<span class="sd">        - Input data should have format Channels x Height x Width (CHW).</span>
+<span class="sd">        - By default, PolSAR always return HH polarization if out_channel is 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_channel</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_channel</span> <span class="o">=</span> <span class="n">out_channel</span>
+        
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_single_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="k">if</span> <span class="n">out_channels</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Element should be a 3D numpy array&quot;</span>
-            <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_tensor</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">element</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">element</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-            <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_tensor</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">element</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_tensor</span><span class="p">(</span>
-                    <span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">element</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">element</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-                <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_two_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">out_channels</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+        <span class="k">elif</span> <span class="n">out_channels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_tensor</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s2">&quot;HH&quot;</span><span class="p">],</span> <span class="n">element</span><span class="p">[</span><span class="s2">&quot;HV&quot;</span><span class="p">],</span> <span class="n">element</span><span class="p">[</span><span class="s2">&quot;VV&quot;</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s2">&quot;HH&quot;</span> <span class="ow">in</span> <span class="n">element</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_tensor</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s2">&quot;HH&quot;</span><span class="p">],</span> <span class="n">element</span><span class="p">[</span><span class="s2">&quot;HV&quot;</span><span class="p">])</span>
-                <span class="k">elif</span> <span class="s2">&quot;VV&quot;</span> <span class="ow">in</span> <span class="n">element</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_tensor</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s2">&quot;HV&quot;</span><span class="p">],</span> <span class="n">element</span><span class="p">[</span><span class="s2">&quot;VV&quot;</span><span class="p">])</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;Dictionary should contain keys HH, HV, VV or HH, VV&quot;</span>
-                    <span class="p">)</span>
-            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_tensor</span><span class="p">(</span>
-                    <span class="n">element</span><span class="p">[</span><span class="s2">&quot;HH&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s2">&quot;HV&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">element</span><span class="p">[</span><span class="s2">&quot;VH&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">element</span><span class="p">[</span><span class="s2">&quot;VV&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Element should be a numpy array or a dictionary&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">_create_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">channels</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
-        <span class="p">)</span></div>
-
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_four_channels</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> 
+        <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> 
+        <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+        <span class="n">backend</span><span class="p">:</span> <span class="n">ModuleType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">channel_maps</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span>
+            <span class="mi">2</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">backend</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">])),</span>
+            <span class="mi">3</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">backend</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span>
+                <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+                <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+            <span class="p">)),</span>
+            <span class="mi">4</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">x</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">channel_maps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">out_channels</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_convert_channels</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> 
+        <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+        <span class="n">backend</span><span class="p">:</span> <span class="n">ModuleType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">handlers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_single_channel</span><span class="p">,</span>
+            <span class="mi">2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_two_channels</span><span class="p">,</span>
+            <span class="mi">4</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">o</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_four_channels</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">handlers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">o</span><span class="p">:</span> <span class="kc">None</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid conversion: </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">out_channels</span><span class="si">}</span><span class="s2"> channels&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_channels</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_channel</span><span class="p">,</span> <span class="n">np</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_channels</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_channel</span><span class="p">,</span> <span class="n">torch</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">|</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">polsar_dict_to_array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Unsqueeze">
