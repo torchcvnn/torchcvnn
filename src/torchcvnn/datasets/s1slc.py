@@ -81,8 +81,8 @@ class S1SLC(Dataset):
             labels_path = os.path.join(subfolder, "Labels.npy")
 
             # Load the .npy files
-            hh = np.load(hh_path)
-            hv = np.load(hv_path)
+            hh = np.load(hh_path, mmap_mode="r")
+            hv = np.load(hv_path, mmap_mode="r")
 
             if not lazy_loading:
                 # If not lazy loading, we load all the data in main memory
@@ -96,7 +96,7 @@ class S1SLC(Dataset):
                 ]
 
             # For the labels, we can preload everything in main memory
-            label = np.load(labels_path)
+            label = np.load(labels_path, mmap_mode="r")
             label = [int(l.item()) - 1 for l in label]  # Convert to 0-indexed labels
 
             # Append data and labels to the lists
