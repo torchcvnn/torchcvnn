@@ -37,7 +37,7 @@ def test_fft_resize_ndarray():
     spatial_resize = transforms.FFTResize(target_size)
     resized_tensor = spatial_resize(tensor)
 
-    assert (resized_tensor.shape[-2], resized_tensor.shape[1]) == target_size
+    assert (resized_tensor.shape[-2], resized_tensor.shape[-1]) == target_size
     assert type(resized_tensor) == np.ndarray
     assert resized_tensor.dtype in [np.complex64, np.complex128]
 
@@ -45,7 +45,7 @@ def test_fft_resize_ndarray():
     target_size = (123, 121)
     spatial_resize = transforms.FFTResize(target_size)
     resized_tensor = spatial_resize(tensor)
-    assert (resized_tensor.shape[-2], resized_tensor.shape[1]) == target_size
+    assert (resized_tensor.shape[-2], resized_tensor.shape[-1]) == target_size
     assert type(resized_tensor) == np.ndarray
     assert resized_tensor.dtype in [np.complex64, np.complex128]
 
