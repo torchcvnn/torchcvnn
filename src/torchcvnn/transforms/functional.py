@@ -27,6 +27,7 @@ from types import ModuleType
 # External imports
 import torch
 import numpy as np
+from skimage import exposure
 
 
 def polsar_dict_to_array(x: np.ndarray | torch.Tensor | Dict[str, np.ndarray]) -> np.ndarray | torch.Tensor:
@@ -81,34 +82,47 @@ def check_input(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
 def log_normalize_amplitude(
     x: np.ndarray | torch.Tensor, 
     backend: ModuleType, 
+    compute_absolute: bool,
     keep_phase: bool,
-    min_value: float,
-    max_value: float,
+    min_value: float | np.ndarray | torch.Tensor,
+    max_value: float | np.ndarray | torch.Tensor,
 ) -> np.ndarray | torch.Tensor:
     """
-    Normalize the amplitude of a complex signal with logarithmic scaling.
+    Logarithmic amplitude normalization for complex-valued data.
     
+    Normalizes input using log scaling with a global min/max value.
+    Can preserve complex phase information if requested.
+
     Args:
-        x: Input array or tensor containing complex numbers. The type can be either numpy ndarray or PyTorch Tensor.
-        backend: Module providing mathematical functions, allowing compatibility with numpy or PyTorch.
-        keep_phase: Boolean indicating whether to retain the original phase of the input signal.
-        max_value: Maximum amplitude value for normalization.
-        min_value: Minimum amplitude value for normalization.
+        x (np.ndarray | torch.Tensor): Complex-valued input array/tensor
+        backend (ModuleType): Either numpy or torch module 
+        compute_absolute (bool): Whether to compute absolute value of input
+        keep_phase (bool): If True, preserves complex phase information
+        min_value (float | np.ndarray | torch.Tensor): Min value or min value per channel for normalization
+        max_value (float | np.ndarray | torch.Tensor): Max value or min value per channel for normalization
 
     Returns:
-        A numpy ndarray or torch.Tensor containing the log-normalized amplitude, optionally with the original phase.
+        np.ndarray | torch.Tensor: Normalized data with same shape as input
+        
+    Example:
+        >>> x = np.random.complex128((3, 64, 64))
+        >>> normalized = log_normalize_amplitude(x, np, True, True, 1e-5, 1.0)
     """
     assert backend.__name__ in ["numpy", "torch"], "Backend must be numpy or torch"
-    amplitude = backend.abs(x)
-    phase = backend.angle(x)
+
+    if keep_phase:
+        phase = backend.angle(x)
+        compute_absolute = True
+    amplitude = backend.abs(x) if compute_absolute else x
+
     amplitude = backend.clip(amplitude, min_value, max_value)
     transformed_amplitude = (
         backend.log10(amplitude / min_value)
     ) / (np.log10(max_value / min_value))
+
     if keep_phase:
         return transformed_amplitude * backend.exp(1j * phase)
-    else:
-        return transformed_amplitude
+    return transformed_amplitude
 
 
 def applyfft2_np(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
@@ -137,12 +151,12 @@ def applyifft2_np(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     return np.fft.ifft2(np.fft.ifftshift(x, axes=axis), axes=axis)
 
 
-def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
+def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...] = (-2, -1)) -> torch.Tensor:
     """Apply 2D Fast Fourier Transform to image.
     
     Args:
         x (np.ndarray): Input array to apply FFT to
-        axis (Tuple[int, ...]): Axes over which to compute the FFT
+        dim (Tuple[int, ...]): Dimensions over which to compute the FFT. Default is (-2, -1).
         
     Returns:
         torch.Tensor: The Fourier transformed array
@@ -150,12 +164,12 @@ def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
     return torch.fft.fftshift(torch.fft.fft2(x, dim=dim), dim=dim)
 
 
-def applyifft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
+def applyifft2_torch(x: torch.Tensor, dim: Tuple[int, ...] = (-2, -1)) -> torch.Tensor:
     """Apply 2D inverse Fast Fourier Transform to image.
     
     Args:
         x (torch.Tensor): Input tensor to apply IFFT to
-        axis (Tuple[int, ...]): Axes over which to compute the IFFT
+        dim (Tuple[int, ...]): Dimensions over which to compute the IFFT. Default is (-2, -1).
         
     Returns:
         torch.Tensor: The inverse Fourier transformed array
@@ -226,7 +240,7 @@ def padifneeded(
         >>> padded.shape
         torch.Size([3, 64, 64])
     """
-    _, h, w = x.shape
+    h, w = x.shape[-2], x.shape[-1]
     # Calculate padding sizes
     top_pad, bottom_pad = get_padding(h, min_height)
     left_pad, right_pad = get_padding(w, min_width)
@@ -260,26 +274,55 @@ def center_crop(x: np.ndarray | torch.Tensor, height: int, width: int) -> np.nda
     """
     Center crops an image to the specified dimensions.
 
-    This function takes an image and crops it to the specified height and width, 
-    centered around the middle of the image. If the requested dimensions are larger 
-    than the image, it will use the maximum possible size.
+    This function crops an image to the specified height and width around its center.
+    Works for both numpy arrays and PyTorch tensors with 2D (H,W), 3D (C,H,W), 4D (B,C,H,W) or 
+    5D (B,C,D,H,W) shapes.
 
     Args:
-        x (Union[np.ndarray, torch.Tensor]): Input image tensor/array with shape (C, H, W)
-        height (int): Desired height of the cropped image
-        width (int): Desired width of the cropped image
+        x (np.ndarray | torch.Tensor): Input array/tensor of shape (..., H, W)
+        height (int): Target height after cropping
+        width (int): Target width after cropping
 
     Returns:
-        Union[np.ndarray, torch.Tensor]: Center cropped image with shape (C, height, width)
+        np.ndarray | torch.Tensor: Center cropped image with dimensions matching height/width
 
     Example:
         >>> img = torch.randn(3, 100, 100)  # RGB image 100x100
         >>> cropped = center_crop(img, 60, 60)  # Returns center 60x60 crop
         >>> cropped.shape
         torch.Size([3, 60, 60])
+        
+    Raises:
+        ValueError: If input does not have 2, 3 or 4 dimensions
     """
-    l_h = max(0, x.shape[0] // 2 - height // 2)
-    l_w = max(0, x.shape[0] // 2 - width // 2)
+    if x.ndim < 2:
+        raise ValueError("Input must have at least 2 dimensions")
+    
+    l_h = max(0, x.shape[-2] // 2 - height // 2)
+    l_w = max(0, x.shape[-1] // 2 - width // 2) #recheck dimensions
     r_h = l_h + height
     r_w = l_w + width
-    return x[:, l_h:r_h, l_w:r_w]
+    
+    slices = (..., slice(l_h, r_h), slice(l_w, r_w))
+    return x[slices]
+
+
+def equalize(image: np.ndarray, plower: int = None, pupper: int = None) -> np.ndarray:
+    """Automatically adjust contrast of the SAR image
+
+    Args:
+        image (np.ndarray): Image in complex
+        plower (int, optional): lower percentile. Defaults to None.
+        pupper (int, optional): upper percentile. Defaults to None.
+
+    Returns:
+        np.ndarray: Image equalized
+    """
+
+    image = np.log10(np.abs(image) + np.spacing(1))
+    if not plower:
+        vlower, vupper = np.percentile(image, (2, 98))
+    else:
+        vlower, vupper = np.percentile(image, (plower, pupper))
+        
+    return np.round(exposure.rescale_intensity(image, in_range=(vlower, vupper), out_range=(0, 1)) * 255).astype(np.uint8)
