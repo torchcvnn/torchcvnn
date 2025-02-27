@@ -406,10 +406,6 @@ class FFTResize(BaseTransform):
         scale: bool, optional
             If True, scales the output amplitudes to maintain energy consistency with 
             respect to input size. Default is True.
-        dtype: torch.dtype or numpy.dtype, optional
-            Output data type. If None, maintains the input data type.
-            For PyTorch tensors: torch.complex64 or torch.complex128
-            For NumPy arrays: numpy.complex64 or numpy.complex128
 
     Returns:
         numpy.ndarray or torch.Tensor
@@ -432,13 +428,8 @@ class FFTResize(BaseTransform):
         self, 
         size: Tuple[int, ...], 
         axis: Tuple[int, ...] = (-2, -1), 
-        scale: bool = True, 
-        dtype: Optional[str] = "complex64"
+        scale: bool = True
     ) -> None:
-        if dtype is None or "complex" not in str(dtype):
-            dtype = "complex64"
-        
-        super().__init__(dtype)
         assert isinstance(size, Tuple), "size must be a tuple"
         assert isinstance(axis, Tuple), "axis must be a tuple"
         self.height = size[0]
@@ -457,7 +448,7 @@ class FFTResize(BaseTransform):
 
         if self.scale:
             return x * target_size / original_size
-        return x.astype(self.np_dtype)
+        return x
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
         original_size = x.shape[1] * x.shape[2]
