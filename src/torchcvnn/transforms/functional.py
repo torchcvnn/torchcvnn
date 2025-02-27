@@ -83,21 +83,29 @@ def log_normalize_amplitude(
     x: np.ndarray | torch.Tensor, 
     backend: ModuleType, 
     keep_phase: bool,
-    min_value: float,
-    max_value: float,
+    min_value: float | np.ndarray | torch.Tensor,
+    max_value: float | np.ndarray | torch.Tensor,
 ) -> np.ndarray | torch.Tensor:
     """
-    Normalize the amplitude of a complex signal with logarithmic scaling.
+    Logarithmic amplitude normalization for complex-valued data.
     
+    Normalizes input using log scaling with a global min/max value.
+    Can preserve complex phase information if requested.
+
     Args:
-        x: Input array or tensor containing complex numbers. The type can be either numpy ndarray or PyTorch Tensor.
-        backend: Module providing mathematical functions, allowing compatibility with numpy or PyTorch.
-        keep_phase: Boolean indicating whether to retain the original phase of the input signal.
-        max_value: Maximum amplitude value for normalization.
-        min_value: Minimum amplitude value for normalization.
+        x (np.ndarray | torch.Tensor): Complex-valued input array/tensor
+        backend (ModuleType): Either numpy or torch module 
+        compute_absolute (bool): Whether to compute absolute value of input
+        keep_phase (bool): If True, preserves complex phase information
+        min_value (float | np.ndarray | torch.Tensor): Min value or min value per channel for normalization
+        max_value (float | np.ndarray | torch.Tensor): Max value or min value per channel for normalization
 
     Returns:
-        A numpy ndarray or torch.Tensor containing the log-normalized amplitude, optionally with the original phase.
+        np.ndarray | torch.Tensor: Normalized data with same shape as input
+        
+    Example:
+        >>> x = np.random.complex128((3, 64, 64))
+        >>> normalized = log_normalize_amplitude(x, np, True, True, 1e-5, 1.0)
     """
     assert backend.__name__ in ["numpy", "torch"], "Backend must be numpy or torch"
     amplitude = backend.abs(x)
@@ -106,10 +114,10 @@ def log_normalize_amplitude(
     transformed_amplitude = (
         backend.log10(amplitude / min_value)
     ) / (np.log10(max_value / min_value))
+
     if keep_phase:
         return transformed_amplitude * backend.exp(1j * phase)
-    else:
-        return transformed_amplitude
+    return transformed_amplitude
 
 
 def applyfft2_np(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
