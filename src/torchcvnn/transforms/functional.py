@@ -227,7 +227,7 @@ def padifneeded(
         >>> padded.shape
         torch.Size([3, 64, 64])
     """
-    _, h, w = x.shape
+    h, w = x.shape[-2], x.shape[-1]
     # Calculate padding sizes
     top_pad, bottom_pad = get_padding(h, min_height)
     left_pad, right_pad = get_padding(w, min_width)
