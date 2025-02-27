@@ -405,7 +405,7 @@ class FFTResize(BaseTransform):
             it corresponds to the Height and Width axes.
         scale: bool, optional
             If True, scales the output amplitudes to maintain energy consistency with 
-            respect to input size. Default is False.
+            respect to input size. Default is True.
         dtype: torch.dtype or numpy.dtype, optional
             Output data type. If None, maintains the input data type.
             For PyTorch tensors: torch.complex64 or torch.complex128
@@ -432,7 +432,7 @@ class FFTResize(BaseTransform):
         self, 
         size: Tuple[int, ...], 
         axis: Tuple[int, ...] = (-2, -1), 
-        scale: bool = False, 
+        scale: bool = True, 
         dtype: Optional[str] = "complex64"
     ) -> None:
         if dtype is None or "complex" not in str(dtype):
@@ -470,7 +470,7 @@ class FFTResize(BaseTransform):
 
         if self.scale:
             return x * target_size / original_size
-        return x.to(self.torch_dtype)
+        return x
 
 
 class SpatialResize:
