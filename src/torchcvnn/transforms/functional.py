@@ -82,6 +82,7 @@ def check_input(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
 def log_normalize_amplitude(
     x: np.ndarray | torch.Tensor, 
     backend: ModuleType, 
+    compute_absolute: bool,
     keep_phase: bool,
     min_value: float | np.ndarray | torch.Tensor,
     max_value: float | np.ndarray | torch.Tensor,
@@ -108,8 +109,12 @@ def log_normalize_amplitude(
         >>> normalized = log_normalize_amplitude(x, np, True, True, 1e-5, 1.0)
     """
     assert backend.__name__ in ["numpy", "torch"], "Backend must be numpy or torch"
-    amplitude = backend.abs(x)
-    phase = backend.angle(x)
+
+    if keep_phase:
+        phase = backend.angle(x)
+        compute_absolute = True
+    amplitude = backend.abs(x) if compute_absolute else x
+
     amplitude = backend.clip(amplitude, min_value, max_value)
     transformed_amplitude = (
         backend.log10(amplitude / min_value)
