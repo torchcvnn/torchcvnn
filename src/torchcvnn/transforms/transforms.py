@@ -149,6 +149,8 @@ class Amplitude(BaseTransform):
     """
     def __init__(self, dtype: str) -> None:
         super().__init__(dtype)
+        if "float" not in dtype:
+            raise ValueError("dtype must be a float type")
 
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
         return torch.abs(x).to(self.torch_dtype)
