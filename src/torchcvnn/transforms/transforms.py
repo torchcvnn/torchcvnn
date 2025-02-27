@@ -669,11 +669,13 @@ class ToTensor(BaseTransform):
         >>> x_existing = torch.tensor([1, 2, 3], dtype=torch.int32)
         >>> x_converted = transform(x_existing)  # converts to torch.FloatTensor
     """
-    def __init__(self, dtype: str) -> None:
+    def __init__(self, dtype: Optional[str] = None) -> None:
         super().__init__(dtype)
+        self.convert_dtype = dtype is not None
 
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
-        return torch.as_tensor(x, dtype=self.torch_dtype)
+        x = torch.as_tensor(x)
+        return x.to(self.torch_dtype) if self.convert_dtype else x
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
-        return x.to(self.torch_dtype)
+        return x.to(self.torch_dtype) if self.convert_dtype else x
