@@ -138,12 +138,12 @@ def applyifft2_np(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     return np.fft.ifft2(np.fft.ifftshift(x, axes=axis), axes=axis)
 
 
-def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
+def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...] = (-2, -1)) -> torch.Tensor:
     """Apply 2D Fast Fourier Transform to image.
     
     Args:
         x (np.ndarray): Input array to apply FFT to
-        axis (Tuple[int, ...]): Axes over which to compute the FFT
+        dim (Tuple[int, ...]): Dimensions over which to compute the FFT. Default is (-2, -1).
         
     Returns:
         torch.Tensor: The Fourier transformed array
@@ -151,12 +151,12 @@ def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
     return torch.fft.fftshift(torch.fft.fft2(x, dim=dim), dim=dim)
 
 
-def applyifft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
+def applyifft2_torch(x: torch.Tensor, dim: Tuple[int, ...] = (-2, -1)) -> torch.Tensor:
     """Apply 2D inverse Fast Fourier Transform to image.
     
     Args:
         x (torch.Tensor): Input tensor to apply IFFT to
-        axis (Tuple[int, ...]): Axes over which to compute the IFFT
+        dim (Tuple[int, ...]): Dimensions over which to compute the IFFT. Default is (-2, -1).
         
     Returns:
         torch.Tensor: The inverse Fourier transformed array
