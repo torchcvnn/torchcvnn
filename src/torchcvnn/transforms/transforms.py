@@ -561,7 +561,8 @@ class PolSAR(BaseTransform):
         >>> output = transform(input_data)  # Returns [HH, (HV+VH)/2, VV]
         
     Note:
-        - Input data should have format Channels x Height x Width (CHW).
+        - Input data should have format Channels x Height x Width (CHW) or 
+        a dictionnary of type {'polarization': np.ndarray, ...}
         - By default, PolSAR always return HH polarization if out_channel is 1.
     """
     def __init__(self, out_channel: int) -> None:
