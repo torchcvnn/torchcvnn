@@ -5,7 +5,9 @@ This is a library that uses `pytorch <https://pytorch.org>`_ as a back-end for c
 
 It was initially developed by Victor Dhédin and Jérémie Levi during their third year project at `CentraleSupélec <https://www.centralesupelec.fr/>`_. 
 
-You can access it on github 
+You can access it on github.
+
+You can access the code coverage report `here <https://torchcvnn.github.io/torchcvnn/htmlcov>`_.
 
 .. raw:: html
 
