@@ -149,6 +149,8 @@ class Amplitude(BaseTransform):
     """
     def __init__(self, dtype: str) -> None:
         super().__init__(dtype)
+        if "float" not in dtype:
+            raise ValueError("dtype must be a float type")
 
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
         return torch.abs(x).to(self.torch_dtype)
@@ -405,11 +407,7 @@ class FFTResize(BaseTransform):
             it corresponds to the Height and Width axes.
         scale: bool, optional
             If True, scales the output amplitudes to maintain energy consistency with 
-            respect to input size. Default is False.
-        dtype: torch.dtype or numpy.dtype, optional
-            Output data type. If None, maintains the input data type.
-            For PyTorch tensors: torch.complex64 or torch.complex128
-            For NumPy arrays: numpy.complex64 or numpy.complex128
+            respect to input size. Default is True.
 
     Returns:
         numpy.ndarray or torch.Tensor
@@ -432,13 +430,8 @@ class FFTResize(BaseTransform):
         self, 
         size: Tuple[int, ...], 
         axis: Tuple[int, ...] = (-2, -1), 
-        scale: bool = False, 
-        dtype: Optional[str] = "complex64"
+        scale: bool = True
     ) -> None:
-        if dtype is None or "complex" not in str(dtype):
-            dtype = "complex64"
-        
-        super().__init__(dtype)
         assert isinstance(size, Tuple), "size must be a tuple"
         assert isinstance(axis, Tuple), "axis must be a tuple"
         self.height = size[0]
@@ -457,7 +450,7 @@ class FFTResize(BaseTransform):
 
         if self.scale:
             return x * target_size / original_size
-        return x.astype(self.np_dtype)
+        return x
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
         original_size = x.shape[1] * x.shape[2]
@@ -470,7 +463,7 @@ class FFTResize(BaseTransform):
 
         if self.scale:
             return x * target_size / original_size
-        return x.to(self.torch_dtype)
+        return x
 
 
 class SpatialResize:
@@ -561,7 +554,8 @@ class PolSAR(BaseTransform):
         >>> output = transform(input_data)  # Returns [HH, (HV+VH)/2, VV]
         
     Note:
-        - Input data should have format Channels x Height x Width (CHW).
+        - Input data should have format Channels x Height x Width (CHW) or 
+        a dictionnary of type {'polarization': np.ndarray, ...}
         - By default, PolSAR always return HH polarization if out_channel is 1.
     """
     def __init__(self, out_channel: int) -> None:
@@ -669,11 +663,13 @@ class ToTensor(BaseTransform):
         >>> x_existing = torch.tensor([1, 2, 3], dtype=torch.int32)
         >>> x_converted = transform(x_existing)  # converts to torch.FloatTensor
     """
-    def __init__(self, dtype: str) -> None:
+    def __init__(self, dtype: Optional[str] = None) -> None:
         super().__init__(dtype)
+        self.convert_dtype = dtype is not None
 
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
-        return torch.as_tensor(x, dtype=self.torch_dtype)
+        x = torch.as_tensor(x)
+        return x.to(self.torch_dtype) if self.convert_dtype else x
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
-        return x.to(self.torch_dtype)
+        return x.to(self.torch_dtype) if self.convert_dtype else x
