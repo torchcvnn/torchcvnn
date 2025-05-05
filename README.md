@@ -30,7 +30,11 @@ This will install torchcvnn in developper mode.
 ## Releasing a new version
 
 To trigger the pipeline for a new release, you have to tag a commit and to push
-it on the main branch 
+it on the main branch.
+
+**Update the version** First, do not forget to update the version in [src/torchcvnn/__init__.py]
+
+**Trigger the CI pipeline for release** :
 
 ```
 [main] git tag x.x.x
