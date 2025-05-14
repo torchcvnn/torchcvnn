@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="torchcvnn.nn.TransformerEncoderLayer" href="torchcvnn.nn.TransformerEncoderLayer.html" /><link rel="prev" title="torchcvnn.nn.RMSNorm" href="torchcvnn.nn.RMSNorm.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>torchcvnn.nn.Transformer - torchcvnn 0.9.5 documentation</title>
+        <title>torchcvnn.nn.Transformer - torchcvnn 0.9.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">torchcvnn 0.9.5 documentation</div></a>
+      <a href="../../index.html"><div class="brand">torchcvnn 0.9.6 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -191,7 +191,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">torchcvnn 0.9.5 documentation</span>
+  <span class="sidebar-brand-text">torchcvnn 0.9.6 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -306,7 +306,7 @@
 <dt class="sig sig-object py" id="torchcvnn.nn.Transformer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.</span></span><span class="sig-name descname"><span class="pre">Transformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d_model:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">512</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nhead:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_encoder_layers:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_decoder_layers:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_feedforward:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2048</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation:</span> <span class="pre">~torch.nn.modules.module.Module</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torchcvnn.nn.modules.activation.CReLU'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_norm_eps:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_first:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_first:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype:</span> <span class="pre">~torch.dtype</span> <span class="pre">=</span> <span class="pre">torch.complex64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/nn/modules/transformer.html#Transformer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.Transformer" title="Link to this definition">¶</a></dt>
 <dd><p>A transformer model.</p>
-<p>Adapted from <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Transformer.html#torch.nn.Transformer" title="(in PyTorch v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Transformer</span></code></a>.</p>
+<p>Adapted from <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Transformer.html#torch.nn.Transformer" title="(in PyTorch v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Transformer</span></code></a>.</p>
 <p>User is able to modify the attributes as needed. The architecture
 is based on the paper <strong>Attention Is All You Need</strong>. Ashish Vaswani, Noam Shazeer,
 Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Lukasz Kaiser, and
@@ -376,7 +376,7 @@ bias. Default: <code class="docutils literal notranslate"><span class="pre">True
 <td><p>Return an iterator over immediate children modules.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compile</span></code>(*args, **kwargs)</p></td>
-<td><p>Compile this Module's forward using <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.compile.html#torch.compile" title="(in PyTorch v2.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.compile()</span></code></a>.</p></td>
+<td><p>Compile this Module's forward using <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.compile.html#torch.compile" title="(in PyTorch v2.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.compile()</span></code></a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cpu</span></code>()</p></td>
 <td><p>Move all model parameters and buffers to the CPU.</p></td>
@@ -472,10 +472,10 @@ bias. Default: <code class="docutils literal notranslate"><span class="pre">True
 <td><p>Add a parameter to the module.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_state_dict_post_hook</span></code>(hook)</p></td>
-<td><p>Register a post-hook for the <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.state_dict" title="(in PyTorch v2.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code></a> method.</p></td>
+<td><p>Register a post-hook for the <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.state_dict" title="(in PyTorch v2.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code></a> method.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_state_dict_pre_hook</span></code>(hook)</p></td>
-<td><p>Register a pre-hook for the <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.state_dict" title="(in PyTorch v2.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code></a> method.</p></td>
+<td><p>Register a pre-hook for the <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.state_dict" title="(in PyTorch v2.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code></a> method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">requires_grad_</span></code>([requires_grad])</p></td>
 <td><p>Change if autograd should record operations on parameters in this module.</p></td>
@@ -487,7 +487,7 @@ bias. Default: <code class="docutils literal notranslate"><span class="pre">True
 <td><p>Set the submodule given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throw an error.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">share_memory</span></code>()</p></td>
-<td><p>See <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.Tensor.share_memory_.html#torch.Tensor.share_memory_" title="(in PyTorch v2.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.share_memory_()</span></code></a>.</p></td>
+<td><p>See <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.Tensor.share_memory_.html#torch.Tensor.share_memory_" title="(in PyTorch v2.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.share_memory_()</span></code></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code>(*args[, destination, prefix, ...])</p></td>
 <td><p>Return a dictionary containing references to the whole state of the module.</p></td>
@@ -614,7 +614,7 @@ bias. Default: <code class="docutils literal notranslate"><span class="pre">True
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=61b282d3"></script>
+</div><script src="../../_static/documentation_options.js?v=564a08b9"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
