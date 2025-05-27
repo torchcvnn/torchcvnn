@@ -283,7 +283,6 @@ class Cardioid(nn.Module):
 
     def __init__(self):
         super().__init__()
-        self.b = torch.nn.Parameter(torch.tensor(0.0, dtype=torch.float), True)
 
     def forward(self, z: torch.Tensor):
         """
