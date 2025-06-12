@@ -34,7 +34,7 @@ from .parse_xml import xml_to_dict
 def gather_ATRNetSTAR_datafiles(
     rootdir: pathlib.Path,
     split: Literal["train", "test", "all"],
-) -> list[pathlib.Path]:
+) -> list[str]:
     """
     This function gathers all the ATRNet-STAR datafiles from the specified split in the root directory
 
@@ -364,7 +364,7 @@ class ATRNetSTAR(Dataset):
             (Optional) annotation : the annotation dict of the sample. Only if `get_annotations` is True.
 
         """
-        sample_name = str(self.datafiles[index])
+        sample_name = self.datafiles[index]
         sample = ATRNetSTARSample(sample_name=sample_name, transform=self.transform)
         class_idx = self.classes.index(sample.annotation["object"][self.class_level])
 
