@@ -154,9 +154,9 @@ class ATRNetSTAR(Dataset):
         "EOC_scene",
     ]
 
-    _ALLOWED_BENCHMARKS = BENCHMARKS + [None, "SOC_40"]
+    _ALLOWED_BENCHMARKS = BENCHMARKS + ["SOC_40"]
     # prettier logs later
-    _ALLOWED_BENCHMARKS.sort(reverse=True, key=lambda x: "" if x is None else x)
+    _ALLOWED_BENCHMARKS.sort(reverse=True)
 
     # EOC_polarization consists of training using one polarization and testing using another
     # (to implement ? or leave it to the user ?)
@@ -252,17 +252,17 @@ class ATRNetSTAR(Dataset):
         self.class_level = class_level
         self.download = download
         self.get_annotations = get_annotations
-        self.benchmark = benchmark
         self.transform = transform
 
-        self._verify_inputs()
-
-        if self.benchmark is None:
+        if benchmark is None:
             # if no benchmark is given, default behavior should be to use the entire dataset (SOC_40)
             logging.info(
                 "No benchmark was specified. SOC_40 (full dataset) will be used."
             )
-            self.benchmark = "SOC_40classes"
+            benchmark = "SOC_40classes"
+
+        self.benchmark = benchmark
+        self._verify_inputs()
 
         if self.benchmark == "SOC_40":
             # allow use of the name given to the benchmark in the paper instead of the file
@@ -294,9 +294,7 @@ class ATRNetSTAR(Dataset):
             )
 
         if self.benchmark not in self._ALLOWED_BENCHMARKS:
-            benchmarks_with_quotes = [
-                f"'{b}'" for b in self._ALLOWED_BENCHMARKS if b is not None
-            ]
+            benchmarks_with_quotes = [f"'{b}'" for b in self._ALLOWED_BENCHMARKS]
             raise ValueError(
                 f"Unknown benchmark. Should be one of {', '.join(benchmarks_with_quotes)} or None"
             )
@@ -315,7 +313,7 @@ class ATRNetSTAR(Dataset):
 
         check_7z()
         download_benchmark(
-            benchmark=self.benchmark,  # type: ignore (benchmark cannot be None here)
+            benchmark=self.benchmark,
             root_dir=self.root_dir,
             hf_repo_id=self.HF_REPO_ID,
             hf_benchmark_path=self.HF_BENCHMARKS_DIR_PATH,
