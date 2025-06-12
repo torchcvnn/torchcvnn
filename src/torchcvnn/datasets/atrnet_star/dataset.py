@@ -57,8 +57,7 @@ def gather_ATRNetSTAR_datafiles(
         # strip file of the .xml or .mat extension
         sample_name = str(filename.with_suffix(""))
 
-        # add sample name to the list of known samples for the target
-        # (using a set to avoid duplicates)
+        # add sample name to the list of known samples
         data_files.append(sample_name)
 
     return data_files
@@ -126,7 +125,7 @@ class ATRNetSTAR(Dataset):
     Dowloading them automatically is possible, but a Hugging Face authentification token
     is needed as being logged in is required for this dataset.
 
-    Warning : samples are ordered by class, shuffling them is recommended.
+    Warning : samples are ordered by type, shuffling them is recommended.
 
     Arguments:
         root_dir (str): The root directory in which the different benchmarks are placed.
