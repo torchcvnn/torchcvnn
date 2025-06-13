@@ -342,15 +342,11 @@ class ATRNetSTAR(Dataset):
     def __len__(self) -> int:
         return len(self.datafiles)
 
-    def __getitem__(
-        self, index: int
-    ) -> Union[
-        tuple[dict[str, torch.Tensor], int],  # get_annotations = False
-        tuple[dict[str, torch.Tensor], int, dict[str, Any]],  # get_annotations = True
-    ]:
+    def __getitem__(self, index: int) -> tuple:
         """
         Returns the sample at the given index. Applies the transform
         if provided. If `get_annotations` is True, also return the entire annotation dict.
+        The return type depends on the transform applied and whether or not get_annotations is True
 
         Arguments:
             index : index of the sample to return
