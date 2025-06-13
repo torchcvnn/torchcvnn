@@ -137,12 +137,12 @@ def applyifft2_np(x: np.ndarray, axis: Tuple[int, ...]) -> np.ndarray:
     return np.fft.ifft2(np.fft.ifftshift(x, axes=axis), axes=axis)
 
 
-def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
+def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...] = (-2, -1)) -> torch.Tensor:
     """Apply 2D Fast Fourier Transform to image.
     
     Args:
         x (np.ndarray): Input array to apply FFT to
-        axis (Tuple[int, ...]): Axes over which to compute the FFT
+        dim (Tuple[int, ...]): Dimensions over which to compute the FFT. Default is (-2, -1).
         
     Returns:
         torch.Tensor: The Fourier transformed array
@@ -150,12 +150,12 @@ def applyfft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
     return torch.fft.fftshift(torch.fft.fft2(x, dim=dim), dim=dim)
 
 
-def applyifft2_torch(x: torch.Tensor, dim: Tuple[int, ...]) -> torch.Tensor:
+def applyifft2_torch(x: torch.Tensor, dim: Tuple[int, ...] = (-2, -1)) -> torch.Tensor:
     """Apply 2D inverse Fast Fourier Transform to image.
     
     Args:
         x (torch.Tensor): Input tensor to apply IFFT to
-        axis (Tuple[int, ...]): Axes over which to compute the IFFT
+        dim (Tuple[int, ...]): Dimensions over which to compute the IFFT. Default is (-2, -1).
         
     Returns:
         torch.Tensor: The inverse Fourier transformed array
@@ -283,3 +283,47 @@ def center_crop(x: np.ndarray | torch.Tensor, height: int, width: int) -> np.nda
     r_h = l_h + height
     r_w = l_w + width
     return x[:, l_h:r_h, l_w:r_w]
+
+
+def rescale_intensity(image: np.ndarray, in_range: Tuple[float, float], out_range: Tuple[float, float]) -> np.ndarray:
+    """Rescale the intensity of an image to a new range.
+    
+    Args:
+        image (np.ndarray): Input image
+        in_range (Tuple[float, float]): Input range (min, max) to scale from
+        out_range (Tuple[float, float]): Output range (min, max) to scale to
+        
+    Returns:
+        np.ndarray: Rescaled image
+    """
+    imin, imax = in_range
+    omin, omax = out_range
+    # Clip the input image to the input range
+    image = np.clip(image, imin, imax)
+    # Scale to [0, 1]
+    if imin != imax:
+        image = (image - imin) / (imax - imin)
+        # Scale to output range
+        return image * (omax - omin) + omin
+    else:
+        return np.clip(image, omin, omax)
+
+
+def equalize(image: np.ndarray, plower: int = None, pupper: int = None) -> np.ndarray:
+    """Automatically adjust contrast of the SAR image
+
+    Args:
+        image (np.ndarray): Image in complex
+        plower (int, optional): lower percentile. Defaults to None.
+        pupper (int, optional): upper percentile. Defaults to None.
+
+    Returns:
+        np.ndarray: Image equalized
+    """
+    image = np.log10(np.abs(image) + np.spacing(1))
+    if not plower:
+        vlower, vupper = np.percentile(image, (2, 98))
+    else:
+        vlower, vupper = np.percentile(image, (plower, pupper))
+        
+    return np.round(rescale_intensity(image, in_range=(vlower, vupper), out_range=(0, 1)) * 255).astype(np.uint8)
