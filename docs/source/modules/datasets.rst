@@ -102,7 +102,7 @@ MSTAR dataset, it contains military vehicles and actually a subset of 10 classes
 MICCAI2023
 ----------
 
-The MICCAI2023 challenge invovled the task of cine reconstruction where the objective is to predict a full sampled
+The MICCAI2023 challenge involved the task of cine reconstruction where the objective is to predict a full sampled
 k-space from an under-sampled k-space. The data come from cardiac MRI.
 
 .. autofunction:: torchcvnn.datasets.miccai2023.kspace_to_image
@@ -114,3 +114,15 @@ k-space from an under-sampled k-space. The data come from cardiac MRI.
 .. autoclass:: MICCAI2023
    :members:
 
+
+ATRNet-STAR
+-----------
+
+ATRNet-STAR is a large vehicule classification/detection dataset of SAR images provided by `Liu et al.(2025) <https://arxiv.org/abs/2501.13354>`_ and released on huggingface hub (`https://huggingface.co/datasets/waterdisappear/ATRNet-STAR`_). It contains :
+
+- 40 target types with 17003 training samples and 7243 test samples.
+- quad polarization
+- bands X, Ku
+
+.. autoclass:: ATRNetSTAR
+   :members:
