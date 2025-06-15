@@ -720,7 +720,7 @@ only the magnitude of the signals although the data are indeed complex valued.</
 </section>
 <section id="miccai2023">
 <h2>MICCAI2023<a class="headerlink" href="#miccai2023" title="Link to this heading">¶</a></h2>
-<p>The MICCAI2023 challenge invovled the task of cine reconstruction where the objective is to predict a full sampled
+<p>The MICCAI2023 challenge involved the task of cine reconstruction where the objective is to predict a full sampled
 k-space from an under-sampled k-space. The data come from cardiac MRI.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="torchcvnn.datasets.miccai2023.kspace_to_image">
@@ -891,6 +891,52 @@ the function <a class="reference internal" href="#torchcvnn.datasets.miccai2023.
 </dd></dl>
 
 </section>
+<section id="atrnet-star">
+<h2>ATRNet-STAR<a class="headerlink" href="#atrnet-star" title="Link to this heading">¶</a></h2>
+<p>ATRNet-STAR is a large vehicule classification/detection dataset of SAR images provided by <a class="reference external" href="https://arxiv.org/abs/2501.13354">Liu et al.(2025)</a> and released on huggingface hub (<a href="#id3"><span class="problematic" id="id4">`https://huggingface.co/datasets/waterdisappear/ATRNet-STAR`_</span></a>). It contains :</p>
+<ul class="simple">
+<li><p>40 target types with 17003 training samples and 7243 test samples.</p></li>
+<li><p>quad polarization</p></li>
+<li><p>bands X, Ku</p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="torchcvnn.datasets.ATRNetSTAR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.datasets.</span></span><span class="sig-name descname"><span class="pre">ATRNetSTAR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">benchmark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.13)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'train'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'test'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'all'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.13)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'type'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'class'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'category'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'type'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_annotations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><span class="pre">Callable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchcvnn/datasets/atrnet_star/dataset.html#ATRNetSTAR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.datasets.ATRNetSTAR" title="Link to this definition">¶</a></dt>
+<dd><p>Implements a PyTorch Dataset for the ATRNet-STAR dataset presented in :</p>
+<p>Yongxiang Liu, Weĳie Li, Li Liu, Jie Zhou, Bowen Peng, Yafei Song, Xuying Xiong, Wei Yang,
+Tianpeng Liu, Zhen Liu, &amp; Xiang Li. (2025).
+ATRNet-STAR: A Large Dataset and Benchmark Towards Remote Sensing Object Recognition in the Wild.</p>
+<p>Only slant-range quad polarization complex images are supported.</p>
+<p>The dataset is composed of pre-defined benchmarks (see paper).
+Dowloading them automatically is possible, but a Hugging Face authentification token
+is needed as being logged in is required for this dataset.</p>
+<p>Warning : samples are ordered by type, shuffling them is recommended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The root directory in which the different benchmarks are placed.
+Will be created if it does not exist.</p></li>
+<li><p><strong>benchmark</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – (optional) Chosen benchmark. If not specified, SOC_40 (entire dataset) will be used as default.</p></li>
+<li><p><strong>split</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – (optional) Chosen split (‘train’, ‘test’ or ‘all’ for both). Those are pre-defined by the dataset. Default: ‘all’</p></li>
+<li><p><strong>download</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – (optional) Whether or not to download the dataset if it is not found. Default: False</p></li>
+<li><p><strong>class_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – (optional) The level of precision chosen for the class attributed to a sample.
+Either ‘category’, ‘class’ or ‘type’. Default: ‘type’ (the finest granularity)</p></li>
+<li><p><strong>get_annotations</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – (optional) If <cite>False</cite>, a dataset item will be a tuple (<cite>sample</cite>, <cite>target class</cite>) (default).
+If <cite>True</cite>, the entire sample annotation
+dictionnary will also be returned: (<cite>sample</cite>, <cite>target class</cite>, <cite>annotation dict</cite>).</p></li>
+<li><p><strong>transform</strong> (<em>Callable</em>) – (optional) A transform to apply to the data</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="torchcvnn.datasets.ATRNetSTAR.classes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#torchcvnn.datasets.ATRNetSTAR.classes" title="Link to this definition">¶</a></dt>
+<dd><p>Get the names of all classes at class_level,</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
         </article>
@@ -998,6 +1044,13 @@ the function <a class="reference internal" href="#torchcvnn.datasets.miccai2023.
 <li><a class="reference internal" href="#torchcvnn.datasets.miccai2023.image_to_kspace"><code class="docutils literal notranslate"><span class="pre">image_to_kspace()</span></code></a></li>
 <li><a class="reference internal" href="#torchcvnn.datasets.miccai2023.combine_coils_from_kspace"><code class="docutils literal notranslate"><span class="pre">combine_coils_from_kspace()</span></code></a></li>
 <li><a class="reference internal" href="#torchcvnn.datasets.MICCAI2023"><code class="docutils literal notranslate"><span class="pre">MICCAI2023</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#atrnet-star">ATRNet-STAR</a><ul>
+<li><a class="reference internal" href="#torchcvnn.datasets.ATRNetSTAR"><code class="docutils literal notranslate"><span class="pre">ATRNetSTAR</span></code></a><ul>
+<li><a class="reference internal" href="#torchcvnn.datasets.ATRNetSTAR.classes"><code class="docutils literal notranslate"><span class="pre">ATRNetSTAR.classes</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
