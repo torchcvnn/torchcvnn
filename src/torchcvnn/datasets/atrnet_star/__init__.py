@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2024 Quentin Gabot
+# Copyright (c) 2025 Rodolphe Durand
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,12 +20,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .alos2 import ALOSDataset
-from .atrnet_star import ATRNetSTAR
-from .bretigny import Bretigny
-from .miccai2023 import MICCAI2023
-from .mstar import MSTARTargets
-from .polsf import PolSFDataset
-from .s1slc import S1SLC
-from .sample import SAMPLE
-from .slc import SLCDataset
+from .dataset import ATRNetSTAR
