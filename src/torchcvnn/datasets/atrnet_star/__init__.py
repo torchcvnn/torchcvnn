@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2023 Jérémie Levi, Victor Dhédin, Jeremy Fix
+# Copyright (c) 2025 Rodolphe Durand
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +20,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-__version__ = "0.9.7"
-
-"""
-# Torchcvnn
-
-This provides several modules (layers, activation functions) suitable for
-optimizing complex valued neural networks with the pytorch framework.
-"""
+from .dataset import ATRNetSTAR

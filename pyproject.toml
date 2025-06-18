@@ -7,9 +7,10 @@ dependencies = [
 	"numpy >= 2.0",
 	"requests >= 2.31.0",
 	"tqdm >= 4.66.1",
-    "pillow >= 11.1.0",
-    "scipy>=1.6.0",
-    "h5py>=3.12.1"
+  "pillow >= 11.1.0",
+  "scipy>=1.6.0",
+  "h5py>=3.12.1",
+  "huggingface-hub>=0.32.6"
 ]
 requires-python = ">= 3.9.10"
 authors = [
