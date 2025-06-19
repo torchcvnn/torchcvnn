@@ -22,10 +22,9 @@
 
 import logging
 import pathlib
-from typing import Any, Callable, Literal, Optional, Union
+from typing import Callable, Literal, Optional
 
 import scipy
-import torch
 from torch.utils.data import Dataset
 
 from .parse_xml import xml_to_dict
@@ -324,20 +323,19 @@ class ATRNetSTAR(Dataset):
         """
         Get the names of all classes at class_level,
         """
-        match self.class_level:
-            case "category":
-                return self.CATEGORIES
+        if self.class_level == "category":
+            return self.CATEGORIES
 
-            case "class":
-                return self.CLASSES
+        elif self.class_level == "class":
+            return self.CLASSES
 
-            case "type":
-                return self.TYPES
+        elif self.class_level == "type":
+            return self.TYPES
 
-            case _:
-                raise ValueError(
-                    f"Unexpected class_level value. Got {self.class_level} instead of type, class or category."
-                )
+        else:
+            raise ValueError(
+                f"Unexpected class_level value. Got {self.class_level} instead of type, class or category."
+            )
 
     def __len__(self) -> int:
         return len(self.datafiles)
