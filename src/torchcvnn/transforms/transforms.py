@@ -694,8 +694,9 @@ class ToTensor(BaseTransform):
         self.convert_dtype = dtype is not None
 
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
-        x = torch.as_tensor(x)
+        x = x[np.newaxis, :, :] if len(x.shape) == 2 else x
         return x.to(self.torch_dtype) if self.convert_dtype else x
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        x = x.unsqueeze(0) if len(x.shape) == 2 else x
         return x.to(self.torch_dtype) if self.convert_dtype else x
