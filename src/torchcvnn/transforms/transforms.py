@@ -695,6 +695,7 @@ class ToTensor(BaseTransform):
 
     def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
         x = x[np.newaxis, :, :] if len(x.shape) == 2 else x
+        x = torch.from_numpy(x.copy()) if isinstance(x, np.ndarray) else torch.from_numpy(x)
         return x.to(self.torch_dtype) if self.convert_dtype else x
     
     def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
