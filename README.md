@@ -42,3 +42,4 @@ Pytorch based :
 
 - [cplxmodule](https://github.com/ivannz/cplxmodule)
 - [complexPyTorch](https://github.com/wavefrontshaping/complexPyTorch)
+- [complextorch](https://github.com/josiahwsmith10/complextorch)
