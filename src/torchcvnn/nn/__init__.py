@@ -21,3 +21,5 @@
 # SOFTWARE.
 
 from .modules import *
+
+from torchcvnn.nn import init as init
