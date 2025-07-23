@@ -137,8 +137,8 @@ class ATRNetSTAR(Dataset):
         root_dir (str): The root directory in which the different benchmarks are placed.
                         Will be created if it does not exist.
         benchmark (str): (optional) Chosen benchmark. If not specified, SOC_40 (entire dataset) will be used as default.
-        split (str): (optional) Chosen split ('train', 'test', ... or 'all' for all benchmark samples).
-                    Those are pre-defined by the dataset for each benchmark. Default: 'all'
+        split (str): Chosen split ('train', 'test', ... or 'all' for all benchmark samples).
+                    Those are pre-defined by the dataset for each benchmark.
         download (bool): (optional) Whether or not to download the dataset if it is not found. Default: False
         class_level (str): (optional) The level of precision chosen for the class attributed to a sample.
                             Either 'category', 'class' or 'type'. Default: 'type' (the finest granularity)
