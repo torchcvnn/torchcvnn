@@ -21,8 +21,9 @@
 # SOFTWARE.
 
 import logging
+import os
 import pathlib
-from typing import Callable, Literal, Optional
+from typing import Callable, Literal, Optional, Union
 
 import scipy
 from torch.utils.data import Dataset
@@ -32,7 +33,7 @@ from .parse_xml import xml_to_dict
 
 def gather_ATRNetSTAR_datafiles(
     rootdir: pathlib.Path,
-    split: Literal["train", "test", "all"],
+    split: str,
 ) -> list[str]:
     """
     This function gathers all the ATRNet-STAR datafiles from the specified split in the root directory
@@ -46,6 +47,12 @@ def gather_ATRNetSTAR_datafiles(
         split_dir = rootdir / split
     else:
         split_dir = rootdir
+
+    if not split_dir.exists():
+        raise ValueError(
+            f"{str(split_dir)} not found. Possible splits of benchmark {rootdir.name} are : {[f.name for f in os.scandir(rootdir) if f.is_dir()]}"
+        )
+
     logging.debug(f"Looking for all samples in {split_dir}")
 
     # only look for data files (avoid duplicates)
@@ -130,7 +137,8 @@ class ATRNetSTAR(Dataset):
         root_dir (str): The root directory in which the different benchmarks are placed.
                         Will be created if it does not exist.
         benchmark (str): (optional) Chosen benchmark. If not specified, SOC_40 (entire dataset) will be used as default.
-        split (str): (optional) Chosen split ('train', 'test' or 'all' for both). Those are pre-defined by the dataset. Default: 'all'
+        split (str): Chosen split ('train', 'test', ... or 'all' for all benchmark samples).
+                    Those are pre-defined by the dataset for each benchmark.
         download (bool): (optional) Whether or not to download the dataset if it is not found. Default: False
         class_level (str): (optional) The level of precision chosen for the class attributed to a sample.
                             Either 'category', 'class' or 'type'. Default: 'type' (the finest granularity)
@@ -238,8 +246,8 @@ class ATRNetSTAR(Dataset):
     def __init__(
         self,
         root_dir: str,
+        split: Union[Literal["train", "test", "all"], str],
         benchmark: Optional[str] = None,
-        split: Literal["train", "test", "all"] = "all",
         download: bool = False,
         class_level: Literal["type", "class", "category"] = "type",
         get_annotations: bool = False,
@@ -296,11 +304,6 @@ class ATRNetSTAR(Dataset):
             benchmarks_with_quotes = [f"'{b}'" for b in self._ALLOWED_BENCHMARKS]
             raise ValueError(
                 f"Unknown benchmark. Should be one of {', '.join(benchmarks_with_quotes)} or None"
-            )
-
-        if self.split not in ["train", "test", "all"]:
-            raise ValueError(
-                f"Unexpected split value. Got {self.split} instead of 'train', 'test' or 'all'."
             )
 
     def _download_dataset(self) -> None:
