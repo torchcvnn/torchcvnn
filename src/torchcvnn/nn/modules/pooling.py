@@ -149,3 +149,30 @@ class AvgPool2d(nn.Module):
         Computes the average over the real and imaginery parts.
         """
         return torch.view_as_complex(self.m(torch.view_as_real(z)))
+
+class AdaptiveAvgPool2d(nn.Module):
+    """
+    Implementation of torch.nn.AdaptiveAvgPool2d for complex numbers.
+    Apply AdaptiveAvgPool2d on the real and imaginary part.
+    Returns complex values associated to the AdaptiveAvgPool2d results.
+
+    Arguments:
+        output_size: the target output size of the image of the form H x W.
+                     Can be a tuple or a single number H for a square image H x H.
+    """
+
+    def __init__(self, output_size: _size_2_t) -> None:
+        super().__init__()
+        if type(output_size) == int:
+            self.output_size = (output_size, output_size)
+        else:
+            self.output_size = output_size
+        self.m = torch.nn.AdaptiveAvgPool2d(self.output_size)
+        
+    def forward(self, z: torch.Tensor) -> torch.Tensor:
+        """
+        Computes the average over the real and imaginary parts.
+        """
+        real = self.m(z.real)
+        imag = self.m(z.imag)
+        return torch.complex(real, imag)

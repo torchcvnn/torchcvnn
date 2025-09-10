@@ -94,7 +94,34 @@ def test_avgpool2d():
 
     assert torch.allclose(outputs, expected_outputs)
 
+def test_adaptiveavgpool2d():
+    aapool = c_nn.AdaptiveAvgPool2d(output_size=3)
+
+    N = 10
+    inputs = torch.tensor([[i + j * 1j for i in range(N)] for j in range(N)])
+    inputs = inputs.unsqueeze(0).unsqueeze(0)
+    outputs = aapool(inputs)
+
+    expected_outputs = (
+        torch.tensor(
+            [
+                [1.5 + 1.5 * 1j, 4.5 + 1.5 * 1j, 7.5 + 1.5 * 1j],
+                [1.5 + 4.5 * 1j, 4.5 + 4.5 * 1j, 7.5 + 4.5 * 1j],
+                [1.5 + 7.5 * 1j, 4.5 + 7.5 * 1j, 7.5 + 7.5 * 1j],
+            ]
+        )
+        .unsqueeze(0)
+        .unsqueeze(0)
+    )
+    assert torch.allclose(outputs, expected_outputs)
+
+    expected_real = torch.nn.AdaptiveAvgPool2d(3)(inputs.real)
+    expected_imag = torch.nn.AdaptiveAvgPool2d(3)(inputs.imag)
+    expected_outputs = torch.complex(expected_real, expected_imag)
+    assert torch.allclose(outputs, expected_outputs)
+    
 
 if __name__ == "__main__":
     test_mpool2d()
     test_avgpool2d()
+    test_adaptiveavgpool2d()
