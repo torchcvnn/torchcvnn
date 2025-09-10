@@ -29,12 +29,18 @@ import torchcvnn.nn as c_nn
 
 
 def test_complex_mse_loss():
-    loss = c_nn.ComplexMSELoss()
-    y_pred = torch.tensor([1 + 1j, 2 + 2j], dtype=torch.complex64)
-    y_true = torch.tensor([1 + 2j, 2 + 3j], dtype=torch.complex64)
-    output = loss(y_pred, y_true)
-    expected_outputs = torch.ones_like(output)
-    assert torch.allclose(output, expected_outputs)
+    reduction_modes = ["mean", "sum", "none"]
+    for mode in reduction_modes:
+        loss = c_nn.ComplexMSELoss(reduction=mode)
+        y_pred = torch.tensor([1 + 1j, 2 + 2j], dtype=torch.complex64)
+        y_true = torch.tensor([1 + 2j, 2 + 3j], dtype=torch.complex64)
+        output = loss(y_pred, y_true)
+        expected_outputs = {
+            "mean": torch.tensor(1.0),
+            "sum": torch.tensor(2.0),
+            "none": torch.tensor([1.0, 1.0]),
+        }
+        assert torch.allclose(output, expected_outputs[mode]), f"Failed for reduction mode: {mode}"
 
 
 if __name__ == "__main__":
