@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for /home/runner/work/torchcvnn/torchcvnn/src/torchcvnn/nn/modules/loss.py: 100%</title>
+    <title>Coverage for /home/runner/work/torchcvnn/torchcvnn/src/torchcvnn/nn/modules/loss.py: 93%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>/home/runner/work/torchcvnn/torchcvnn/src/torchcvnn/nn/modules/loss.py</b>:
-            <span class="pc_cov">100%</span>
+            <span class="pc_cov">93%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -54,9 +54,9 @@
             </div>
         </aside>
         <h2>
-            <span class="text">7 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">7<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">0<span class="text"> missing</span></button>
+            <span class="text">14 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">13<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">1<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_7b238a249de0d324_normalization_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-12 05:34 +0000
+            created at 2025-09-12 06:03 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -148,7 +148,15 @@
     <p class="pln"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">    <span class="key">def</span> <span class="nam">forward</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">y_pred</span><span class="op">:</span> <span class="nam">torch</span><span class="op">.</span><span class="nam">Tensor</span><span class="op">,</span> <span class="nam">y_true</span><span class="op">:</span> <span class="nam">torch</span><span class="op">.</span><span class="nam">Tensor</span><span class="op">)</span> <span class="op">-></span> <span class="nam">torch</span><span class="op">.</span><span class="nam">Tensor</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">        <span class="com"># Calculate Mean Square Loss for complex numbers</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">        <span class="key">return</span> <span class="nam">torch</span><span class="op">.</span><span class="nam">mean</span><span class="op">(</span><span class="nam">torch</span><span class="op">.</span><span class="nam">square</span><span class="op">(</span><span class="nam">torch</span><span class="op">.</span><span class="nam">abs</span><span class="op">(</span><span class="nam">y_true</span> <span class="op">-</span> <span class="nam">y_pred</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">        <span class="nam">mse</span> <span class="op">=</span> <span class="nam">torch</span><span class="op">.</span><span class="nam">square</span><span class="op">(</span><span class="nam">torch</span><span class="op">.</span><span class="nam">abs</span><span class="op">(</span><span class="nam">y_true</span> <span class="op">-</span> <span class="nam">y_pred</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">reduction</span> <span class="op">==</span> <span class="str">"mean"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">            <span class="key">return</span> <span class="nam">torch</span><span class="op">.</span><span class="nam">mean</span><span class="op">(</span><span class="nam">mse</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t72" href="#t72">72</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">reduction</span> <span class="op">==</span> <span class="str">"sum"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t73" href="#t73">73</a></span><span class="t">            <span class="key">return</span> <span class="nam">torch</span><span class="op">.</span><span class="nam">sum</span><span class="op">(</span><span class="nam">mse</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t74" href="#t74">74</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">reduction</span> <span class="op">==</span> <span class="str">"none"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t75" href="#t75">75</a></span><span class="t">            <span class="key">return</span> <span class="nam">mse</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t77" href="#t77">77</a></span><span class="t">            <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="str">f"Invalid reduction mode: {self.reduction}"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -158,7 +166,7 @@
             <a class="nav" href="z_7b238a249de0d324_normalization_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-12 05:34 +0000
+            created at 2025-09-12 06:03 +0000
         </p>
     </div>
 </footer>
