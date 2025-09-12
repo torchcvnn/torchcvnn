@@ -572,6 +572,10 @@ class PolSAR(BaseTransform):
     Supported conversions:
         - 1 channel -> 1 channel: Identity
         - 2 channels -> 1 or 2 channels
+        - 3 channels -> 1, 2, or 3 channels where:
+            - 1 channel: Returns first channel only
+            - 2 channels: Returns [HH, VV] channels
+            - 3 channels: Returns all channels [HH, HV, VV]
         - 4 channels -> 1, 2, 3, or 4 channels where:
             - 1 channel: Returns first channel only
             - 2 channels: Returns [HH, VV] channels
@@ -608,6 +612,17 @@ class PolSAR(BaseTransform):
             return x[0:1]
         return None
 
+    def _handle_three_channels(
+        self, x: np.ndarray | torch.Tensor, out_channels: int, backend: ModuleType
+    ) -> np.ndarray | torch.Tensor:
+        channel_maps = {
+            1: lambda: x[0:1],
+            2: lambda: backend.stack((x[0], x[2])),
+            3: lambda: backend.stack((x[0], x[1], x[2])),
+        }
+        return channel_maps.get(out_channels, lambda: None)()
+
+
     def _handle_four_channels(
         self, x: np.ndarray | torch.Tensor, out_channels: int, backend: ModuleType
     ) -> np.ndarray | torch.Tensor:
@@ -625,6 +640,7 @@ class PolSAR(BaseTransform):
         handlers = {
             1: self._handle_single_channel,
             2: self._handle_two_channels,
+            3: lambda x, o: self._handle_three_channels(x, o, backend),
             4: lambda x, o: self._handle_four_channels(x, o, backend),
         }
         result = handlers.get(x.shape[0], lambda x, o: None)(x, out_channels)

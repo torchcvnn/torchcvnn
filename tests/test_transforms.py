@@ -119,6 +119,85 @@ def test_spatial_resize_tensor():
     assert type(resized_tensor) == torch.Tensor
     assert resized_tensor.dtype == torch.complex64
 
+def test_polsar_transform_four_channels():
+    # Create a random complex tensor
+    tensor_numpy = np.random.rand(4, 100, 100) + 1j * np.random.rand(4, 100, 100)
+    tensor = torch.as_tensor(tensor_numpy)
+
+    polsar_transform_one_channel = transforms.PolSAR(out_channel=1)
+    out = polsar_transform_one_channel(tensor_numpy)
+    assert out.shape == (1, 100, 100)
+    out = polsar_transform_one_channel(tensor)
+    assert out.shape == (1, 100, 100)
+
+    polsar_transform_two_channels = transforms.PolSAR(out_channel=2)
+    out = polsar_transform_two_channels(tensor_numpy)
+    assert out.shape == (2, 100, 100)    
+    out = polsar_transform_two_channels(tensor)
+    assert out.shape == (2, 100, 100)
+
+    polsar_transform_three_channels = transforms.PolSAR(out_channel=3)
+    out = polsar_transform_three_channels(tensor_numpy)
+    assert out.shape == (3, 100, 100)
+    out = polsar_transform_three_channels(tensor)
+    assert out.shape == (3, 100, 100)
+
+    polsar_transform_four_channels = transforms.PolSAR(out_channel=4)
+    out = polsar_transform_four_channels(tensor_numpy)
+    assert out.shape == (4, 100, 100)
+    out = polsar_transform_four_channels(tensor)
+    assert out.shape == (4, 100, 100)    
+
+def test_polsar_transform_three_channels():
+    # Create a random complex tensor
+    tensor_numpy = np.random.rand(3, 100, 100) + 1j * np.random.rand(3, 100, 100)
+    tensor = torch.as_tensor(tensor_numpy)
+
+    polsar_transform_one_channel = transforms.PolSAR(out_channel=1)
+    out = polsar_transform_one_channel(tensor_numpy)
+    assert out.shape == (1, 100, 100)
+    out = polsar_transform_one_channel(tensor)
+    assert out.shape == (1, 100, 100)
+
+    polsar_transform_two_channels = transforms.PolSAR(out_channel=2)
+    out = polsar_transform_two_channels(tensor_numpy)
+    assert out.shape == (2, 100, 100)    
+    out = polsar_transform_two_channels(tensor)
+    assert out.shape == (2, 100, 100)
+
+    polsar_transform_three_channels = transforms.PolSAR(out_channel=3)
+    out = polsar_transform_three_channels(tensor_numpy)
+    assert out.shape == (3, 100, 100)
+    out = polsar_transform_three_channels(tensor)
+    assert out.shape == (3, 100, 100)
+
+def polsar_transform_two_channels():
+    # Create a random complex tensor
+    tensor_numpy = np.random.rand(2, 100, 100) + 1j * np.random.rand(2, 100, 100)
+    tensor = torch.as_tensor(tensor_numpy)
+
+    polsar_transform_one_channel = transforms.PolSAR(out_channel=1)
+    out = polsar_transform_one_channel(tensor_numpy)
+    assert out.shape == (1, 100, 100)
+    out = polsar_transform_one_channel(tensor)
+    assert out.shape == (1, 100, 100)
+
+    polsar_transform_two_channels = transforms.PolSAR(out_channel=2)
+    out = polsar_transform_two_channels(tensor_numpy)
+    assert out.shape == (2, 100, 100)    
+    out = polsar_transform_two_channels(tensor)
+    assert out.shape == (2, 100, 100)
+
+def polsar_transform_one_channel():
+    # Create a random complex tensor
+    tensor_numpy = np.random.rand(1, 100, 100) + 1j * np.random.rand(1, 100, 100)
+    tensor = torch.as_tensor(tensor_numpy)
+
+    polsar_transform_one_channel = transforms.PolSAR(out_channel=1)
+    out = polsar_transform_one_channel(tensor_numpy)
+    assert out.shape == (1, 100, 100)
+    out = polsar_transform_one_channel(tensor)
+    assert out.shape == (1, 100, 100)
 
 def on_rgb_img():
     """
@@ -194,3 +273,7 @@ if __name__ == "__main__":
     test_spatial_resize_tensor()
     on_rgb_img()
     on_bw_img()
+    test_polsar_transform_four_channels()
+    test_polsar_transform_three_channels()
+    polsar_transform_two_channels()
+    polsar_transform_one_channel()
