@@ -66,4 +66,12 @@ class ComplexMSELoss(nn.modules.loss._Loss):
 
     def forward(self, y_pred: torch.Tensor, y_true: torch.Tensor) -> torch.Tensor:
         # Calculate Mean Square Loss for complex numbers
-        return torch.mean(torch.square(torch.abs(y_true - y_pred)))
+        mse = torch.square(torch.abs(y_true - y_pred))
+        if self.reduction == "mean":
+            return torch.mean(mse)
+        elif self.reduction == "sum":
+            return torch.sum(mse)
+        elif self.reduction == "none":
+            return mse
+        else:
+            raise ValueError(f"Invalid reduction mode: {self.reduction}")
