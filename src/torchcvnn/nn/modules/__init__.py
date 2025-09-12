@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .pooling import MaxPool2d, AvgPool2d
+from .pooling import MaxPool2d, AvgPool2d, AdaptiveAvgPool2d
 from .dropout import Dropout, Dropout2d
 from .conv import ConvTranspose2d
 from .batchnorm import BatchNorm1d, BatchNorm2d
