@@ -89,10 +89,10 @@ class S1SLC(Dataset):
 
             # Load labels and convert to 0-indexed
             labels = np.load(labels_path, mmap_mode="r")
-            labels = np.array([int(label.item()) - 1 for label in labels])
+            labels = labels.astype(int).squeeze() - 1
 
             # put labels in the set of classes
-            self.classes.update(labels)
+            self.classes.update(list(labels))
 
             self.data[subfolder] = {
                 "hh": hh,
