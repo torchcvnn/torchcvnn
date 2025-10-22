@@ -1,14 +1,14 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="../">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Classification of MNIST digit from their Fourier representation" href="../tutorials/complex_mnist.html" /><link rel="prev" title="torchcvnn.models" href="models.html" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Classification of MNIST digit from their Fourier representation" href="../tutorials/complex_mnist.html"><link rel="prev" title="torchcvnn.models" href="models.html">
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
         <title>torchcvnn.nn.init - torchcvnn 0.9.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -23,14 +23,14 @@
   }
   @media not print {
     body[data-theme="dark"] {
-      --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
-        --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
   
       }
     }
@@ -145,14 +145,10 @@
   </symbol>
 </svg>
 
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
 
 <a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
@@ -162,8 +158,7 @@
   <header class="mobile-header">
     <div class="header-left">
       <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
       </label>
     </div>
     <div class="header-center">
@@ -171,8 +166,7 @@
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
           <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
           <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
           <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
@@ -180,8 +174,7 @@
         </button>
       </div>
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
   </header>
@@ -205,7 +198,7 @@
 <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">torchcvnn.datasets</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="transforms.html">torchcvnn.transforms</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of torchcvnn.transforms</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="transforms.html">torchcvnn.transforms</a><input aria-label="Toggle navigation of torchcvnn.transforms" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.Unsqueeze.html">torchcvnn.transforms.Unsqueeze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.ToTensor.html">torchcvnn.transforms.ToTensor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.RealImaginary.html">torchcvnn.transforms.RealImaginary</a></li>
@@ -216,7 +209,7 @@
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.FFTResize.html">torchcvnn.transforms.FFTResize</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="nn.html">torchcvnn.nn</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of torchcvnn.nn</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="nn.html">torchcvnn.nn</a><input aria-label="Toggle navigation of torchcvnn.nn" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.ConvTranspose2d.html">torchcvnn.nn.ConvTranspose2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.MaxPool2d.html">torchcvnn.nn.MaxPool2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.AvgPool2d.html">torchcvnn.nn.AvgPool2d</a></li>
@@ -285,8 +278,7 @@
     <span class="visually-hidden">Edit this page</span>
   </a>
 </div><div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
               <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
@@ -294,8 +286,7 @@
             </button>
           </div>
           <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
@@ -303,7 +294,7 @@
 <span id="torchcvnn-nn-init"></span><h1>torchcvnn.nn.init<a class="headerlink" href="#module-torchcvnn.nn.modules.initialization" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="torchcvnn.nn.modules.initialization.complex_kaiming_normal_">
-<span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.modules.initialization.</span></span><span class="sig-name descname"><span class="pre">complex_kaiming_normal_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fan_in'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'leaky_relu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../_modules/torchcvnn/nn/modules/initialization.html#complex_kaiming_normal_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.modules.initialization.complex_kaiming_normal_" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.modules.initialization.</span></span><span class="sig-name descname"><span class="pre">complex_kaiming_normal_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fan_in'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'leaky_relu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../_modules/torchcvnn/nn/modules/initialization.html#complex_kaiming_normal_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.modules.initialization.complex_kaiming_normal_" title="Link to this definition">¶</a></dt>
 <dd><p>Fills the input <cite>Tensor</cite> with values according to the method
 described in <cite>Delving deep into rectifiers: Surpassing human-level
 performance on ImageNet classification</cite> - He, K. et al. (2015), using a
@@ -334,12 +325,12 @@ recommended to use only with <code class="docutils literal notranslate"><span cl
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c_nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">complex_kaiming_normal_</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fan_out&#39;</span><span class="p">,</span> <span class="n">nonlinearity</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This implementation is a minor adaptation of the <a class="reference external" href="https://docs.pytorch.org/docs/stable/nn.init.html#torch.nn.init.kaiming_normal_" title="(in PyTorch v2.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.init.kaiming_normal_()</span></code></a> function</p>
+<p>This implementation is a minor adaptation of the <a class="reference external" href="https://docs.pytorch.org/docs/stable/nn.init.html#torch.nn.init.kaiming_normal_" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.init.kaiming_normal_()</span></code></a> function</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="torchcvnn.nn.modules.initialization.complex_kaiming_uniform_">
-<span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.modules.initialization.</span></span><span class="sig-name descname"><span class="pre">complex_kaiming_uniform_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fan_in'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'leaky_relu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../_modules/torchcvnn/nn/modules/initialization.html#complex_kaiming_uniform_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.modules.initialization.complex_kaiming_uniform_" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.modules.initialization.</span></span><span class="sig-name descname"><span class="pre">complex_kaiming_uniform_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fan_in'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'leaky_relu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../_modules/torchcvnn/nn/modules/initialization.html#complex_kaiming_uniform_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.modules.initialization.complex_kaiming_uniform_" title="Link to this definition">¶</a></dt>
 <dd><p>Fills the input <cite>Tensor</cite> with values according to the method
 described in <cite>Delving deep into rectifiers: Surpassing human-level
 performance on ImageNet classification</cite> - He, K. et al. (2015), using a
@@ -370,12 +361,12 @@ recommended to use only with <code class="docutils literal notranslate"><span cl
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c_nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">complex_kaiming_uniform_</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fan_in&#39;</span><span class="p">,</span> <span class="n">nonlinearity</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This implementation is a minor adaptation of the <a class="reference external" href="https://docs.pytorch.org/docs/stable/nn.init.html#torch.nn.init.kaiming_uniform_" title="(in PyTorch v2.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.init.kaiming_uniform_()</span></code></a> function</p>
+<p>This implementation is a minor adaptation of the <a class="reference external" href="https://docs.pytorch.org/docs/stable/nn.init.html#torch.nn.init.kaiming_uniform_" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.init.kaiming_uniform_()</span></code></a> function</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="torchcvnn.nn.modules.initialization.complex_xavier_normal_">
-<span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.modules.initialization.</span></span><span class="sig-name descname"><span class="pre">complex_xavier_normal_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'leaky_relu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../_modules/torchcvnn/nn/modules/initialization.html#complex_xavier_normal_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.modules.initialization.complex_xavier_normal_" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.modules.initialization.</span></span><span class="sig-name descname"><span class="pre">complex_xavier_normal_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'leaky_relu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../_modules/torchcvnn/nn/modules/initialization.html#complex_xavier_normal_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.modules.initialization.complex_xavier_normal_" title="Link to this definition">¶</a></dt>
 <dd><p>Fills the input <cite>Tensor</cite> with values according to the method
 described in <cite>Understanding the difficulty of training deep feedforward
 neural networks</cite> - Glorot, X. &amp; Bengio, Y. (2010), using a normal
@@ -400,12 +391,12 @@ distribution. The resulting tensor will have values sampled from
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">complex_xavier_normal_</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">nonlinearity</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This implementation is a minor adaptation of the <a class="reference external" href="https://docs.pytorch.org/docs/stable/nn.init.html#torch.nn.init.xavier_normal_" title="(in PyTorch v2.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.init.xavier_normal_()</span></code></a> function</p>
+<p>This implementation is a minor adaptation of the <a class="reference external" href="https://docs.pytorch.org/docs/stable/nn.init.html#torch.nn.init.xavier_normal_" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.init.xavier_normal_()</span></code></a> function</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="torchcvnn.nn.modules.initialization.complex_xavier_uniform_">
-<span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.modules.initialization.</span></span><span class="sig-name descname"><span class="pre">complex_xavier_uniform_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'leaky_relu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../_modules/torchcvnn/nn/modules/initialization.html#complex_xavier_uniform_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.modules.initialization.complex_xavier_uniform_" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.modules.initialization.</span></span><span class="sig-name descname"><span class="pre">complex_xavier_uniform_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'leaky_relu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../_modules/torchcvnn/nn/modules/initialization.html#complex_xavier_uniform_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.modules.initialization.complex_xavier_uniform_" title="Link to this definition">¶</a></dt>
 <dd><p>Fills the input <cite>Tensor</cite> with values according to the method
 described in <cite>Understanding the difficulty of training deep feedforward
 neural networks</cite> - Glorot, X. &amp; Bengio, Y. (2010), using a uniform
@@ -430,7 +421,7 @@ distribution. The resulting tensor will have values sampled from
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c_nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">complex_xavier_uniform_</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">nonlinearity</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This implementation is a minor adaptation of the <a class="reference external" href="https://docs.pytorch.org/docs/stable/nn.init.html#torch.nn.init.xavier_uniform_" title="(in PyTorch v2.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.init.xavier_uniform_()</span></code></a> function</p>
+<p>This implementation is a minor adaptation of the <a class="reference external" href="https://docs.pytorch.org/docs/stable/nn.init.html#torch.nn.init.xavier_uniform_" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.init.xavier_uniform_()</span></code></a> function</p>
 </dd></dl>
 
 </section>

@@ -1,14 +1,14 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="../">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Remote sensing data loading" href="loading_remote.html" /><link rel="prev" title="torchcvnn.nn.init" href="../modules/init.html" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Remote sensing data loading" href="loading_remote.html"><link rel="prev" title="torchcvnn.nn.init" href="../modules/init.html">
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
         <title>Classification of MNIST digit from their Fourier representation - torchcvnn 0.9.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -23,14 +23,14 @@
   }
   @media not print {
     body[data-theme="dark"] {
-      --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
-        --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
   
       }
     }
@@ -145,14 +145,10 @@
   </symbol>
 </svg>
 
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
 
 <a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
@@ -162,8 +158,7 @@
   <header class="mobile-header">
     <div class="header-left">
       <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
       </label>
     </div>
     <div class="header-center">
@@ -171,8 +166,7 @@
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
           <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
           <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
           <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
@@ -180,8 +174,7 @@
         </button>
       </div>
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
   </header>
@@ -205,7 +198,7 @@
 <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules/datasets.html">torchcvnn.datasets</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../modules/transforms.html">torchcvnn.transforms</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of torchcvnn.transforms</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../modules/transforms.html">torchcvnn.transforms</a><input aria-label="Toggle navigation of torchcvnn.transforms" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.Unsqueeze.html">torchcvnn.transforms.Unsqueeze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.ToTensor.html">torchcvnn.transforms.ToTensor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.RealImaginary.html">torchcvnn.transforms.RealImaginary</a></li>
@@ -216,7 +209,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.FFTResize.html">torchcvnn.transforms.FFTResize</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../modules/nn.html">torchcvnn.nn</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of torchcvnn.nn</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../modules/nn.html">torchcvnn.nn</a><input aria-label="Toggle navigation of torchcvnn.nn" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.nn.ConvTranspose2d.html">torchcvnn.nn.ConvTranspose2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.nn.MaxPool2d.html">torchcvnn.nn.MaxPool2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.nn.AvgPool2d.html">torchcvnn.nn.AvgPool2d</a></li>
@@ -285,8 +278,7 @@
     <span class="visually-hidden">Edit this page</span>
   </a>
 </div><div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
               <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
@@ -294,8 +286,7 @@
             </button>
           </div>
           <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
@@ -305,7 +296,7 @@
 suppose you want to classify the MNIST digits from their Fourier space representation.</p>
 <section id="loading-the-complex-valued-mnist-dataset">
 <h2>Loading the complex valued MNIST dataset<a class="headerlink" href="#loading-the-complex-valued-mnist-dataset" title="Link to this heading">¶</a></h2>
-<p>Using <a class="reference external" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.MNIST.html#torchvision.datasets.MNIST" title="(in Torchvision v0.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchvision.datasets.MNIST</span></code></a> and <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.fft.fft.html#torch.fft.fft" title="(in PyTorch v2.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.fft.fft()</span></code></a>, we can easily transform the MNIST dataset into its Fourier space representation :</p>
+<p>Using <a class="reference external" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.MNIST.html#torchvision.datasets.MNIST" title="(in Torchvision v0.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchvision.datasets.MNIST</span></code></a> and <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.fft.fft.html#torch.fft.fft" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.fft.fft()</span></code></a>, we can easily transform the MNIST dataset into its Fourier space representation :</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span>
     <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
