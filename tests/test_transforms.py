@@ -199,6 +199,57 @@ def polsar_transform_one_channel():
     out = polsar_transform_one_channel(tensor)
     assert out.shape == (1, 100, 100)
 
+def test_normalize():
+    # Create complex Gaussian data that matches the provided per-channel means and covariances
+    rng = np.random.default_rng(0)
+    C, H, W = 2, 100, 100
+    means = [[0.0, 0.0], [1.0, 1.0]]
+    covs = [[[1.0, 0.0], [0.0, 1.0]], [[2.0, 0.0], [0.0, 2.0]]]
+
+    # Generate per-channel complex Gaussian samples with shape (C, H, W)
+    samples = np.zeros((C, H, W), dtype=np.complex64)
+    for c in range(C):
+        mv = rng.multivariate_normal(means[c], covs[c], size=H * W)
+        real = mv[:, 0].reshape(H, W)
+        imag = mv[:, 1].reshape(H, W)
+        samples[c] = real + 1j * imag
+
+    tensor_numpy = samples
+    tensor = torch.as_tensor(tensor_numpy)
+
+    normalize_transform = transforms.Normalize(means, covs)
+
+    # Numpy input
+    out_np = normalize_transform(tensor_numpy)
+    assert out_np.shape == (C, H, W)
+
+    # For each channel, check mean ~ 0 and covariance ~ identity
+    for c in range(C):
+        vals = out_np[c].reshape(-1)
+        mean_real = vals.real.mean()
+        mean_imag = vals.imag.mean()
+        # sampling error over H*W samples -> use a realistic tolerance
+        assert np.allclose([mean_real, mean_imag], [0.0, 0.0], atol=5e-2)
+
+        stacked = np.vstack([vals.real.flatten(), vals.imag.flatten()])
+    cov_est = np.cov(stacked, bias=True)
+    assert np.allclose(cov_est, np.eye(2), atol=3e-2)
+
+    # Torch input
+    out_t = normalize_transform(tensor)
+    assert out_t.shape == (C, H, W)
+
+    for c in range(C):
+        vals = out_t[c].cpu().numpy().reshape(-1)
+        mean_real = vals.real.mean()
+        mean_imag = vals.imag.mean()
+        # sampling error over H*W samples -> use a realistic tolerance
+        assert np.allclose([mean_real, mean_imag], [0.0, 0.0], atol=5e-2)
+
+        stacked = np.vstack([vals.real.flatten(), vals.imag.flatten()])
+    cov_est = np.cov(stacked, bias=True)
+    assert np.allclose(cov_est, np.eye(2), atol=3e-2)
+
 def on_rgb_img():
     """
     Test the resize from an image
@@ -277,3 +328,4 @@ if __name__ == "__main__":
     test_polsar_transform_three_channels()
     polsar_transform_two_channels()
     polsar_transform_one_channel()
+    test_normalize()

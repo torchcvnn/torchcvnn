@@ -146,6 +146,77 @@ class LogAmplitude(BaseTransform):
             x, torch, self.keep_phase, self.min_value, self.max_value
         )
 
+class Normalize(BaseTransform):
+    """Per-channel 2x2 normalization of [Re, Im]. 
+    This transform normalizes complex-valued input data by centering and scaling it.
+    It supports both numpy arrays and PyTorch tensors as input.
+    Args:
+        means (array-like): Per-channel means for centering. Shape (C, 2) where C is number of channels.
+        covs (array-like): Per-channel 2x2 covariance matrices for scaling. Shape (C, 2, 2).
+            Covariance matrices must be symmetric positive definite.
+    Returns:
+        np.ndarray | torch.Tensor: Normalized data with same shape as input.
+            Each channel is independently centered and scaled.
+    Example:
+        >>> means = [[0,0], [1,1]]
+        >>> covs = [[[1,0],[0,1]], [[2,0],[0,2]]]
+        >>> transform = Normalize(means, covs)
+        >>> output = transform(input_data)  # Normalizes each channel independently
+    """
+    
+    def __init__(self, means, covs, eps=1e-12):
+        # means: (C,2) ; covs: (C,2,2)
+        self.means = np.asarray(means, dtype=np.float64)
+        self.covs  = np.asarray(covs,  dtype=np.float64)
+        assert self.means.ndim == 2 and self.means.shape[1] == 2
+        assert self.covs.ndim  == 3 and self.covs.shape[1:] == (2,2)
+        self.num_channels = self.means.shape[0]
+
+        # NEW: precompute per-channel whitening matrices W = Σ^{-1/2} once
+        covs_sym = 0.5 * (self.covs + np.swapaxes(self.covs, -1, -2))       # NEW
+        w, V = np.linalg.eigh(covs_sym)                                     # NEW
+        w = np.maximum(w, eps)                                              # NEW
+        Dinv = np.zeros_like(self.covs)                                     # NEW
+        Dinv[:,0,0] = 1.0 / np.sqrt(w[:,0])
+        Dinv[:,1,1] = 1.0 / np.sqrt(w[:,1])
+        self.W_np = V @ Dinv @ np.transpose(V, (0,2,1))                     # NEW
+        super().__init__()
+
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        if x.ndim != 3 or not np.iscomplexobj(x):
+            raise ValueError("Expect complex CHW ndarray.")
+        C, H, W = x.shape
+        if C != self.num_channels:
+            raise ValueError("Channel mismatch.")
+
+        # Stack to (C,2,H,W)
+        Z  = np.stack([x.real, x.imag], axis=1)                              # FIX: (C,2,H,W)
+        Zc = Z - self.means[:, :, None, None]                                # center
+
+        # FIX: correct contraction over the 2-dim
+        Y = np.einsum('cij,cjhw->cihw', self.W_np, Zc)                       # (C,2,H,W)
+
+        return Y[:,0] + 1j * Y[:,1]
+
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        if x.dim() != 3 or not x.is_complex():
+            raise ValueError("Expect complex CHW tensor.")
+        C, H, W = x.shape
+        if C != self.num_channels:
+            raise ValueError("Channel mismatch.")
+
+        # Move precomputed params to device/dtype
+        Wc  = torch.as_tensor(self.W_np, device=x.device, dtype=x.real.dtype)    # NEW
+        muc = torch.as_tensor(self.means, device=x.device, dtype=x.real.dtype)   # NEW
+
+        # (C,2,H,W)
+        Z  = torch.stack([x.real, x.imag], dim=1)                                # FIX
+        Zc = Z - muc.view(C,2,1,1)
+
+        # FIX: correct contraction over 2-dim
+        Y = torch.einsum('cij,cjhw->cihw', Wc, Zc)
+
+        return torch.complex(Y[:,0], Y[:,1])
 
 class Amplitude(BaseTransform):
     """Transform a complex-valued tensor into its amplitude/magnitude.
