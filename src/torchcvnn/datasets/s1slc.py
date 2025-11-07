@@ -25,9 +25,8 @@
 import os
 
 # External imports
-from torch.utils.data import Dataset
 import numpy as np
-import torch
+from torch.utils.data import Dataset
 
 
 class S1SLC(Dataset):
@@ -61,9 +60,13 @@ class S1SLC(Dataset):
 
     """
 
-    def __init__(self, root, transform=None, lazy_loading=True):
+    def __init__(self, root, transform=None, lazy_loading=False):
+        if lazy_loading is True:
+            raise DeprecationWarning(
+                "Lazy loading is no longer supported for S1SLC dataset."
+            )
+
         self.transform = transform
-        self.lazy_loading = lazy_loading
         # Get list of subfolders in the root path
         subfolders = [
             os.path.join(root, name)
@@ -71,8 +74,8 @@ class S1SLC(Dataset):
             if os.path.isdir(os.path.join(root, name))
         ]
 
-        self.data = []
-        self.labels = []
+        self.data = {}
+        self.classes = set()
 
         for subfolder in subfolders:
             # Define paths to the .npy files
@@ -80,53 +83,52 @@ class S1SLC(Dataset):
             hv_path = os.path.join(subfolder, "HV.npy")
             labels_path = os.path.join(subfolder, "Labels.npy")
 
-            # Load the .npy files
+            # Load the .npy files (using a memory map for memory efficiency)
             hh = np.load(hh_path, mmap_mode="r")
             hv = np.load(hv_path, mmap_mode="r")
 
-            if not lazy_loading:
-                # If not lazy loading, we load all the data in main memory
-                # Concatenate HH and HV to create a two-channel array
-                data = np.stack((hh, hv), axis=1)  # Shape: (B, 2, H, W)
-            else:
-                # If lazy loading, we store the paths to the .npy files
-                num_patches = hh.shape[0]
-                data = [
-                    (hh_path, hv_path, patch_idx) for patch_idx in range(num_patches)
-                ]
+            # Load labels and convert to 0-indexed
+            labels = np.load(labels_path, mmap_mode="r")
+            labels = labels.astype(int).squeeze() - 1
 
-            # For the labels, we can preload everything in main memory
-            label = np.load(labels_path, mmap_mode="r")
-            label = [int(l.item()) - 1 for l in label]  # Convert to 0-indexed labels
+            # put labels in the set of classes
+            self.classes.update(list(labels))
 
-            # Append data and labels to the lists
-            self.data.extend(data)
-            self.labels.extend(label)
+            self.data[subfolder] = {
+                "hh": hh,
+                "hv": hv,
+                "labels": labels,
+            }
 
-        self.classes = list(set(self.labels))
+        self.classes = [int(c) for c in self.classes]
 
     def __len__(self):
-        return len(self.data)
+        return sum(len(city_data["labels"]) for city_data in self.data.values())
+
+    def find_city_and_local_idx(self, idx):
+        """
+        Given a global index, find the corresponding city and local index within that city's data.
+        This is done in O(n_cities) time, which is acceptable since n_cities=3
+        """
+        cumulative = 0
+        for city, city_data in self.data.items():
+            city_size = len(city_data["labels"])
+            if idx < cumulative + city_size:
+                local_idx = idx - cumulative
+                return city, local_idx
+            cumulative += city_size
+        raise IndexError("Index out of range")
 
     def __getitem__(self, idx):
+        city, local_idx = self.find_city_and_local_idx(idx)
 
-        if self.lazy_loading:
-            hh_path, hv_path, patch_idx = self.data[idx]
-
-            # Load the .npy files
-            hh = np.load(hh_path)
-            hv = np.load(hv_path)
-
-            # Extract the right patch
-            hh_patch = hh[patch_idx]
-            hv_patch = hv[patch_idx]
-
-            # Concatenate HH and HV to create a two-channel array
-            image = np.stack((hh_patch, hv_patch), axis=0)  # Shape: (2, H, W)
-        else:
-            image = self.data[idx]
-
-        label = self.labels[idx]
+        image = np.stack(
+            [
+                self.data[city]["hh"][local_idx],
+                self.data[city]["hv"][local_idx],
+            ]
+        )
+        label = self.data[city]["labels"][local_idx]
 
         if self.transform:
             image = self.transform(image)
