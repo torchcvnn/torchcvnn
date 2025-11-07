@@ -561,7 +561,7 @@ just a carriage return or spaces and a carriage return.</p>
 <p>S1SLC is a dataset built from Sentinel-1 SLC data. The dataset is provided at the following url <a href="#id1"><span class="problematic" id="id2">`https://ieee-dataport.org/open-access/s1slccvdl-complex-valued-annotated-single-look-complex-sentinel-1-sar-dataset-complex`_</span></a>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchcvnn.datasets.S1SLC">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.datasets.</span></span><span class="sig-name descname"><span class="pre">S1SLC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lazy_loading</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchcvnn/datasets/s1slc.html#S1SLC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.datasets.S1SLC" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.datasets.</span></span><span class="sig-name descname"><span class="pre">S1SLC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lazy_loading</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchcvnn/datasets/s1slc.html#S1SLC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.datasets.S1SLC" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.Dataset" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a></p>
 <p>The Polarimetric SAR dataset with the labels provided by
 <a class="reference external" href="https://ieee-dataport.org/open-access/s1slccvdl-complex-valued-annotated-single-look-complex-sentinel-1-sar-dataset-complex">https://ieee-dataport.org/open-access/s1slccvdl-complex-valued-annotated-single-look-complex-sentinel-1-sar-dataset-complex</a></p>
@@ -592,6 +592,13 @@ just a carriage return or spaces and a carriage return.</p>
 </pre></div>
 </div>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="torchcvnn.datasets.S1SLC.find_city_and_local_idx">
+<span class="sig-name descname"><span class="pre">find_city_and_local_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchcvnn/datasets/s1slc.html#S1SLC.find_city_and_local_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.datasets.S1SLC.find_city_and_local_idx" title="Link to this definition">¶</a></dt>
+<dd><p>Given a global index, find the corresponding city and local index within that city’s data.
+This is done in O(n_cities) time, which is acceptable since n_cities=3</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -1016,7 +1023,10 @@ dictionnary will also be returned: (<cite>sample</cite>, <cite>target class</cit
 </ul>
 </li>
 <li><a class="reference internal" href="#s1slc">S1SLC</a><ul>
-<li><a class="reference internal" href="#torchcvnn.datasets.S1SLC"><code class="docutils literal notranslate"><span class="pre">S1SLC</span></code></a></li>
+<li><a class="reference internal" href="#torchcvnn.datasets.S1SLC"><code class="docutils literal notranslate"><span class="pre">S1SLC</span></code></a><ul>
+<li><a class="reference internal" href="#torchcvnn.datasets.S1SLC.find_city_and_local_idx"><code class="docutils literal notranslate"><span class="pre">S1SLC.find_city_and_local_idx()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#mstar">MSTAR</a><ul>
