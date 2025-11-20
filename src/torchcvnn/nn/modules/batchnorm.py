@@ -301,13 +301,13 @@ class _BatchNormNd(nn.Module):
         if self.training and self.track_running_stats:
             self.running_mean = (
                 1.0 - self.momentum
-            ) * self.running_mean + self.momentum * mus
+            ) * self.running_mean + self.momentum * mus.detach()
             if torch.isnan(self.running_mean).any():
                 raise RuntimeError("Running mean divergence")
 
             self.running_var = (
                 1.0 - self.momentum
-            ) * self.running_var + self.momentum * covs
+            ) * self.running_var + self.momentum * covs.detach()
             if torch.isnan(self.running_var).any():
                 raise RuntimeError("Running var divergence")
         return outz
