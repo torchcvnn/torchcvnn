@@ -202,7 +202,7 @@ class MSTARTargets(Dataset):
 
     def __init__(self, rootdir: str, transform=None):
         super().__init__()
-        self.rootdir = pathlib.Path(rootdir)
+
         self.transform = transform
 
         rootdir = pathlib.Path(rootdir)
