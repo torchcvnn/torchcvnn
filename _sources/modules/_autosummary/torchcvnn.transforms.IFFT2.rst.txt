@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.IFFT2
+==========================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: IFFT2
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~IFFT2.__init__
+   
+   
+
+   
+   
+   

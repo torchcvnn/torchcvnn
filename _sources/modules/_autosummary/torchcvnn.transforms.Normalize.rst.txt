@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.Normalize
+==============================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: Normalize
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Normalize.__init__
+   
+   
+
+   
+   
+   

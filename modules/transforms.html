@@ -202,17 +202,26 @@
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.Unsqueeze.html">torchcvnn.transforms.Unsqueeze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.ToTensor.html">torchcvnn.transforms.ToTensor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.RealImaginary.html">torchcvnn.transforms.RealImaginary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.ToImaginary.html">torchcvnn.transforms.ToImaginary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.ToReal.html">torchcvnn.transforms.ToReal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.RandomPhase.html">torchcvnn.transforms.RandomPhase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.Normalize.html">torchcvnn.transforms.Normalize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.LogAmplitude.html">torchcvnn.transforms.LogAmplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.Amplitude.html">torchcvnn.transforms.Amplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.RandomPhase.html">torchcvnn.transforms.RandomPhase</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.SpatialResize.html">torchcvnn.transforms.SpatialResize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.FFTResize.html">torchcvnn.transforms.FFTResize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.CenterCrop.html">torchcvnn.transforms.CenterCrop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.PadIfNeeded.html">torchcvnn.transforms.PadIfNeeded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.FFT2.html">torchcvnn.transforms.FFT2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.IFFT2.html">torchcvnn.transforms.IFFT2</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nn.html">torchcvnn.nn</a><input aria-label="Toggle navigation of torchcvnn.nn" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.ConvTranspose2d.html">torchcvnn.nn.ConvTranspose2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.MaxPool2d.html">torchcvnn.nn.MaxPool2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.AvgPool2d.html">torchcvnn.nn.AvgPool2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.AdaptiveAvgPool2d.html">torchcvnn.nn.AdaptiveAvgPool2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.Upsample.html">torchcvnn.nn.Upsample</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.CCELU.html">torchcvnn.nn.CCELU</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.nn.CELU.html">torchcvnn.nn.CELU</a></li>
@@ -306,6 +315,18 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.RealImaginary.html#torchcvnn.transforms.RealImaginary" title="torchcvnn.transforms.RealImaginary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RealImaginary</span></code></a>([dtype])</p></td>
 <td><p>Transform a complex-valued tensor into its real and imaginary components.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.ToImaginary.html#torchcvnn.transforms.ToImaginary" title="torchcvnn.transforms.ToImaginary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToImaginary</span></code></a>()</p></td>
+<td><p>Extracts the imaginary part of a complex-valued input tensor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.ToReal.html#torchcvnn.transforms.ToReal" title="torchcvnn.transforms.ToReal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToReal</span></code></a>()</p></td>
+<td><p>Extracts the real part of a complex-valued input tensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.RandomPhase.html#torchcvnn.transforms.RandomPhase" title="torchcvnn.transforms.RandomPhase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomPhase</span></code></a>(dtype[, centering])</p></td>
+<td><p>Randomly phase-shifts complex-valued input data. This transform applies a random phase shift to complex-valued input tensors/arrays by multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π] or [-π, π] if centering is enabled. :param dtype: str               Data type for the output. Must be one of the supported complex dtypes. :param centering: bool, optional. If True, centers the random phase distribution around 0 by subtracting π from                   the generated phases. Default is False.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.Normalize.html#torchcvnn.transforms.Normalize" title="torchcvnn.transforms.Normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Normalize</span></code></a>(means, covs[, eps])</p></td>
+<td><p>Per-channel 2x2 normalization of [Re, Im]. This transform normalizes complex-valued input data by centering and scaling it. It supports both numpy arrays and PyTorch tensors as input. :param means: Per-channel means for centering. Shape (C, 2) where C is number of channels. :type means: array-like :param covs: Per-channel 2x2 covariance matrices for scaling. Shape (C, 2, 2). Covariance matrices must be symmetric positive definite. :type covs: array-like.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -338,6 +359,27 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.FFTResize.html#torchcvnn.transforms.FFTResize" title="torchcvnn.transforms.FFTResize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FFTResize</span></code></a>(size[, axis, scale, dtype])</p></td>
 <td><p>Resizes an input image in spectral domain with Fourier Transformations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.CenterCrop.html#torchcvnn.transforms.CenterCrop" title="torchcvnn.transforms.CenterCrop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CenterCrop</span></code></a>(height, width)</p></td>
+<td><p>Center crops an input array/tensor to the specified size.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.PadIfNeeded.html#torchcvnn.transforms.PadIfNeeded" title="torchcvnn.transforms.PadIfNeeded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PadIfNeeded</span></code></a>(min_height, min_width[, ...])</p></td>
+<td><p>Pad an image if its dimensions are smaller than specified minimum dimensions.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="fourier-transforms">
+<h2>Fourier transforms<a class="headerlink" href="#fourier-transforms" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.FFT2.html#torchcvnn.transforms.FFT2" title="torchcvnn.transforms.FFT2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FFT2</span></code></a>([axis])</p></td>
+<td><p>Applies 2D Fast Fourier Transform (FFT) to the input.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.IFFT2.html#torchcvnn.transforms.IFFT2" title="torchcvnn.transforms.IFFT2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IFFT2</span></code></a>([axis])</p></td>
+<td><p>Applies 2D inverse Fast Fourier Transform (IFFT) to the input.</p></td>
 </tr>
 </tbody>
 </table>
@@ -411,6 +453,7 @@
 <li><a class="reference internal" href="#conversion-transforms">Conversion transforms</a></li>
 <li><a class="reference internal" href="#complex-transforms">Complex transforms</a></li>
 <li><a class="reference internal" href="#resize-transforms">Resize transforms</a></li>
+<li><a class="reference internal" href="#fourier-transforms">Fourier transforms</a></li>
 </ul>
 </li>
 </ul>

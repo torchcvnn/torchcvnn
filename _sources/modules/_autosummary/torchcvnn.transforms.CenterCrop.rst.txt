@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.CenterCrop
+===============================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: CenterCrop
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CenterCrop.__init__
+   
+   
+
+   
+   
+   

@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.ToReal
+===========================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: ToReal
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ToReal.__init__
+   
+   
+
+   
+   
+   

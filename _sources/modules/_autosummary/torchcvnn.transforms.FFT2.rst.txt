@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.FFT2
+=========================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: FFT2
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FFT2.__init__
+   
+   
+
+   
+   
+   

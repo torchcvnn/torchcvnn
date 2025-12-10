@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.ToImaginary
+================================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: ToImaginary
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ToImaginary.__init__
+   
+   
+
+   
+   
+   

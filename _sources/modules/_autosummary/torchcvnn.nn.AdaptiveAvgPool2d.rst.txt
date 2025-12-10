@@ -1,0 +1,81 @@
+﻿torchcvnn.nn.AdaptiveAvgPool2d
+==============================
+
+.. currentmodule:: torchcvnn.nn
+
+.. autoclass:: AdaptiveAvgPool2d
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AdaptiveAvgPool2d.__init__
+      ~AdaptiveAvgPool2d.add_module
+      ~AdaptiveAvgPool2d.apply
+      ~AdaptiveAvgPool2d.bfloat16
+      ~AdaptiveAvgPool2d.buffers
+      ~AdaptiveAvgPool2d.children
+      ~AdaptiveAvgPool2d.compile
+      ~AdaptiveAvgPool2d.cpu
+      ~AdaptiveAvgPool2d.cuda
+      ~AdaptiveAvgPool2d.double
+      ~AdaptiveAvgPool2d.eval
+      ~AdaptiveAvgPool2d.extra_repr
+      ~AdaptiveAvgPool2d.float
+      ~AdaptiveAvgPool2d.forward
+      ~AdaptiveAvgPool2d.get_buffer
+      ~AdaptiveAvgPool2d.get_extra_state
+      ~AdaptiveAvgPool2d.get_parameter
+      ~AdaptiveAvgPool2d.get_submodule
+      ~AdaptiveAvgPool2d.half
+      ~AdaptiveAvgPool2d.ipu
+      ~AdaptiveAvgPool2d.load_state_dict
+      ~AdaptiveAvgPool2d.modules
+      ~AdaptiveAvgPool2d.mtia
+      ~AdaptiveAvgPool2d.named_buffers
+      ~AdaptiveAvgPool2d.named_children
+      ~AdaptiveAvgPool2d.named_modules
+      ~AdaptiveAvgPool2d.named_parameters
+      ~AdaptiveAvgPool2d.parameters
+      ~AdaptiveAvgPool2d.register_backward_hook
+      ~AdaptiveAvgPool2d.register_buffer
+      ~AdaptiveAvgPool2d.register_forward_hook
+      ~AdaptiveAvgPool2d.register_forward_pre_hook
+      ~AdaptiveAvgPool2d.register_full_backward_hook
+      ~AdaptiveAvgPool2d.register_full_backward_pre_hook
+      ~AdaptiveAvgPool2d.register_load_state_dict_post_hook
+      ~AdaptiveAvgPool2d.register_load_state_dict_pre_hook
+      ~AdaptiveAvgPool2d.register_module
+      ~AdaptiveAvgPool2d.register_parameter
+      ~AdaptiveAvgPool2d.register_state_dict_post_hook
+      ~AdaptiveAvgPool2d.register_state_dict_pre_hook
+      ~AdaptiveAvgPool2d.requires_grad_
+      ~AdaptiveAvgPool2d.set_extra_state
+      ~AdaptiveAvgPool2d.set_submodule
+      ~AdaptiveAvgPool2d.share_memory
+      ~AdaptiveAvgPool2d.state_dict
+      ~AdaptiveAvgPool2d.to
+      ~AdaptiveAvgPool2d.to_empty
+      ~AdaptiveAvgPool2d.train
+      ~AdaptiveAvgPool2d.type
+      ~AdaptiveAvgPool2d.xpu
+      ~AdaptiveAvgPool2d.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AdaptiveAvgPool2d.T_destination
+      ~AdaptiveAvgPool2d.call_super_init
+      ~AdaptiveAvgPool2d.dump_patches
+      ~AdaptiveAvgPool2d.training
+   
+   

@@ -201,17 +201,26 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.Unsqueeze.html">torchcvnn.transforms.Unsqueeze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.ToTensor.html">torchcvnn.transforms.ToTensor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.RealImaginary.html">torchcvnn.transforms.RealImaginary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.ToImaginary.html">torchcvnn.transforms.ToImaginary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.ToReal.html">torchcvnn.transforms.ToReal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.RandomPhase.html">torchcvnn.transforms.RandomPhase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.Normalize.html">torchcvnn.transforms.Normalize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.LogAmplitude.html">torchcvnn.transforms.LogAmplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.Amplitude.html">torchcvnn.transforms.Amplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.RandomPhase.html">torchcvnn.transforms.RandomPhase</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.SpatialResize.html">torchcvnn.transforms.SpatialResize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.FFTResize.html">torchcvnn.transforms.FFTResize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.CenterCrop.html">torchcvnn.transforms.CenterCrop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.PadIfNeeded.html">torchcvnn.transforms.PadIfNeeded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.FFT2.html">torchcvnn.transforms.FFT2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.transforms.IFFT2.html">torchcvnn.transforms.IFFT2</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules/nn.html">torchcvnn.nn</a><input aria-label="Toggle navigation of torchcvnn.nn" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.nn.ConvTranspose2d.html">torchcvnn.nn.ConvTranspose2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.nn.MaxPool2d.html">torchcvnn.nn.MaxPool2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.nn.AvgPool2d.html">torchcvnn.nn.AvgPool2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.nn.AdaptiveAvgPool2d.html">torchcvnn.nn.AdaptiveAvgPool2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.nn.Upsample.html">torchcvnn.nn.Upsample</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.nn.CCELU.html">torchcvnn.nn.CCELU</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../modules/_autosummary/torchcvnn.nn.CELU.html">torchcvnn.nn.CELU</a></li>
@@ -434,6 +443,8 @@
         <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="Normalize">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.Normalize.html#torchcvnn.transforms.Normalize">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Normalize</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-channel 2x2 normalization of [Re, Im]. </span>
 <span class="sd">    This transform normalizes complex-valued input data by centering and scaling it.</span>
@@ -452,6 +463,8 @@
 <span class="sd">        &gt;&gt;&gt; output = transform(input_data)  # Normalizes each channel independently</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
+<div class="viewcode-block" id="Normalize.__init__">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.Normalize.html#torchcvnn.transforms.Normalize.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">):</span>
         <span class="c1"># means: (C,2) ; covs: (C,2,2)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -468,7 +481,8 @@
         <span class="n">Dinv</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">w</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">Dinv</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">w</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">W_np</span> <span class="o">=</span> <span class="n">V</span> <span class="o">@</span> <span class="n">Dinv</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>                     <span class="c1"># NEW</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">iscomplexobj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -504,7 +518,8 @@
         <span class="c1"># FIX: correct contraction over 2-dim</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;cij,cjhw-&gt;cihw&#39;</span><span class="p">,</span> <span class="n">Wc</span><span class="p">,</span> <span class="n">Zc</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex</span><span class="p">(</span><span class="n">Y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">Y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex</span><span class="p">(</span><span class="n">Y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">Y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span></div>
+
 
 <div class="viewcode-block" id="Amplitude">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.Amplitude.html#torchcvnn.transforms.Amplitude">[docs]</a>
@@ -613,6 +628,8 @@
 
 
 
+<div class="viewcode-block" id="ToReal">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.ToReal.html#torchcvnn.transforms.ToReal">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ToReal</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the real part of a complex-valued input tensor.</span>
 
@@ -629,9 +646,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">real</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">real</span></div>
 
 
+
+<div class="viewcode-block" id="ToImaginary">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.ToImaginary.html#torchcvnn.transforms.ToImaginary">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ToImaginary</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the imaginary part of a complex-valued input tensor.</span>
 
@@ -648,9 +668,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">imag</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">imag</span></div>
 
 
+
+<div class="viewcode-block" id="FFT2">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.FFT2.html#torchcvnn.transforms.FFT2">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FFT2</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies 2D Fast Fourier Transform (FFT) to the input.</span>
 <span class="sd">    This transform computes the 2D FFT along specified dimensions of the input array/tensor.</span>
@@ -669,16 +692,22 @@
 <span class="sd">        - Transform is applied along specified dimensions (`axis`).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="FFT2.__init__">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.FFT2.html#torchcvnn.transforms.FFT2.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">applyfft2_np</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">applyfft2_torch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">applyfft2_torch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span></div>
 
 
+
+<div class="viewcode-block" id="IFFT2">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.IFFT2.html#torchcvnn.transforms.IFFT2">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">IFFT2</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies 2D inverse Fast Fourier Transform (IFFT) to the input.</span>
 <span class="sd">    This transform computes the 2D IFFT along the last two dimensions of the input array/tensor.</span>
@@ -697,16 +726,22 @@
 <span class="sd">        - Transform is applied along specified dimensions (`axis`).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="IFFT2.__init__">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.IFFT2.html#torchcvnn.transforms.IFFT2.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">applyifft2_np</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">applyifft2_torch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">applyifft2_torch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">)</span></div>
 
 
+
+<div class="viewcode-block" id="PadIfNeeded">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.PadIfNeeded.html#torchcvnn.transforms.PadIfNeeded">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PadIfNeeded</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pad an image if its dimensions are smaller than specified minimum dimensions.</span>
 
@@ -731,6 +766,8 @@
 <span class="sd">        &gt;&gt;&gt; padded_image = transform(small_image)  # Pads if image is smaller than 256x256</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="PadIfNeeded.__init__">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.PadIfNeeded.html#torchcvnn.transforms.PadIfNeeded.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">min_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -741,7 +778,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">min_height</span> <span class="o">=</span> <span class="n">min_height</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_width</span> <span class="o">=</span> <span class="n">min_width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">border_mode</span> <span class="o">=</span> <span class="n">border_mode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pad_value</span> <span class="o">=</span> <span class="n">pad_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pad_value</span> <span class="o">=</span> <span class="n">pad_value</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">padifneeded</span><span class="p">(</span>
@@ -751,9 +789,12 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">padifneeded</span><span class="p">(</span>
             <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border_mode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pad_value</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
 
+
+<div class="viewcode-block" id="CenterCrop">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.CenterCrop.html#torchcvnn.transforms.CenterCrop">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CenterCrop</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Center crops an input array/tensor to the specified size.</span>
 
@@ -778,15 +819,19 @@
 <span class="sd">        - Uses functional.center_crop() implementation for both numpy and torch</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="CenterCrop.__init__">
+<a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.CenterCrop.html#torchcvnn.transforms.CenterCrop.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">center_crop</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">center_crop</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">center_crop</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="FFTResize">
