@@ -205,8 +205,6 @@ class MSTARTargets(Dataset):
         self.rootdir = pathlib.Path(rootdir)
         self.transform = transform
 
-        rootdir = pathlib.Path(rootdir)
-
         # The MSTAR dataset is composed of several sub-datasets
         # Each sub-dataset has a different layout
         # The dictionnary below maps the directory name of the sub-dataset
@@ -223,7 +221,7 @@ class MSTARTargets(Dataset):
         # We collect all the samples from all the sub-datasets
         self.data_files = {}
         for sub_dataset, target_name_depth in sub_datasets.items():
-            sub_dir = rootdir / sub_dataset
+            sub_dir = self.rootdir / sub_dataset
             if not sub_dir.exists():
                 logging.warning(f"Directory {sub_dir} does not exist.")
                 continue
