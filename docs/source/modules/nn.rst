@@ -19,6 +19,7 @@ Pooling layers
 
    MaxPool2d
    AvgPool2d
+   AdaptiveAvgPool2d
 
 
 UpSampling layers

@@ -12,7 +12,10 @@ Conversion transforms
     Unsqueeze
     ToTensor
     RealImaginary
-    PolSARtoTensor
+    ToImaginary
+    ToReal
+    RandomPhase
+    Normalize
 
 Complex transforms
 --------------------
@@ -32,4 +35,14 @@ Resize transforms
 
     SpatialResize
     FFTResize
+    CenterCrop
+    PadIfNeeded
 
+Fourier transforms
+-----------------
+
+.. autosummary::
+   :toctree: _autosummary
+
+    FFT2
+    IFFT2
