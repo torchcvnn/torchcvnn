@@ -57,8 +57,8 @@ class Dropout(nn.Module):
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
         mask = torch.nn.functional.dropout(
-            torch.ones(z.shape), self.p, training=self.training
-        ).to(z.device)
+            torch.ones(z.shape, device=z.device), self.p, training=self.training
+        )
         return mask * z
 
 
@@ -82,6 +82,6 @@ class Dropout2d(nn.Module):
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
         mask = torch.nn.functional.dropout2d(
-            torch.ones(z.shape), self.p, training=self.training
-        ).to(z.device)
+            torch.ones(z.shape, device=z.device), self.p, training=self.training
+        )
         return mask * z

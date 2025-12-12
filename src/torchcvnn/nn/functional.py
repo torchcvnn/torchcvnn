@@ -35,7 +35,7 @@ def dropout(
 ) -> Tensor:
     if p < 0.0 or p > 1.0:
         raise ValueError(f"dropout probability has to be between 0 and 1, but got {p}")
-    mask = F.dropout(torch.ones(z.shape), p, training=training).to(z.device)
+    mask = F.dropout(torch.ones(z.shape, device=z.device), p, training=training)
     return mask * z
 
 
