@@ -164,7 +164,71 @@ def test_rmsnorm():
     assert out.shape == x.shape  # N, C, H, W
 
 
+def test_layernorm_input_validation():
+    """Test that LayerNorm raises errors for mismatched input dimensions."""
+    # Test with wrong last dimension
+    layer_norm = c_nn.LayerNorm(10)
+    x = torch.randn((20, 5, 8), dtype=torch.complex64)  # last dim is 8, not 10
+    try:
+        layer_norm(x)
+        assert False, "Expected RuntimeError"
+    except RuntimeError as e:
+        assert "normalized_shape=[10]" in str(e)
+        assert "but got input of size" in str(e)
+
+    # Test with multi-dim normalized_shape mismatch
+    layer_norm = c_nn.LayerNorm([5, 10, 10])
+    x = torch.randn((20, 3, 8, 8), dtype=torch.complex64)
+    try:
+        layer_norm(x)
+        assert False, "Expected RuntimeError"
+    except RuntimeError as e:
+        assert "normalized_shape=[5, 10, 10]" in str(e)
+
+    # Test with too few dimensions
+    layer_norm = c_nn.LayerNorm([5, 10])
+    x = torch.randn((10,), dtype=torch.complex64)
+    try:
+        layer_norm(x)
+        assert False, "Expected RuntimeError"
+    except RuntimeError as e:
+        assert "expected input with at least 2 dimensions" in str(e)
+
+
+def test_rmsnorm_input_validation():
+    """Test that RMSNorm raises errors for mismatched input dimensions."""
+    # Test with wrong last dimension
+    rms_norm = c_nn.RMSNorm(10)
+    x = torch.randn((20, 5, 8), dtype=torch.complex64)  # last dim is 8, not 10
+    try:
+        rms_norm(x)
+        assert False, "Expected RuntimeError"
+    except RuntimeError as e:
+        assert "normalized_shape=[10]" in str(e)
+        assert "but got input of size" in str(e)
+
+    # Test with multi-dim normalized_shape mismatch
+    rms_norm = c_nn.RMSNorm([5, 10, 10])
+    x = torch.randn((20, 3, 8, 8), dtype=torch.complex64)
+    try:
+        rms_norm(x)
+        assert False, "Expected RuntimeError"
+    except RuntimeError as e:
+        assert "normalized_shape=[5, 10, 10]" in str(e)
+
+    # Test with too few dimensions
+    rms_norm = c_nn.RMSNorm([5, 10])
+    x = torch.randn((10,), dtype=torch.complex64)
+    try:
+        rms_norm(x)
+        assert False, "Expected RuntimeError"
+    except RuntimeError as e:
+        assert "expected input with at least 2 dimensions" in str(e)
+
+
 if __name__ == "__main__":
     test_layernorm_real()
     test_layernorm()
     test_rmsnorm()
+    test_layernorm_input_validation()
+    test_rmsnorm_input_validation()
