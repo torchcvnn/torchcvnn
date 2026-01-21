@@ -40,7 +40,10 @@ class Attention(nn.Module):
 
     def scaled_dot_product_attention(self, q: Tensor, k: Tensor, v: Tensor) -> Tensor:
         out = ((q @ k.transpose(-2, -1).conj()).real * self.scale).softmax(dim=-1)
-        return out.to(torch.complex64) @ v
+        weighted_v =  (out.to(torch.complex64) @ v) # B, num_heads, N, head_dim
+        out = torch.flatten(weighted_v.transpose(1, 2), start_dim=-2, end_dim=-1) # B, N, embed_dim
+
+        return out
 
 
 class Block(nn.Module):
@@ -69,7 +72,7 @@ class Block(nn.Module):
 
     def forward(self, x: Tensor) -> Tensor:
         B, N, C = x.shape
-        attn = self.attn(x).transpose(1, 2).reshape(B, N, C)
+        attn = self.attn(x)
         x = x + attn
         x = x + self.linear(self.layer_norm(x))
         # inp_x = self.layer_norm(x)
