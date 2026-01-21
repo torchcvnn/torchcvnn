@@ -5,41 +5,9 @@ import torch
 from torch import Tensor
 import torchcvnn.nn as c_nn
 from typing import Tuple, Union, List
-from argparse import ArgumentParser
 
 
-class Image2Patch(nn.Module):
-    """Converts an image into patches.
-
-    Args:
-        patch_size (int): size of the patch
-        flatten_channels (bool): whether to flatten the channels of the patch representation
-    """
-    def __init__(self, patch_size: int, flatten_channels: bool = True):
-        super().__init__()
-        self.patch_size = patch_size
-        self.flatten_channels = flatten_channels
-
-    def forward(self, x: Tensor) -> Tensor:
-        B, C, H, W = x.shape
-        assert (
-            H // self.patch_size != 0 and W // self.patch_size != 0
-        ), f"Image height and width are {H, W}, which is not a multiple of the patch size"
-        # Shape of x: (B, C, H, W)
-        # Reshape to (B, C, number of patch along H, patch_size, number of patch along W, patch_size)
-        x = x.reshape(B, C, H // self.patch_size, self.patch_size, W // self.patch_size, self.patch_size)
-        # Permute axis. Shape of x after permute: (B, number of patch along H, number of patch along W, C, patch_size, patch_size)
-        x = x.permute(0, 2, 4, 1, 3, 5)
-        # Flatten 1st and 2nd axis to obtain to total amount of patches. Shape of x after flatten: (B, number of patch, C, patch_size, patch_size)
-        x = x.flatten(1, 2)
-
-        if self.flatten_channels:
-            # Flatten to obtain a 1D patch representation. Shape of x after flatten: (B, number of patch, C * patch_size * patch_size)
-            return x.flatten(2, 4)
-        else:
-            # Return full patch representation. Shape of x: (B, number of patch, C, patch_size, patch_size)
-            return x
-
+import embedders
 
 class Attention(nn.Module):
     """Complex-valued attention layer for Vision Transformer, as proposed in "Building Blocks for a Complex-Valued Transformer Architecture" by Eilers et al.
@@ -142,11 +110,11 @@ class VisionTransformer(nn.Module):
         self.num_patches = (input_size // patch_size) ** 2
         # Define whether to use traditional ViT or hybrid-ViT
         if "hybrid" in model_type:
-            self.patch_embedder = ConvStem(num_channels, hidden_dim, patch_size)
+            self.patch_embedder = embedders.ConvStem(num_channels, hidden_dim, patch_size)
             self.embed_dim = int(num_channels * (patch_size**2) / 2)
             input_layer_channels = hidden_dim
         else:
-            self.patch_embedder = Image2Patch(patch_size)
+            self.patch_embedder = embedders.Image2Patch(patch_size)
             self.embed_dim = int(hidden_dim / 2)
             input_layer_channels = num_channels * (patch_size**2)
         # Input layer
@@ -193,62 +161,10 @@ class VisionTransformer(nn.Module):
         return self.mlp_head(cls)
 
 
-class ConvStem(nn.Module):
-    """
-        Convolutional Stem to replace Image2Patch.
-        This converts vanilla Vision Transformers into a hybrid model.
-        Stem layers work as a compression mechanism over the initial image, they typically compute convolution with large kernel size and/or stride. 
-        This leads to a better spatial dimension, which could be help the Vision Transformer to generalize better.
-
-        Args:
-            in_channels (int): Number of input channels. For MSTAR dataset, it is 1.
-            hidden_dim (int): Dimension of the hidden dimension of the ViT.
-            patch_size (int): Patch size used to split the image.
-        """
-    def __init__(self, in_channels, hidden_dim, patch_size):
-        super().__init__()
-        self.conv = nn.Sequential(
-            nn.Conv2d(
-                in_channels,
-                hidden_dim // 2,
-                kernel_size=7,
-                stride=2,
-                padding=3,
-                dtype=torch.complex64,
-            ),
-            c_nn.BatchNorm2d(hidden_dim // 2, track_running_stats=False),
-            c_nn.modReLU(),
-            nn.Conv2d(
-                hidden_dim // 2,
-                hidden_dim,
-                kernel_size=3,
-                stride=patch_size // 2,
-                padding=1,
-                dtype=torch.complex64,
-            ),
-            c_nn.BatchNorm2d(hidden_dim, track_running_stats=False),
-            c_nn.modReLU(),
-        )
-
-    def forward(self, x):
-        """
-        Args:
-            x (torch.Tensor): Input image tensor of shape (B, C, H, W).
-
-        Returns:
-            torch.Tensor: Patch embeddings of shape (B, hidden_dim, H, W).
-        """
-        # Apply the convolutional stem. Output shape: (B, hidden_dim, num_patches_H, num_patches_W)
-        x = self.conv(x)
-        # Flatten the pathces. Output shape: (B, hidden_dim, num_patches_H * num_patches_W)
-        x = x.flatten(2)
-        # Rearrange to (B, num_patches_H * num_patches_W, hidden_dim)
-        x = x.transpose(1, 2)
-        return x
 
 if __name__ == "__main__":
     opt = {
-        "patch_size": 4,
+        "patch_size": 7,
         "input_size": 28,
         "hidden_dim": 32,
         "num_layers": 3,
@@ -257,7 +173,7 @@ if __name__ == "__main__":
         "dropout": 0.3,
         # "attention_dropout": 0.1,
         # "norm_layer": "rms_norm",
-        "model_type": "hybrid-vit"
+        "model_type": "vit"
     }
     num_classes = 10
 
