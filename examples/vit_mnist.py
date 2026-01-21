@@ -35,6 +35,7 @@ import sys
 from typing import List, Tuple, Union
 
 # External imports
+import numpy as np
 import torch
 import torch.nn as nn
 import torchvision
@@ -229,7 +230,7 @@ def train():
     """
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     valid_ratio = 0.1
-    batch_size = 6
+    batch_size = 512
     epochs = 10
     cdtype = torch.complex64
 
@@ -238,17 +239,15 @@ def train():
         root="./data",
         train=True,
         download=True,
-        transform=v2_transforms.Compose(
-            [v2_transforms.PILToTensor(), v2_transforms.ToDtype(cdtype)]
-        ),
+        transform=v2_transforms.Compose([v2_transforms.PILToTensor(), torch.fft.fft]),
     )
+    train_valid_dataset = torch.utils.data.Subset(train_valid_dataset, indices=np.arange(5000))
+
     test_dataset = torchvision.datasets.MNIST(
         root="./data",
         train=False,
         download=True,
-        transform=v2_transforms.Compose(
-            [v2_transforms.PILToTensor(), v2_transforms.ToDtype(cdtype)]
-        ),
+        transform=v2_transforms.Compose([v2_transforms.PILToTensor(), torch.fft.fft]),
     )
 
     all_indices = list(range(len(train_valid_dataset)))
