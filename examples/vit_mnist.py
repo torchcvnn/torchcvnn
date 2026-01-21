@@ -151,21 +151,27 @@ class PatchEmbedder(nn.Module):
 
 class Model(nn.Module):
 
-    def __init__(self):
+    def __init__(self, opt: dict, num_classes: int):
         super().__init__()
+
+        patch_size = opt["patch_size"]
+        input_size = opt["input_size"]
+        hidden_dim = opt["hidden_dim"]
+        num_layers = opt["num_layers"]
+        num_heads = opt["num_heads"]
+        num_channels = opt["num_channels"]
+        dropout = opt["dropout"]
+        attention_dropout = opt["attention_dropout"]
+        # norm_layer = opt["norm_layer"]
 
         # The hidden_dim must be adapted to the hidden_dim of the ViT model
         # It is used as the output dimension of the patch embedder but must match
         # the expected hidden dim of your ViT
-        hidden_dim = 32
-        dropout = 0.1
-        attention_dropout = 0.1
         # norm_layer = PseudoNorm
         norm_layer = c_nn.RMSNorm
         # norm_layer = c_nn.LayerNorm
-        patch_size = 4
 
-        embedder = PatchEmbedder(28, 1, hidden_dim, patch_size, norm_layer=norm_layer)
+        embedder = PatchEmbedder(input_size, 1, hidden_dim, patch_size, norm_layer=norm_layer)
 
         # For using an off-the shelf ViT model, you can use the following code
         # If you go this way, do not forget to adapt the hidden_dim above
@@ -176,8 +182,6 @@ class Model(nn.Module):
         # If you go this way, do not forget to adapt the hidden_dim above
         # You can reduce it to 32 for example
 
-        num_layers = 3
-        num_heads = 8
         mlp_dim = 4 * hidden_dim
 
         self.backbone = c_nn.ViT(
@@ -193,7 +197,7 @@ class Model(nn.Module):
 
         # A Linear decoding head to project on the logits
         self.head = nn.Sequential(
-            nn.Linear(hidden_dim, 10, dtype=torch.complex64), c_nn.Mod()
+            nn.Linear(hidden_dim, num_classes, dtype=torch.complex64)
         )
 
     def forward(self, x):
@@ -274,11 +278,7 @@ def train():
     )
 
     # Model
-
-    ## Our implementation
-    # model = Model()
-
-    ## Huy implementation
+    num_classes = 10
     opt = {
         "patch_size": 4,
         "input_size": 28,
@@ -287,11 +287,17 @@ def train():
         "num_heads": 8,
         "num_channels": 1,
         "dropout": 0.3,
-        # "attention_dropout": 0.1,
+        "attention_dropout": 0.1,
         # "norm_layer": "rms_norm",
         "model_type": "hybrid-vit"
     }
-    model = vit_huy.VisionTransformer(opt, 10)
+
+    ## Our implementation
+    model = Model(opt, num_classes)
+
+    ## Huy implementation
+    # model = vit_huy.VisionTransformer(opt, num_classes)
+
     model = nn.Sequential(
         model,
         c_nn.Mod(),
