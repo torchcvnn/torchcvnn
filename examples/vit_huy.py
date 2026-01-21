@@ -248,8 +248,8 @@ class ConvStem(nn.Module):
 
 if __name__ == "__main__":
     opt = {
-        "patch_size": 16,
-        "input_size": 128,
+        "patch_size": 4,
+        "input_size": 28,
         "hidden_dim": 32,
         "num_layers": 3,
         "num_heads": 8,
@@ -262,10 +262,11 @@ if __name__ == "__main__":
     num_classes = 10
 
     model = VisionTransformer(opt, num_classes)
-    B, C, H, W = 10, 1, 128, 128
+    B, C, H, W = 10, 1, 28, 28
     X = torch.zeros((B, C, H, W), dtype=torch.complex64)
 
-    model(X)
+    y = model(X)
+    print(y.dtype)
 
 
 

@@ -46,6 +46,7 @@ import torchcvnn.models as c_models
 
 # Local imports
 import utils
+import vit_huy
 
 
 class PseudoNorm(nn.Module):
@@ -162,7 +163,7 @@ class Model(nn.Module):
         # norm_layer = PseudoNorm
         norm_layer = c_nn.RMSNorm
         # norm_layer = c_nn.LayerNorm
-        patch_size = 7
+        patch_size = 4
 
         embedder = PatchEmbedder(28, 1, hidden_dim, patch_size, norm_layer=norm_layer)
 
@@ -273,7 +274,29 @@ def train():
     )
 
     # Model
-    model = Model().to(device)
+
+    ## Our implementation
+    # model = Model()
+
+    ## Huy implementation
+    opt = {
+        "patch_size": 4,
+        "input_size": 28,
+        "hidden_dim": 32,
+        "num_layers": 3,
+        "num_heads": 8,
+        "num_channels": 1,
+        "dropout": 0.3,
+        # "attention_dropout": 0.1,
+        # "norm_layer": "rms_norm",
+        "model_type": "hybrid-vit"
+    }
+    model = vit_huy.VisionTransformer(opt, 10)
+    model = nn.Sequential(
+        model,
+        c_nn.Mod(),
+    )
+    model = model.to(device)
 
     # Loss, optimizer, callbacks
     f_loss = nn.CrossEntropyLoss()
