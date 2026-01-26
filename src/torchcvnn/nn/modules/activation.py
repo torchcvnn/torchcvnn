@@ -353,7 +353,6 @@ class MultiheadAttention(nn.Module):
         num_heads: int,
         dropout: float = 0.0,
         bias: bool = True,
-        add_bias_kv=False,
         add_zero_attn=False,
         kdim: int = None,
         vdim: int = None,
@@ -406,16 +405,6 @@ class MultiheadAttention(nn.Module):
             embed_dim, embed_dim, bias=bias, **factory_kwargs
         )
 
-        if add_bias_kv:
-            self.bias_k = torch.nn.parameter.Parameter(
-                torch.empty((1, 1, embed_dim), **factory_kwargs)
-            )
-            self.bias_v = torch.nn.parameter.Parameter(
-                torch.empty((1, 1, embed_dim), **factory_kwargs)
-            )
-        else:
-            self.bias_k = self.bias_v = None
-
         self.add_zero_attn = add_zero_attn
         if bias:
             self.in_proj_bias = torch.nn.parameter.Parameter(
@@ -435,54 +424,23 @@ class MultiheadAttention(nn.Module):
         if self.in_proj_bias is not None:
             torch.nn.init.constant_(self.in_proj_bias, 0.0)
             torch.nn.init.constant_(self.out_proj.bias, 0.0)
-        if self.bias_k is not None:
-            torch.nn.init.constant_(self.bias_k, 0.0)
-        if self.bias_v is not None:
-            torch.nn.init.constant_(self.bias_v, 0.0)
 
     def forward(
         self,
         query: torch.Tensor,
         key: torch.Tensor,
         value: torch.Tensor,
-        key_padding_mask: Optional[torch.Tensor] = None,
         need_weights: bool = True,
-        attn_mask: Optional[torch.Tensor] = None,
         average_attn_weights: bool = True,
         is_causal: bool = False,
     ) -> torch.Tensor:
         """
         Computes attention outputs using query, key and value embeddings.
 
-        This function is adapted from torch.nn.MultiheadAttention to support complex valued tensors. It keeps the same
-        signature but does not support yet key_padding_mask and attn_mask.
+        This function is adapted from torch.nn.MultiheadAttention to support complex valued tensors. 
         """
 
         is_batched = query.dim() == 3
-
-        if key_padding_mask is not None:
-            raise NotImplementedError("key_padding_mask is not supported yet")
-        # key_padding_mask = F._canonical_mask(
-        #     mask=key_padding_mask,
-        #     mask_name="key_padding_mask",
-        #     other_type=F._none_or_dtype(attn_mask),
-        #     other_name="attn_mask",
-        #     target_type=query.dtype,  # Adapted because q is complex
-        # )
-        # But
-        # F._canonical_mask raises an exception
-        # AssertionError: only bool and floating types of key_padding_mask are supported
-
-        if attn_mask is not None:
-            raise NotImplementedError("attn_mask is not supported yet")
-        # attn_mask = F._canonical_mask(
-        #     mask=attn_mask,
-        #     mask_name="attn_mask",
-        #     other_type=None,
-        #     other_name="",
-        #     target_type=query.dtype,  # Adapted because q is complex
-        #     check_other=False,
-        # )
 
         if self.batch_first and is_batched:
             # These steps prevent multiple transpose on the same tensors
@@ -505,16 +463,12 @@ class MultiheadAttention(nn.Module):
                 self.num_heads,
                 self.in_proj_weight,
                 self.in_proj_bias,
-                self.bias_k,
-                self.bias_v,
                 self.add_zero_attn,
                 self.dropout,
                 self.out_proj.weight,
                 self.out_proj.bias,
                 training=self.training,
-                key_padding_mask=key_padding_mask,
                 need_weights=need_weights,
-                attn_mask=attn_mask,
                 use_separate_proj_weight=True,
                 q_proj_weight=self.q_proj_weight,
                 k_proj_weight=self.k_proj_weight,
@@ -531,16 +485,12 @@ class MultiheadAttention(nn.Module):
                 self.num_heads,
                 self.in_proj_weight,
                 self.in_proj_bias,
-                self.bias_k,
-                self.bias_v,
                 self.add_zero_attn,
                 self.dropout,
                 self.out_proj.weight,
                 self.out_proj.bias,
                 training=self.training,
-                key_padding_mask=key_padding_mask,
                 need_weights=need_weights,
-                attn_mask=attn_mask,
                 average_attn_weights=average_attn_weights,
                 is_causal=is_causal,
             )

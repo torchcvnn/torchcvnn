@@ -47,16 +47,12 @@ def multi_head_attention_forward(
     num_heads: int,
     in_proj_weight: Optional[Tensor],
     in_proj_bias: Optional[Tensor],
-    bias_k: Optional[Tensor],
-    bias_v: Optional[Tensor],
     add_zero_attn: bool,
     dropout_p: float,
     out_proj_weight: Tensor,
     out_proj_bias: Optional[Tensor],
     training: bool = True,
-    key_padding_mask: Optional[Tensor] = None,
     need_weights: bool = True,
-    attn_mask: Optional[Tensor] = None,
     use_separate_proj_weight: bool = False,
     q_proj_weight: Optional[Tensor] = None,
     k_proj_weight: Optional[Tensor] = None,
@@ -84,25 +80,12 @@ def multi_head_attention_forward(
         dropout_p: probability of an element to be zeroed.
         out_proj_weight, out_proj_bias: the output projection weight and bias.
         training: apply dropout if is ``True``.
-        key_padding_mask: if provided, specified padding elements in the key will
-            be ignored by the attention. This is an binary mask. When the value is True,
-            the corresponding value on the attention layer will be filled with -inf.
         need_weights: output attn_output_weights.
             Default: `True`
             Note: `needs_weight` defaults to `True`, but should be set to `False`
             For best performance when attention weights are not needed.
             *Setting needs_weights to `True`
             leads to a significant performance degradation.*
-        attn_mask: 2D or 3D mask that prevents attention to certain positions. A 2D mask will be broadcasted for all
-            the batches while a 3D mask allows to specify a different mask for the entries of each batch.
-        is_causal: If specified, applies a causal mask as attention mask, and ignores
-            attn_mask for computing scaled dot product attention.
-            Default: ``False``.
-            .. warning::
-                is_causal is provides a hint that the attn_mask is the
-                causal mask.Providing incorrect hints can result in
-                incorrect execution, including forward and backward
-                compatibility.
         use_separate_proj_weight: the function accept the proj. weights for query, key,
             and value in different forms. If false, in_proj_weight will be used, which is
             a combination of q_proj_weight, k_proj_weight, v_proj_weight.
@@ -121,16 +104,6 @@ def multi_head_attention_forward(
           the embedding dimension.
         - value: :math:`(S, E)` or :math:`(S, N, E)` where S is the source sequence length, N is the batch size, E is
           the embedding dimension.
-        - key_padding_mask: :math:`(S)` or :math:`(N, S)` where N is the batch size, S is the source sequence length.
-          If a FloatTensor is provided, it will be directly added to the value.
-          If a BoolTensor is provided, the positions with the
-          value of ``True`` will be ignored while the position with the value of ``False`` will be unchanged.
-        - attn_mask: 2D mask :math:`(L, S)` where L is the target sequence length, S is the source sequence length.
-          3D mask :math:`(N*num_heads, L, S)` where N is the batch size, L is the target sequence length,
-          S is the source sequence length. attn_mask ensures that position i is allowed to attend the unmasked
-          positions. If a BoolTensor is provided, positions with ``True``
-          are not allowed to attend while ``False`` values will be unchanged. If a FloatTensor
-          is provided, it will be added to the attention weight.
         - static_k: :math:`(N*num_heads, S, E/num_heads)`, where S is the source sequence length,
           N is the batch size, E is the embedding dimension. E/num_heads is the head dimension.
         - static_v: :math:`(N*num_heads, S, E/num_heads)`, where S is the source sequence length,
@@ -145,65 +118,10 @@ def multi_head_attention_forward(
           :math:`S` is the source sequence length. If ``average_attn_weights=False``, returns attention weights per
           head of shape :math:`(num_heads, L, S)` when input is unbatched or :math:`(N, num_heads, L, S)`.
     """
-    if key_padding_mask is not None:
-        raise NotImplementedError("key_padding_mask is not supported yet")
-    if attn_mask is not None:
-        raise NotImplementedError("attn_mask is not supported yet")
-
-    is_batched = F._mha_shape_check(
-        query, key, value, key_padding_mask, attn_mask, num_heads
-    )
-
-    # For unbatched input, we unsqueeze at the expected batch-dim to pretend that the input
-    # is batched, run the computation and before returning squeeze the
-    # batch dimension so that the output doesn't carry this temporary batch dimension.
-    if not is_batched:
-        # unsqueeze if the input is unbatched
-        query = query.unsqueeze(1)
-        key = key.unsqueeze(1)
-        value = value.unsqueeze(1)
-        if key_padding_mask is not None:
-            key_padding_mask = key_padding_mask.unsqueeze(0)
 
     # set up shape vars
     tgt_len, bsz, embed_dim = query.shape
     src_len, _, _ = key.shape
-
-    key_padding_mask = F._canonical_mask(
-        mask=key_padding_mask,
-        mask_name="key_padding_mask",
-        other_type=F._none_or_dtype(attn_mask),
-        other_name="attn_mask",
-        target_type=query.dtype,
-    )
-
-    if is_causal and attn_mask is None:
-        raise RuntimeError(
-            "Need attn_mask if specifying the is_causal hint. "
-            "You may use the Transformer module method "
-            "`generate_square_subsequent_mask` to create this mask."
-        )
-
-    if is_causal and key_padding_mask is None and not need_weights:
-        # when we have a kpm or need weights, we need attn_mask
-        # Otherwise, we use the is_causal hint go as is_causal
-        # indicator to SDPA.
-        attn_mask = None
-    else:
-        attn_mask = F._canonical_mask(
-            mask=attn_mask,
-            mask_name="attn_mask",
-            other_type=None,
-            other_name="",
-            target_type=query.dtype,
-            check_other=False,
-        )
-
-        if key_padding_mask is not None:
-            # We have the attn_mask, and use that to merge kpm into it.
-            # Turn off use of is_causal hint, as the merged mask is no
-            # longer causal.
-            is_causal = False
 
     assert (
         embed_dim == embed_dim_to_check
@@ -262,42 +180,6 @@ def multi_head_attention_forward(
             b_v,
         )
 
-    # prep attention mask
-
-    if attn_mask is not None:
-        # ensure attn_mask's dim is 3
-        if attn_mask.dim() == 2:
-            correct_2d_size = (tgt_len, src_len)
-            if attn_mask.shape != correct_2d_size:
-                raise RuntimeError(
-                    f"The shape of the 2D attn_mask is {attn_mask.shape}, but should be {correct_2d_size}."
-                )
-            attn_mask = attn_mask.unsqueeze(0)
-        elif attn_mask.dim() == 3:
-            correct_3d_size = (bsz * num_heads, tgt_len, src_len)
-            if attn_mask.shape != correct_3d_size:
-                raise RuntimeError(
-                    f"The shape of the 3D attn_mask is {attn_mask.shape}, but should be {correct_3d_size}."
-                )
-        else:
-            raise RuntimeError(
-                f"attn_mask's dimension {attn_mask.dim()} is not supported"
-            )
-
-    # add bias along batch dimension (currently second)
-    if bias_k is not None and bias_v is not None:
-        assert static_k is None, "bias cannot be added to static key."
-        assert static_v is None, "bias cannot be added to static value."
-        k = torch.cat([k, bias_k.repeat(1, bsz, 1)])
-        v = torch.cat([v, bias_v.repeat(1, bsz, 1)])
-        if attn_mask is not None:
-            attn_mask = F.pad(attn_mask, (0, 1))
-        if key_padding_mask is not None:
-            key_padding_mask = F.pad(key_padding_mask, (0, 1))
-    else:
-        assert bias_k is None
-        assert bias_v is None
-
     #
     # reshape q, k, v for multihead attention and make them batch first
     #
@@ -334,28 +216,9 @@ def multi_head_attention_forward(
         v = torch.cat(
             [v, torch.zeros(zero_attn_shape, dtype=v.dtype, device=v.device)], dim=1
         )
-        if attn_mask is not None:
-            attn_mask = F.pad(attn_mask, (0, 1))
-        if key_padding_mask is not None:
-            key_padding_mask = F.pad(key_padding_mask, (0, 1))
 
     # update source sequence length after adjustments
     src_len = k.size(1)
-
-    # merge key padding and attention masks
-    if key_padding_mask is not None:
-        if not torch.jit.is_scripting() and not torch.jit.is_tracing():
-            F._check_key_padding_mask(key_padding_mask, src_len, bsz)
-
-        key_padding_mask = (
-            key_padding_mask.view(bsz, 1, 1, src_len)
-            .expand(-1, num_heads, -1, -1)
-            .reshape(bsz * num_heads, 1, src_len)
-        )
-        if attn_mask is None:
-            attn_mask = key_padding_mask
-        else:
-            attn_mask = attn_mask + key_padding_mask
 
     # adjust dropout probability
     if not training:
@@ -381,10 +244,7 @@ def multi_head_attention_forward(
     # We need to conjugate the keys before computing the dot product
     k = k.conj()
 
-    if attn_mask is not None:
-        attn_output_weights = torch.baddbmm(attn_mask, q_scaled, k.transpose(-2, -1))
-    else:
-        attn_output_weights = torch.bmm(q_scaled, k.transpose(-2, -1))
+    attn_output_weights = torch.bmm(q_scaled, k.transpose(-2, -1))
 
     # And then take the real part of the result
     attn_output_weights = attn_output_weights.real
@@ -404,9 +264,6 @@ def multi_head_attention_forward(
 
     # Early exist if we do not need the weights
     if not need_weights:
-        if not is_batched:
-            # squeeze the output if input was unbatched
-            attn_output = attn_output.squeeze(1)
         return attn_output, None
 
     # Perform the extra computation only if the weights are needed
