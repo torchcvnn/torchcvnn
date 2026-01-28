@@ -74,7 +74,6 @@ def multi_head_attention_forward(
         embed_dim_to_check: total dimension of the model.
         num_heads: parallel attention heads.
         in_proj_weight, in_proj_bias: input projection weight and bias.
-        bias_k, bias_v: bias of the key and value sequences to be added at dim=0.
         add_zero_attn: add a new batch of zeros to the key and
                        value sequences at dim=1.
         dropout_p: probability of an element to be zeroed.
