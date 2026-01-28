@@ -183,7 +183,7 @@ def multi_head_attention_forward(
     # attn_output_weights are real valued while v are complex valued
     attn_output = torch.bmm(attn_output_weights.to(v.dtype), v)  # B, seq_len, embed_dim
 
-    # torch.Size([231, 12, 16])
+    # torch.Size([231, 12, 16]) = [num_heads x bsz, tgt_len, head_dim]
     # Tgt_len  = 12, bsz = 11 , embed_dim = 336
 
     # print(attn_output.shape)
