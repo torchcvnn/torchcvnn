@@ -29,7 +29,7 @@ import torch.nn as nn
 
 # Local imports
 from .normalization import LayerNorm
-from .activation import modReLU, MultiheadAttention
+from .activation import modReLU, MultiheadAttention, CGELU
 from .dropout import Dropout
 
 

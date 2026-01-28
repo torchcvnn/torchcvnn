@@ -353,9 +353,6 @@ class MultiheadAttention(nn.Module):
         num_heads: int,
         dropout: float = 0.0,
         bias: bool = True,
-        add_zero_attn=False,
-        kdim: int = None,
-        vdim: int = None,
         batch_first: bool = False,
         device: torch.device = None,
         dtype: torch.dtype = torch.complex64,
@@ -363,9 +360,6 @@ class MultiheadAttention(nn.Module):
         factory_kwargs = {"device": device, "dtype": dtype}
         super().__init__()
         self.embed_dim = embed_dim
-        self.kdim = kdim if kdim is not None else embed_dim
-        self.vdim = vdim if vdim is not None else embed_dim
-        self._qkv_same_embed_dim = self.kdim == embed_dim and self.vdim == embed_dim
 
         self.num_heads = num_heads
         self.dropout = dropout
@@ -375,24 +369,9 @@ class MultiheadAttention(nn.Module):
             self.head_dim * num_heads == self.embed_dim
         ), "embed_dim must be divisible by num_heads"
 
-        if not self._qkv_same_embed_dim:
-            self.q_proj_weight = torch.nn.parameter.Parameter(
-                torch.empty((embed_dim, embed_dim), **factory_kwargs)
-            )
-            self.k_proj_weight = torch.nn.parameter.Parameter(
-                torch.empty((embed_dim, self.kdim), **factory_kwargs)
-            )
-            self.v_proj_weight = torch.nn.parameter.Parameter(
-                torch.empty((embed_dim, self.vdim), **factory_kwargs)
-            )
-            self.register_parameter("in_proj_weight", None)
-        else:
-            self.in_proj_weight = torch.nn.parameter.Parameter(
-                torch.empty((3 * embed_dim, embed_dim), **factory_kwargs)
-            )
-            self.register_parameter("q_proj_weight", None)
-            self.register_parameter("k_proj_weight", None)
-            self.register_parameter("v_proj_weight", None)
+        self.in_proj_weight = torch.nn.parameter.Parameter(
+            torch.empty((3 * embed_dim, embed_dim), **factory_kwargs)
+        )
 
         if bias:
             self.in_proj_bias = torch.nn.parameter.Parameter(
@@ -405,7 +384,6 @@ class MultiheadAttention(nn.Module):
             embed_dim, embed_dim, bias=bias, **factory_kwargs
         )
 
-        self.add_zero_attn = add_zero_attn
         if bias:
             self.in_proj_bias = torch.nn.parameter.Parameter(
                 torch.empty(3 * embed_dim, **factory_kwargs)
@@ -414,12 +392,7 @@ class MultiheadAttention(nn.Module):
         self._reset_parameters()
 
     def _reset_parameters(self):
-        if self._qkv_same_embed_dim:
-            complex_xavier_uniform_(self.in_proj_weight)
-        else:
-            complex_xavier_uniform_(self.q_proj_weight)
-            complex_xavier_uniform_(self.k_proj_weight)
-            complex_xavier_uniform_(self.v_proj_weight)
+        complex_xavier_uniform_(self.in_proj_weight)
 
         if self.in_proj_bias is not None:
             torch.nn.init.constant_(self.in_proj_bias, 0.0)
@@ -454,46 +427,22 @@ class MultiheadAttention(nn.Module):
             else:
                 query, key, value = (x.transpose(1, 0) for x in (query, key, value))
 
-        if not self._qkv_same_embed_dim:
-            attn_output, attn_output_weights = c_F.multi_head_attention_forward(
-                query,
-                key,
-                value,
-                self.embed_dim,
-                self.num_heads,
-                self.in_proj_weight,
-                self.in_proj_bias,
-                self.add_zero_attn,
-                self.dropout,
-                self.out_proj.weight,
-                self.out_proj.bias,
-                training=self.training,
-                need_weights=need_weights,
-                use_separate_proj_weight=True,
-                q_proj_weight=self.q_proj_weight,
-                k_proj_weight=self.k_proj_weight,
-                v_proj_weight=self.v_proj_weight,
-                average_attn_weights=average_attn_weights,
-                is_causal=is_causal,
-            )
-        else:
-            attn_output, attn_output_weights = c_F.multi_head_attention_forward(
-                query,
-                key,
-                value,
-                self.embed_dim,
-                self.num_heads,
-                self.in_proj_weight,
-                self.in_proj_bias,
-                self.add_zero_attn,
-                self.dropout,
-                self.out_proj.weight,
-                self.out_proj.bias,
-                training=self.training,
-                need_weights=need_weights,
-                average_attn_weights=average_attn_weights,
-                is_causal=is_causal,
-            )
+        attn_output, attn_output_weights = c_F.multi_head_attention_forward(
+            query,
+            key,
+            value,
+            self.embed_dim,
+            self.num_heads,
+            self.in_proj_weight,
+            self.in_proj_bias,
+            self.dropout,
+            self.out_proj.weight,
+            self.out_proj.bias,
+            training=self.training,
+            need_weights=need_weights,
+            average_attn_weights=average_attn_weights,
+            is_causal=is_causal,
+        )
         if self.batch_first and is_batched:
             return attn_output.transpose(1, 0), attn_output_weights
         else:
