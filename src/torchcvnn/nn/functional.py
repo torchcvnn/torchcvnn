@@ -122,6 +122,11 @@ def multi_head_attention_forward(
         key.shape == value.shape
     ), f"key shape {key.shape} does not match value shape {value.shape}"
 
+
+    print("Before in proj")
+    print(f"embed_dim : {embed_dim}") # embed_dim
+    print(f"num_heads : {num_heads}") # num_heads
+    print(f"head_dim : {head_dim}")   # head_dim
     #
     # compute in-projection
     #
@@ -139,9 +144,19 @@ def multi_head_attention_forward(
     #
     # reshape q, k, v for multihead attention and make them batch first
     #
-    q = q.view(tgt_len, bsz * num_heads, head_dim).transpose(0, 1)    # bsz * num_heads, tgt_len, embed_dim
-    k = k.view(k.shape[0], bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, embed_dim
-    v = v.view(v.shape[0], bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, embed_dim
+    q = q.view(tgt_len, bsz * num_heads, head_dim).transpose(0, 1)    # bsz * num_heads, tgt_len, embed_dim  [B*H, N, Hd]
+    k = k.view(k.shape[0], bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, embed_dim  [B*H, N, Hd]
+    v = v.view(v.shape[0], bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, embed_dim  [B*H, N, Hd]
+
+    print(f"target lenfth : {tgt_len}")
+    print(f"source length : {src_len}")
+    print(f"batch size : {bsz}")
+    print(f"num heads : {num_heads}")
+
+    print("After view and transpose")
+    print(f"Q shapes : {q.shape}") # tgt_len, B, embed_dim 
+    print(f"K shapes : {k.shape}") # src_len, B, embed_dim
+    print(f"V shapes : {v.shape}") # src_len, B, embed_dim
 
 
     # update source sequence length after adjustments
@@ -171,8 +186,8 @@ def multi_head_attention_forward(
     # We need to conjugate the keys before computing the dot product
     k = k.conj()
 
-    attn_output_weights = torch.bmm(q_scaled, k.transpose(-2, -1))
-    print(f"Attn weights shape : {attn_output_weights.shape}")
+    attn_output_weights = torch.bmm(q_scaled, k.transpose(-2, -1)) #[B*H, N, N]
+   
 
     # And then take the real part of the result
     attn_output_weights = attn_output_weights.real
@@ -181,8 +196,14 @@ def multi_head_attention_forward(
     if dropout_p > 0.0:
         attn_output_weights = dropout(attn_output_weights, p=dropout_p)
 
+    print(f"Attn weights shape : {attn_output_weights.shape}")
+    print(f"v shape : {v.shape}")
+
     # attn_output_weights are real valued while v are complex valued
-    attn_output = torch.bmm(attn_output_weights.to(v.dtype), v)  # B, seq_len, embed_dim
+    attn_output = torch.bmm(attn_output_weights.to(v.dtype), v)  # B, seq_len, embed_dim [B*H, N, Hd]
+
+    print(f"attn_output after scale dot product: {attn_output.shape}")
+
 
     # torch.Size([231, 12, 16]) = [bsz x num_heads, tgt_len, head_dim]
     # Tgt_len  = 12, bsz = 11 , embed_dim = 336
@@ -191,11 +212,15 @@ def multi_head_attention_forward(
     # print(f"Tgt_len  = {tgt_len}, bsz = {bsz} , embed_dim = {embed_dim}")
     # sys.exit(-1)
 
+    attn_output = attn_output.reshape(bsz, num_heads, tgt_len, head_dim) #[B, H, N, Hd]
     attn_output = (
-        attn_output.transpose(0, 1).contiguous().view(tgt_len * bsz, embed_dim)
+        attn_output.transpose(1, 2).contiguous().view(bsz * tgt_len, embed_dim)  #[BxN, HxHd]
     )
+
     attn_output = F.linear(attn_output, out_proj_weight, out_proj_bias)
-    attn_output = attn_output.view(tgt_len, bsz, attn_output.size(1)) # seq_len , B, embed_dim
+
+
+    attn_output = attn_output.view(tgt_len, bsz, attn_output.size(1)) # seq_len , B, embed_dim  [N, B, H* Hd]
 
     # Early exist if we do not need the weights
     if not need_weights:
@@ -204,7 +229,7 @@ def multi_head_attention_forward(
     # Perform the extra computation only if the weights are needed
 
     # optionally average attention weights over heads
-    attn_output_weights = attn_output_weights.view(bsz, num_heads, tgt_len, src_len)
+    attn_output_weights = attn_output_weights.view(bsz, num_heads, tgt_len, src_len)  #[B, H, N, Hd]
     if average_attn_weights:
         attn_output_weights = attn_output_weights.mean(dim=1)
 
