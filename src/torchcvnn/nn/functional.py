@@ -131,13 +131,18 @@ def multi_head_attention_forward(
     q, k, v = F._in_projection_packed(
         query, key, value, in_proj_weight, in_proj_bias
     )
+    print("After in proj")
+    print(f"Q shapes : {q.shape}") # tgt_len, B, embed_dim 
+    print(f"K shapes : {k.shape}") # src_len, B, embed_dim
+    print(f"V shapes : {v.shape}") # src_len, B, embed_dim
 
     #
     # reshape q, k, v for multihead attention and make them batch first
     #
-    q = q.view(tgt_len, bsz * num_heads, head_dim).transpose(0, 1)
-    k = k.view(k.shape[0], bsz * num_heads, head_dim).transpose(0, 1)
-    v = v.view(v.shape[0], bsz * num_heads, head_dim).transpose(0, 1)
+    q = q.view(tgt_len, bsz * num_heads, head_dim).transpose(0, 1)    # bsz * num_heads, tgt_len, embed_dim
+    k = k.view(k.shape[0], bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, embed_dim
+    v = v.view(v.shape[0], bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, embed_dim
+
 
     # update source sequence length after adjustments
     src_len = k.size(1)

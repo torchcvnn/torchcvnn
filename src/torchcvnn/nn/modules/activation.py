@@ -384,11 +384,6 @@ class MultiheadAttention(nn.Module):
             embed_dim, embed_dim, bias=bias, **factory_kwargs
         )
 
-        if bias:
-            self.in_proj_bias = torch.nn.parameter.Parameter(
-                torch.empty(3 * embed_dim, **factory_kwargs)
-            )
-
         self._reset_parameters()
 
     def _reset_parameters(self):
@@ -426,6 +421,10 @@ class MultiheadAttention(nn.Module):
                     value = key
             else:
                 query, key, value = (x.transpose(1, 0) for x in (query, key, value))
+    
+        print(f"Key shapes : {key.shape}") # src_len, B, embed_dim
+        print(f"Value shapes : {value.shape}") # src_len, B, embed_dim
+        print(f"Query shapes : {query.shape}") # tgt_len, B, embed_dim 
 
         attn_output, attn_output_weights = c_F.multi_head_attention_forward(
             query,
