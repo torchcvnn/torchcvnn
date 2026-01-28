@@ -28,7 +28,8 @@ def test_attention():
     print("===" * 80)
     oatt = c_nn.ViTLayer(num_heads=num_heads, 
                          hidden_dim=embed_dim, 
-                         mlp_dim=embed_dim)
+                         mlp_dim=embed_dim,
+                         norm_layer=c_nn.RMSNorm)
     oy = oatt(x)
     print(oy.shape)
     torchinfo.summary(oatt, 
