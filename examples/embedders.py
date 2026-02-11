@@ -90,8 +90,14 @@ class PatchEmbedder(nn.Module):
         # Adds the positionnal embedding
         pos_emb = self.rope_embedding(
             num_patches_H, num_patches_W, patch_embeddings.shape[1], device=x.device
-        )
+        ).unsqueeze(0)
         patch_embeddings = patch_embeddings + pos_emb
+
+        # Flatten the patches. Output shape: (B, embed_dim, num_patches_H * num_patches_W)
+        patch_embeddings = patch_embeddings.flatten(2)
+
+        # Rearrange to (B, num_patches_H * num_patches_W, hidden_dim)
+        patch_embeddings = patch_embeddings.transpose(1, 2)
 
         return patch_embeddings
 

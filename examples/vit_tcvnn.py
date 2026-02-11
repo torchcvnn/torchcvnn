@@ -19,6 +19,7 @@ class PatchEmbedderPos(nn.Module):
         )
 
         self.dropout = c_nn.Dropout(dropout)
+
         # Class tokens
         self.cls_token = nn.Parameter(
             torch.rand(1, 1, embed_dim, dtype=torch.complex64)
@@ -67,7 +68,7 @@ class Model(nn.Module):
         num_patches = (input_size // patch_size) ** 2
         embedder = PatchEmbedderPos(num_patches, patch_size, embed_dim, num_channels, dropout)
         # embedder = embedders.PatchEmbedder(input_size, 
-        #                                    1, 
+        #                                    num_channels, 
         #                                    embed_dim, 
         #                                    patch_size, 
         #                                    norm_layer=norm_layer)
