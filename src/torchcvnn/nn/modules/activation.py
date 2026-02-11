@@ -430,10 +430,6 @@ class MultiheadAttention(nn.Module):
             else:
                 query, key, value = (x.transpose(1, 0) for x in (query, key, value)) # (T, B, E), (S, B, E), (S, B, E)
     
-        print(f"Query shapes : {query.shape}") # T, B, E
-        print(f"Key shapes : {key.shape}") # S, B, E
-        print(f"Value shapes : {value.shape}") # S, B, E
-
         attn_output, attn_output_weights = c_F.multi_head_attention_forward(
             query,
             key,

@@ -118,11 +118,6 @@ def multi_head_attention_forward(
         key.shape == value.shape
     ), f"key shape {key.shape} does not match value shape {value.shape}"
 
-
-    print("Before in proj")
-    print(f"embed_dim : {embed_dim}") # embed_dim
-    print(f"num_heads : {num_heads}") # num_heads
-    print(f"head_dim : {head_dim}")   # head_dim
     #
     # compute in-projection
     #
@@ -133,27 +128,12 @@ def multi_head_attention_forward(
         query, key, value, in_proj_weight, in_proj_bias
     ) # (T, B, E), (S, B, E), (S, B, E)
 
-    print("After in proj")
-    print(f"Q shapes : {q.shape}") # T, B, E
-    print(f"K shapes : {k.shape}") # S, B, E 
-    print(f"V shapes : {v.shape}") # S, B, (num_heads * head_dim)
-
     #
     # reshape q, k, v for multihead attention and make them batch first
     #
     q = q.view(tgt_len, bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, tgt_len, head_dim
     k = k.view(src_len, bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, head_dim
     v = v.view(src_len, bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, head_dim
-
-    print(f"target lenfth : {tgt_len}")
-    print(f"source length : {src_len}")
-    print(f"batch size : {bsz}")
-    print(f"num heads : {num_heads}")
-
-    print("After view and transpose")
-    print(f"Q shapes : {q.shape}") # B * num_heads, tgt_len, head_dim
-    print(f"K shapes : {k.shape}") # B * num_heads, src_len, head_dim
-    print(f"V shapes : {v.shape}") # B * num_heads, src_len, head_dim
 
     # adjust dropout probability
     if not training:
@@ -186,22 +166,10 @@ def multi_head_attention_forward(
     if dropout_p > 0.0:
         attn_output_weights = dropout(attn_output_weights, p=dropout_p)
 
-    print(f"Attn weights shape : {attn_output_weights.shape}")
-    print(f"v shape : {v.shape}")
-
     # attn_output_weights are real valued while v are complex valued
     # attn_output_weights : B * num_heads, tgt_len, src_len
     #                   v : B * num_heads, src_len, head_dim
     attn_output = torch.bmm(attn_output_weights.to(v.dtype), v)  # B * num_heads, tgt_len, head_dim
-
-    print(f"attn_output after scale dot product: {attn_output.shape}")
-
-    # torch.Size([231, 12, 16]) = [bsz x num_heads, tgt_len, head_dim]
-    # Tgt_len  = 12, bsz = 11 , embed_dim = 336
-
-    # print(attn_output.shape)
-    # print(f"Tgt_len  = {tgt_len}, bsz = {bsz} , embed_dim = {embed_dim}")
-    # sys.exit(-1)
 
     attn_output = attn_output.view(bsz, num_heads, tgt_len, head_dim) #[B, num_heads, tgt_len, head_dim]
     attn_output = (
