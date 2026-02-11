@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="torchcvnn.transforms.Unsqueeze" href="_autosummary/torchcvnn.transforms.Unsqueeze.html"><link rel="prev" title="torchcvnn.datasets" href="datasets.html">
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
         <title>torchcvnn.transforms - torchcvnn 0.9.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -209,6 +209,7 @@
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.LogAmplitude.html">torchcvnn.transforms.LogAmplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.Amplitude.html">torchcvnn.transforms.Amplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.RandomPhase.html">torchcvnn.transforms.RandomPhase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.HWC2CHW.html">torchcvnn.transforms.HWC2CHW</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.SpatialResize.html">torchcvnn.transforms.SpatialResize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.FFTResize.html">torchcvnn.transforms.FFTResize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/torchcvnn.transforms.CenterCrop.html">torchcvnn.transforms.CenterCrop</a></li>
@@ -349,6 +350,18 @@
 </table>
 </div>
 </section>
+<section id="reshape-transforms">
+<h2>Reshape transforms<a class="headerlink" href="#reshape-transforms" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/torchcvnn.transforms.HWC2CHW.html#torchcvnn.transforms.HWC2CHW" title="torchcvnn.transforms.HWC2CHW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HWC2CHW</span></code></a>([dtype])</p></td>
+<td><p>Converts an input array/tensor from HWC to CHW format.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="resize-transforms">
 <h2>Resize transforms<a class="headerlink" href="#resize-transforms" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper autosummary longtable docutils container">
@@ -452,6 +465,7 @@
 <li><a class="reference internal" href="#">torchcvnn.transforms</a><ul>
 <li><a class="reference internal" href="#conversion-transforms">Conversion transforms</a></li>
 <li><a class="reference internal" href="#complex-transforms">Complex transforms</a></li>
+<li><a class="reference internal" href="#reshape-transforms">Reshape transforms</a></li>
 <li><a class="reference internal" href="#resize-transforms">Resize transforms</a></li>
 <li><a class="reference internal" href="#fourier-transforms">Fourier transforms</a></li>
 </ul>

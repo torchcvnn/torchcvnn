@@ -1,0 +1,22 @@
+﻿torchcvnn.transforms.HWC2CHW
+============================
+
+.. currentmodule:: torchcvnn.transforms
+
+.. autoclass:: HWC2CHW
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~HWC2CHW.__init__
+   
+   
+
+   
+   
+   

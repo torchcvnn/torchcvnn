@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Remote sensing data loading" href="loading_remote.html"><link rel="prev" title="torchcvnn.nn.init" href="../modules/init.html">
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
         <title>Classification of MNIST digit from their Fourier representation - torchcvnn 0.9.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -209,6 +209,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.LogAmplitude.html">torchcvnn.transforms.LogAmplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.Amplitude.html">torchcvnn.transforms.Amplitude</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.RandomPhase.html">torchcvnn.transforms.RandomPhase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.HWC2CHW.html">torchcvnn.transforms.HWC2CHW</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.SpatialResize.html">torchcvnn.transforms.SpatialResize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.FFTResize.html">torchcvnn.transforms.FFTResize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/_autosummary/torchcvnn.transforms.CenterCrop.html">torchcvnn.transforms.CenterCrop</a></li>
@@ -305,7 +306,7 @@
 suppose you want to classify the MNIST digits from their Fourier space representation.</p>
 <section id="loading-the-complex-valued-mnist-dataset">
 <h2>Loading the complex valued MNIST dataset<a class="headerlink" href="#loading-the-complex-valued-mnist-dataset" title="Link to this heading">¶</a></h2>
-<p>Using <a class="reference external" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.MNIST.html#torchvision.datasets.MNIST" title="(in Torchvision v0.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchvision.datasets.MNIST</span></code></a> and <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.fft.fft.html#torch.fft.fft" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.fft.fft()</span></code></a>, we can easily transform the MNIST dataset into its Fourier space representation :</p>
+<p>Using <a class="reference external" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.MNIST.html#torchvision.datasets.MNIST" title="(in Torchvision v0.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchvision.datasets.MNIST</span></code></a> and <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.fft.fft.html#torch.fft.fft" title="(in PyTorch v2.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.fft.fft()</span></code></a>, we can easily transform the MNIST dataset into its Fourier space representation :</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span>
     <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
