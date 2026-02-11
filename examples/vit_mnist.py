@@ -146,10 +146,10 @@ def train():
     }
 
     ## Our implementation
-    # model = vit_tcvnn.Model(opt, num_classes)
+    model = vit_tcvnn.Model(opt, num_classes)
 
     ## Huy implementation
-    model = vit_huy.VisionTransformer(opt, num_classes)
+    # model = vit_huy.VisionTransformer(opt, num_classes)
 
     model = nn.Sequential(
         model,

@@ -176,8 +176,9 @@ if __name__ == "__main__":
     num_classes = 10
 
     model = VisionTransformer(opt, num_classes)
-    B, C, H, W = 10, 1, 28, 28
+    B, C, H, W = 12, 1, 28, 28
     X = torch.zeros((B, C, H, W), dtype=torch.complex64)
 
     y = model(X)
+    print(y.shape)
     print(y.dtype)

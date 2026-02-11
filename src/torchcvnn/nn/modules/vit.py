@@ -190,7 +190,6 @@ class ViT(nn.Module):
     def forward(self, x):
         # x : (B, C, H, W)
         embedding = self.patch_embedder(x)  # (B, src_len, embed_dim)
-        print(f"Out embedding : {embedding.shape}")
 
         out = self.layers(self.dropout(embedding))
 
