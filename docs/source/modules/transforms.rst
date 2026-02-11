@@ -27,6 +27,14 @@ Complex transforms
     Amplitude
     RandomPhase
 
+Reshape transforms
+------------------
+
+.. autosummary::
+   :toctree: _autosummary
+
+    HWC2CHW
+
 Resize transforms
 -----------------
 
