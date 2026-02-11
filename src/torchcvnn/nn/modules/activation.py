@@ -400,7 +400,6 @@ class MultiheadAttention(nn.Module):
         value: torch.Tensor,
         need_weights: bool = True,
         average_attn_weights: bool = True,
-        is_causal: bool = False,
     ) -> torch.Tensor:
         """
         Computes attention outputs using query, key and value embeddings.
@@ -449,7 +448,6 @@ class MultiheadAttention(nn.Module):
             training=self.training,
             need_weights=need_weights,
             average_attn_weights=average_attn_weights,
-            is_causal=is_causal,
         )
         # attn_output is (T, E) or (T, B, E)
         # attn_output_weights is (T, S) or (B, T, S) (already batch_first)

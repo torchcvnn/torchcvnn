@@ -53,7 +53,6 @@ def multi_head_attention_forward(
     training: bool = True,
     need_weights: bool = True,
     average_attn_weights: bool = True,
-    is_causal: bool = False,
 ) -> Tuple[Tensor, Optional[Tensor]]:
     r"""Forward method for MultiHeadAttention.
 
@@ -83,17 +82,19 @@ def multi_head_attention_forward(
 
     Shape:
         Inputs:
-        - query: :math:`(T, E)` or :math:`(T, B, E)` where T is the target sequence length, B is the batch size, E is the embedding dimension.
-        - key: :math:`(S, E)` or :math:`(S, B, E)`, where S is the source sequence length, B is the batch size, E is the embedding dimension.
-        - value: :math:`(S, E)` or :math:`(S, B, E)` where S is the source sequence length, B is the batch size, E is the embedding dimension.
+        - query: :math:`(T, B, E)` where T is the target sequence length, B is the batch size, E is the embedding dimension.
+        - key: :math:`(S, B, E)`, where S is the source sequence length, B is the batch size, E is the embedding dimension.
+        - value: :math:`(S, B, E)` where S is the source sequence length, B is the batch size, E is the embedding dimension.
 
         Outputs:
-        - attn_output: :math:`(T, E)` or :math:`(T, B, E)` where T is the target sequence length, B is the batch size, E is the embedding dimension.
+        - attn_output: :math:`(T, B, E)` where T is the target sequence length, B is the batch size, E is the embedding dimension.
         - attn_output_weights: Only returned when ``need_weights=True``. If ``average_attn_weights=True``, returns
-          attention weights averaged across heads of shape :math:`(T, S)` when input is unbatched or
+          attention weights averaged across heads of shape
           :math:`(B, T, S)`, where :math:`B` is the batch size, :math:`T` is the target sequence length, and
-          :math:`S` is the source sequence length. If ``average_attn_weights=False``, returns attention weights per head of shape :math:`(num_heads, T, S)` when input is unbatched or :math:`(B, num_heads, T, S)`.
+          :math:`S` is the source sequence length. If ``average_attn_weights=False``, returns attention weights per head of shape :math:`(B, num_heads, T, S)`.
     """
+
+    assert query.dim() == 3, "Expected batched tensors"
 
     # set up shape vars
     tgt_len, bsz, embed_dim = query.shape
@@ -108,8 +109,9 @@ def multi_head_attention_forward(
         head_dim = embed_dim.div(num_heads, rounding_mode="trunc")
     else:
         head_dim = embed_dim // num_heads
+
     assert (
-        head_dim * num_heads == embed_dim
+        num_heads * head_dim == embed_dim
     ), f"embed_dim {embed_dim} not divisible by num_heads {num_heads}"
 
     assert (
@@ -126,21 +128,22 @@ def multi_head_attention_forward(
     #
     assert (
         in_proj_weight is not None
-    ), "use_separate_proj_weight is False but in_proj_weight is None"
+    ), "in_proj_weight is None"
     q, k, v = F._in_projection_packed(
         query, key, value, in_proj_weight, in_proj_bias
-    )
+    ) # (T, B, E), (S, B, E), (S, B, E)
+
     print("After in proj")
-    print(f"Q shapes : {q.shape}") # tgt_len, B, embed_dim 
-    print(f"K shapes : {k.shape}") # src_len, B, embed_dim
-    print(f"V shapes : {v.shape}") # src_len, B, embed_dim
+    print(f"Q shapes : {q.shape}") # T, B, E
+    print(f"K shapes : {k.shape}") # S, B, E 
+    print(f"V shapes : {v.shape}") # S, B, (num_heads * head_dim)
 
     #
     # reshape q, k, v for multihead attention and make them batch first
     #
-    q = q.view(tgt_len, bsz * num_heads, head_dim).transpose(0, 1)    # bsz * num_heads, tgt_len, embed_dim  [B*H, N, Hd]
-    k = k.view(k.shape[0], bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, embed_dim  [B*H, N, Hd]
-    v = v.view(v.shape[0], bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, embed_dim  [B*H, N, Hd]
+    q = q.view(tgt_len, bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, tgt_len, head_dim
+    k = k.view(src_len, bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, head_dim
+    v = v.view(src_len, bsz * num_heads, head_dim).transpose(0, 1) # bsz * num_heads, src_len, head_dim
 
     print(f"target lenfth : {tgt_len}")
     print(f"source length : {src_len}")
@@ -148,13 +151,9 @@ def multi_head_attention_forward(
     print(f"num heads : {num_heads}")
 
     print("After view and transpose")
-    print(f"Q shapes : {q.shape}") # tgt_len, B, embed_dim 
-    print(f"K shapes : {k.shape}") # src_len, B, embed_dim
-    print(f"V shapes : {v.shape}") # src_len, B, embed_dim
-
-
-    # update source sequence length after adjustments
-    src_len = k.size(1)
+    print(f"Q shapes : {q.shape}") # B * num_heads, tgt_len, head_dim
+    print(f"K shapes : {k.shape}") # B * num_heads, src_len, head_dim
+    print(f"V shapes : {v.shape}") # B * num_heads, src_len, head_dim
 
     # adjust dropout probability
     if not training:
@@ -169,24 +168,21 @@ def multi_head_attention_forward(
     # Indeed, since we are using specific implementations for computing
     # attention for the complex valued case, we cannot use the optimized versions
     # of the original pytorch code (flash attention or others)
-    _B, _Nt, E = q.shape
-    q_scaled = q * math.sqrt(1.0 / float(E))
-
-    assert not (
-        is_causal and attn_mask is None
-    ), "FIXME: is_causal not implemented for need_weights"
+    q_scaled = q * math.sqrt(1.0 / float(head_dim))
 
     # For equation (8) from (Eilers et al. 2023),
     # We need to conjugate the keys before computing the dot product
     k = k.conj()
 
-    attn_output_weights = torch.bmm(q_scaled, k.transpose(-2, -1)) #[B*H, N, N]
-   
+    # q_scaled # B * num_heads, tgt_len, head_dim
+    # k.transpose(-2, -1) # B * num_heads, head_dim, src_len
+    #  bmm( X(B, n, m) , Y(B, m, p) ) = Z (B, n, p)
+    attn_output_weights = torch.bmm(q_scaled, k.transpose(-2, -1)) #[B * num_heads, tgt_len, src_len]
 
     # And then take the real part of the result
     attn_output_weights = attn_output_weights.real
 
-    attn_output_weights = F.softmax(attn_output_weights, dim=-1)
+    attn_output_weights = F.softmax(attn_output_weights, dim=-1) # Softmax over the src_len dimension
     if dropout_p > 0.0:
         attn_output_weights = dropout(attn_output_weights, p=dropout_p)
 
@@ -194,10 +190,11 @@ def multi_head_attention_forward(
     print(f"v shape : {v.shape}")
 
     # attn_output_weights are real valued while v are complex valued
-    attn_output = torch.bmm(attn_output_weights.to(v.dtype), v)  # B, seq_len, embed_dim [B*H, N, Hd]
+    # attn_output_weights : B * num_heads, tgt_len, src_len
+    #                   v : B * num_heads, src_len, head_dim
+    attn_output = torch.bmm(attn_output_weights.to(v.dtype), v)  # B * num_heads, tgt_len, head_dim
 
     print(f"attn_output after scale dot product: {attn_output.shape}")
-
 
     # torch.Size([231, 12, 16]) = [bsz x num_heads, tgt_len, head_dim]
     # Tgt_len  = 12, bsz = 11 , embed_dim = 336
@@ -206,15 +203,18 @@ def multi_head_attention_forward(
     # print(f"Tgt_len  = {tgt_len}, bsz = {bsz} , embed_dim = {embed_dim}")
     # sys.exit(-1)
 
-    attn_output = attn_output.reshape(bsz, num_heads, tgt_len, head_dim) #[B, H, N, Hd]
+    attn_output = attn_output.view(bsz, num_heads, tgt_len, head_dim) #[B, num_heads, tgt_len, head_dim]
     attn_output = (
-        attn_output.transpose(1, 2).contiguous().view(bsz * tgt_len, embed_dim)  #[BxN, HxHd]
+        attn_output.transpose(1, 2).contiguous() # (B, tgt_len, num_heads, head_dim)
+        .view(bsz * tgt_len, embed_dim)  # (B * tgt_len, num_heads * head_dim) = (B * tgt_len, embed_dim)
     )
 
     attn_output = F.linear(attn_output, out_proj_weight, out_proj_bias)
 
-
-    attn_output = attn_output.view(tgt_len, bsz, attn_output.size(1)) # seq_len , B, embed_dim  [N, B, H* Hd]
+    attn_output = (
+            attn_output.view(bsz, tgt_len, embed_dim) # B, seq_len, embed_dim
+            .transpose(0, 1) # seq_len , B, embed_dim
+    )
 
     # Early exist if we do not need the weights
     if not need_weights:
@@ -223,12 +223,8 @@ def multi_head_attention_forward(
     # Perform the extra computation only if the weights are needed
 
     # optionally average attention weights over heads
-    attn_output_weights = attn_output_weights.view(bsz, num_heads, tgt_len, src_len)  #[B, H, N, Hd]
+    attn_output_weights = attn_output_weights.view(bsz, num_heads, tgt_len, src_len) # (B, num_heads, tgt_len, src_len)
     if average_attn_weights:
-        attn_output_weights = attn_output_weights.mean(dim=1)
+        attn_output_weights = attn_output_weights.mean(dim=1) # (B, tgt_len, src_len)
 
-    if not is_batched:
-        # squeeze the output if input was unbatched
-        attn_output = attn_output.squeeze(1)
-        attn_output_weights = attn_output_weights.squeeze(0)
     return attn_output, attn_output_weights

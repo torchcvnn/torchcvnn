@@ -8,15 +8,15 @@ def test_attention():
 
     num_heads = 21
     head_dim = 16
-    B, N, embed_dim = 11, 12, num_heads * head_dim
-    input_size = (B, N, embed_dim)
+    B, S, E = 11, 12, num_heads * head_dim
+    input_size = (B, S, E)
 
-    x = torch.randn((B, N, embed_dim), dtype=torch.complex64)
+    x = torch.randn(input_size, dtype=torch.complex64)
 
     # First model
     print("===" * 80)
-    hatt = vit_huy.Block(embed_dim=embed_dim, 
-                         hidden_dim=embed_dim, 
+    hatt = vit_huy.Block(embed_dim=E, 
+                         hidden_dim=E, 
                          num_heads=num_heads)
     hy = hatt(x)
     print(hy.shape)
@@ -27,8 +27,8 @@ def test_attention():
     # Torchcvnn
     print("===" * 80)
     oatt = c_nn.ViTLayer(num_heads=num_heads, 
-                         hidden_dim=embed_dim, 
-                         mlp_dim=embed_dim,
+                         hidden_dim=E, 
+                         mlp_dim=E,
                          norm_layer=c_nn.RMSNorm)
     oy = oatt(x)
     print(oy.shape)
