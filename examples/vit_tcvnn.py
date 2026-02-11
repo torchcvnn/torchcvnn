@@ -113,7 +113,7 @@ if __name__ == "__main__":
         "patch_size": 7,
         "input_size": 28,
         "embed_dim": 16,
-        "hidden_dim": 40,
+        "hidden_dim": 32,
         "num_layers": 3,
         "num_heads": 8,
         "num_channels": 1,

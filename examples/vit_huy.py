@@ -97,6 +97,7 @@ class VisionTransformer(nn.Module):
 
         patch_size = opt["patch_size"]
         input_size = opt["input_size"]
+        embed_dim = opt["embed_dim"]
         hidden_dim = opt["hidden_dim"]
         num_layers = opt["num_layers"]
         num_heads = opt["num_heads"]
@@ -104,7 +105,6 @@ class VisionTransformer(nn.Module):
         dropout = opt["dropout"]
         # attention_dropout = opt["attention_dropout"]
         # norm_layer = opt["norm_layer"]
-        model_type = opt["model_type"]
 
         self.patch_size = patch_size
         assert (
@@ -112,40 +112,34 @@ class VisionTransformer(nn.Module):
         ), "Image size must be divisible by the patch size"
         self.num_patches = (input_size // patch_size) ** 2
         # Define whether to use traditional ViT or hybrid-ViT
-        if "hybrid" in model_type:
-            self.patch_embedder = embedders.ConvStem(num_channels, hidden_dim, patch_size)
-            self.embed_dim = int(num_channels * (patch_size**2) / 2)
-            input_layer_channels = hidden_dim
-        else:
-            self.patch_embedder = embedders.Image2Patch(patch_size)
-            self.embed_dim = int(hidden_dim / 2)
-            input_layer_channels = num_channels * (patch_size**2)
+        self.patch_embedder = embedders.Image2Patch(patch_size)
+        input_layer_channels = num_channels * (patch_size**2)
         # Input layer
         self.input_layer = nn.Linear(
-            input_layer_channels, self.embed_dim, dtype=torch.complex64
+            input_layer_channels, embed_dim, dtype=torch.complex64
         )
         # Tranformer blocks
         self.transformer = nn.Sequential(
             *(
                 Block(
-                    self.embed_dim, hidden_dim, num_heads, dropout=dropout
+                    embed_dim, hidden_dim, num_heads, dropout=dropout
                 )
                 for _ in range(num_layers)
             )
         )
         # MLP head
         self.mlp_head = nn.Sequential(
-            c_nn.RMSNorm(self.embed_dim),
-            nn.Linear(self.embed_dim, num_classes, dtype=torch.complex64),
+            c_nn.RMSNorm(embed_dim),
+            nn.Linear(embed_dim, num_classes, dtype=torch.complex64),
         )
         self.dropout = c_nn.Dropout(dropout)
         # Class tokens
         self.cls_token = nn.Parameter(
-            torch.rand(1, 1, self.embed_dim, dtype=torch.complex64)
+            torch.rand(1, 1, embed_dim, dtype=torch.complex64)
         )
         # Positional embeddings
         self.pos_embedding = nn.Parameter(
-            torch.rand(1, 1 + self.num_patches, self.embed_dim, dtype=torch.complex64)
+            torch.rand(1, 1 + self.num_patches, embed_dim, dtype=torch.complex64)
         )
 
     def forward(self, x: Tensor) -> Tensor:
@@ -169,6 +163,7 @@ if __name__ == "__main__":
     opt = {
         "patch_size": 7,
         "input_size": 28,
+        "embed_dim": 16,
         "hidden_dim": 32,
         "num_layers": 3,
         "num_heads": 8,
@@ -176,7 +171,7 @@ if __name__ == "__main__":
         "dropout": 0.3,
         # "attention_dropout": 0.1,
         # "norm_layer": "rms_norm",
-        "model_type": "vit"
+        # "model_type": "vit"
     }
     num_classes = 10
 
@@ -186,7 +181,3 @@ if __name__ == "__main__":
 
     y = model(X)
     print(y.dtype)
-
-
-
-    

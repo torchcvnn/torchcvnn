@@ -134,6 +134,7 @@ def train():
     opt = {
         "patch_size": 4,
         "input_size": 28,
+        "embed_dim": 16,
         "hidden_dim": 32,
         "num_layers": 3,
         "num_heads": 8,
