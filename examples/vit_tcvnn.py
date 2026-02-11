@@ -80,8 +80,6 @@ class Model(nn.Module):
         # If you go this way, do not forget to adapt the embed_dim above
         # You can reduce it to 32 for example
 
-        mlp_dim = 4*embed_dim
-
         self.backbone = c_nn.ViT(
             embedder,
             num_layers,
@@ -101,12 +99,14 @@ class Model(nn.Module):
     def forward(self, x):
         features = self.backbone(x)  # B, num_patches, embed_dim
 
-        print(features.shape)
-
+        # print(features.shape)
+    
         # Global average pooling of the patches encoding
-        mean_features = features.mean(dim=1)
+        # mean_features = features.mean(dim=1)
+        # return self.head(mean_features)
 
-        return self.head(mean_features)
+        cls_features = features[:, 0]
+        return self.head(cls_features)
 
 if __name__ == "__main__":
     opt = {
@@ -124,9 +124,10 @@ if __name__ == "__main__":
     num_classes = 10
 
     model = Model(opt, num_classes)
-    B, C, H, W = 10, 1, 28, 28
+    B, C, H, W = 12, 1, 28, 28
     X = torch.zeros((B, C, H, W), dtype=torch.complex64)
 
     y = model(X)
+    print(y.shape)
     print(y.dtype)
 
