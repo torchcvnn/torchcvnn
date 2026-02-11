@@ -69,7 +69,6 @@ class ViTLayer(nn.Module):
 
         factory_kwargs = {"device": device, "dtype": dtype}
 
-        # self.norm1 = norm_layer(embed_dim, **factory_kwargs)
         self.attn = MultiheadAttention(
             embed_dim=embed_dim,
             dropout=attention_dropout,

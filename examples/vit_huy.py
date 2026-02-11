@@ -5,6 +5,7 @@ import torch
 from torch import Tensor
 import torchcvnn.nn as c_nn
 from typing import Tuple, Union, List
+import torchinfo
 
 
 import embedders
@@ -176,6 +177,7 @@ if __name__ == "__main__":
     num_classes = 10
 
     model = VisionTransformer(opt, num_classes)
+    torchinfo.summary(model, depth=3)
     B, C, H, W = 12, 1, 28, 28
     X = torch.zeros((B, C, H, W), dtype=torch.complex64)
 

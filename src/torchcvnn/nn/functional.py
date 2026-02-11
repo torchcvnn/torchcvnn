@@ -45,11 +45,12 @@ def multi_head_attention_forward(
     value: Tensor,
     embed_dim_to_check: int,
     num_heads: int,
-    in_proj_weight: Optional[Tensor],
-    in_proj_bias: Optional[Tensor],
+    q_norm,
+    k_norm,
+    in_proj_weight: Tensor,
+    in_proj_bias: Tensor,
     dropout_p: float,
-    out_proj_weight: Tensor,
-    out_proj_bias: Optional[Tensor],
+    out_proj: Optional[torch.nn.Module],
     training: bool = True,
     need_weights: bool = True,
     average_attn_weights: bool = True,
@@ -67,7 +68,7 @@ def multi_head_attention_forward(
         num_heads: parallel attention heads.
         in_proj_weight, in_proj_bias: input projection weight and bias.
         dropout_p: probability of an element to be zeroed.
-        out_proj_weight, out_proj_bias: the output projection weight and bias.
+        out_proj: layer for the output projection
         training: apply dropout if is ``True``.
         need_weights: output attn_output_weights.
             Default: `True`
@@ -127,6 +128,8 @@ def multi_head_attention_forward(
     q, k, v = F._in_projection_packed(
         query, key, value, in_proj_weight, in_proj_bias
     ) # (T, B, E), (S, B, E), (S, B, E)
+    q = q_norm(q)
+    k = k_norm(k)
 
     #
     # reshape q, k, v for multihead attention and make them batch first
@@ -177,7 +180,8 @@ def multi_head_attention_forward(
         .view(bsz * tgt_len, embed_dim)  # (B * tgt_len, num_heads * head_dim) = (B * tgt_len, embed_dim)
     )
 
-    attn_output = F.linear(attn_output, out_proj_weight, out_proj_bias)
+    if out_proj is not None:
+        attn_output = out_proj(attn_output)
 
     attn_output = (
             attn_output.view(bsz, tgt_len, embed_dim) # B, seq_len, embed_dim

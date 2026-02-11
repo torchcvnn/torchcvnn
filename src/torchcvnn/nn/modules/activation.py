@@ -30,6 +30,7 @@ import torch.nn.functional as F
 
 # Local imports
 from torchcvnn.nn import functional as c_F
+from torchcvnn.nn.modules.normalization import RMSNorm
 from .initialization import complex_xavier_uniform_
 
 
@@ -369,6 +370,9 @@ class MultiheadAttention(nn.Module):
             self.head_dim * num_heads == self.embed_dim
         ), "embed_dim must be divisible by num_heads"
 
+        self.q_norm = RMSNorm(self.head_dim)
+        self.k_norm = RMSNorm(self.head_dim)
+
         self.in_proj_weight = torch.nn.parameter.Parameter(
             torch.empty((3 * embed_dim, embed_dim), **factory_kwargs)
         )
@@ -380,9 +384,10 @@ class MultiheadAttention(nn.Module):
         else:
             self.register_parameter("in_proj_bias", None)
 
-        self.out_proj = torch.nn.Linear(
-            embed_dim, embed_dim, bias=bias, **factory_kwargs
-        )
+        # self.out_proj = torch.nn.Linear(
+        #     embed_dim, embed_dim, bias=bias, **factory_kwargs
+        # )
+        self.out_proj = None
 
         self._reset_parameters()
 
@@ -391,7 +396,6 @@ class MultiheadAttention(nn.Module):
 
         if self.in_proj_bias is not None:
             torch.nn.init.constant_(self.in_proj_bias, 0.0)
-            torch.nn.init.constant_(self.out_proj.bias, 0.0)
 
     def forward(
         self,
@@ -429,18 +433,19 @@ class MultiheadAttention(nn.Module):
                     value = key
             else:
                 query, key, value = (x.transpose(1, 0) for x in (query, key, value)) # (T, B, E), (S, B, E), (S, B, E)
-    
+   
         attn_output, attn_output_weights = c_F.multi_head_attention_forward(
             query,
             key,
             value,
             self.embed_dim,
             self.num_heads,
+            self.q_norm,
+            self.k_norm,
             self.in_proj_weight,
             self.in_proj_bias,
             self.dropout,
-            self.out_proj.weight,
-            self.out_proj.bias,
+            self.out_proj,
             training=self.training,
             need_weights=need_weights,
             average_attn_weights=average_attn_weights,

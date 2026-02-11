@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torchcvnn.nn as c_nn
+import torchinfo
 
 import embedders
 
@@ -124,6 +125,7 @@ if __name__ == "__main__":
     num_classes = 10
 
     model = Model(opt, num_classes)
+    torchinfo.summary(model, depth=4)
     B, C, H, W = 12, 1, 28, 28
     X = torch.zeros((B, C, H, W), dtype=torch.complex64)
 
