@@ -384,18 +384,20 @@ class MultiheadAttention(nn.Module):
         else:
             self.register_parameter("in_proj_bias", None)
 
-        # self.out_proj = torch.nn.Linear(
-        #     embed_dim, embed_dim, bias=bias, **factory_kwargs
-        # )
-        self.out_proj = None
+        self.out_proj = torch.nn.Linear(
+            embed_dim, embed_dim, bias=bias, **factory_kwargs
+        )
 
         self._reset_parameters()
 
     def _reset_parameters(self):
         complex_xavier_uniform_(self.in_proj_weight)
-
         if self.in_proj_bias is not None:
             torch.nn.init.constant_(self.in_proj_bias, 0.0)
+
+        complex_xavier_uniform_(self.out_proj.weight)
+        if self.out_proj.bias is not None:
+            torch.nn.init.constant_(self.out_proj.bias, 0.0)
 
     def forward(
         self,
