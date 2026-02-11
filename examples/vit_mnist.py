@@ -44,6 +44,8 @@ import torchvision.transforms.v2 as v2_transforms
 import torchcvnn.nn as c_nn
 import torchcvnn.models as c_models
 
+import torchinfo
+
 # Local imports
 import utils
 import vit_huy
@@ -143,16 +145,19 @@ def train():
     }
 
     ## Our implementation
-    model = vit_tcvnn.Model(opt, num_classes)
+    # model = vit_tcvnn.Model(opt, num_classes)
 
     ## Huy implementation
-    # model = vit_huy.VisionTransformer(opt, num_classes)
+    model = vit_huy.VisionTransformer(opt, num_classes)
 
     model = nn.Sequential(
         model,
         c_nn.Mod(),
     )
     model = model.to(device)
+
+    torchinfo.summary(model)
+
 
     # Loss, optimizer, callbacks
     f_loss = nn.CrossEntropyLoss()

@@ -38,8 +38,8 @@ class ViTLayer(nn.Module):
     def __init__(
         self,
         num_heads: int,
+        embed_dim: int,
         hidden_dim: int,
-        mlp_dim: int,
         dropout: float = 0.0,
         attention_dropout: float = 0.0,
         norm_layer: Callable[..., nn.Module] = LayerNorm,
@@ -51,8 +51,8 @@ class ViTLayer(nn.Module):
 
         Args:
             num_heads: Number of heads in the multi-head attention block.
-            hidden_dim: Hidden dimension of the transformer.
-            mlp_dim: Hidden dimension of the feed-forward network.
+            embed_dim: Hidden dimension of the transformer.
+            hidden_dim: Hidden dimension of the feed-forward network.
             dropout: Dropout rate (default: 0.0).
             attention_dropout: Dropout rate in the attention block (default: 0.0).
             norm_layer: Normalization layer (default :py:class:`LayerNorm`).
@@ -69,22 +69,23 @@ class ViTLayer(nn.Module):
 
         factory_kwargs = {"device": device, "dtype": dtype}
 
-        self.norm1 = norm_layer(hidden_dim, **factory_kwargs)
+        # self.norm1 = norm_layer(embed_dim, **factory_kwargs)
         self.attn = MultiheadAttention(
-            embed_dim=hidden_dim,
+            embed_dim=embed_dim,
             dropout=attention_dropout,
             num_heads=num_heads,
             batch_first=True,
             **factory_kwargs
         )
-        self.dropout = Dropout(dropout)
-        self.norm2 = norm_layer(hidden_dim)
+        # self.dropout = Dropout(dropout)
+        self.norm2 = norm_layer(embed_dim)
         self.ffn = nn.Sequential(
-            nn.Linear(hidden_dim, mlp_dim, **factory_kwargs),
-            norm_layer(mlp_dim),
-            modReLU(),
+            nn.Linear(embed_dim, hidden_dim, **factory_kwargs),
+            # norm_layer(hidden_dim),
+            # modReLU(),
+            CGELU(),
             Dropout(dropout),
-            nn.Linear(mlp_dim, hidden_dim, **factory_kwargs),
+            nn.Linear(hidden_dim, embed_dim, **factory_kwargs),
             Dropout(dropout),
         )
 
@@ -95,8 +96,12 @@ class ViTLayer(nn.Module):
         Args:
             x: Input tensor of shape (B, seq_len, hidden_dim)
         """
-        norm_x = self.norm1(x)
-        x = x + self.dropout(self.attn(norm_x, norm_x, norm_x, need_weights=False)[0])
+        # norm_x = self.norm1(x)
+        # attn = self.attn(norm_x, norm_x, norm_x, need_weights=False)[0]
+        # x = x + self.dropout(attn)
+        # x = x + self.ffn(self.norm2(x))
+        attn = self.attn(x, x, x, need_weights=False)[0]
+        x = x + attn
         x = x + self.ffn(self.norm2(x))
 
         return x
@@ -109,8 +114,8 @@ class ViT(nn.Module):
         patch_embedder: nn.Module,
         num_layers: int,
         num_heads: int,
+        embed_dim: int,
         hidden_dim: int,
-        mlp_dim: int,
         dropout: float = 0.0,
         attention_dropout: float = 0.0,
         norm_layer: Callable[..., nn.Module] = LayerNorm,
@@ -128,8 +133,8 @@ class ViT(nn.Module):
                 embedder,
                 num_layers,
                 num_heads,
+                embed_dim,
                 hidden_dim,
-                mlp_dim,
                 dropout=dropout,
                 attention_dropout=attention_dropout,
                 norm_layer=norm_layer,
@@ -137,14 +142,14 @@ class ViT(nn.Module):
 
             # A Linear decoding head to project on the logits
             head = nn.Sequential(
-                nn.Linear(hidden_dim, 10, dtype=torch.complex64), c_nn.Mod()
+                nn.Linear(embed_dim, 10, dtype=torch.complex64), c_nn.Mod()
             )
 
             x = torch.randn(B C, H, W)
-            features = backbone(x)  # B, num_patches, hidden_dim
+            features = backbone(x)  # B, num_patches, embed_dim
 
             # Global average pooling of the patches encoding
-            mean_features = features.mean(dim=1) # B, hidden_dim
+            mean_features = features.mean(dim=1) # B, embed_dim
 
             head(mean_features)
 
@@ -154,8 +159,8 @@ class ViT(nn.Module):
             patch_embedder: PatchEmbedder instance.
             num_layers: Number of layers in the transformer.
             num_heads: Number of heads in the multi-head attention block.
-            hidden_dim: Hidden dimension of the transformer.
-            mlp_dim: Hidden dimension of the feed-forward network.
+            embed_dim: Hidden dimension of the transformer.
+            hidden_dim: Hidden dimension of the feed-forward network.
             dropout: Dropout rate (default: 0.0).
             attention_dropout: Dropout rate in the attention block (default: 0.0).
             norm_layer: Normalization layer (default :py:class:`LayerNorm`).
@@ -171,8 +176,8 @@ class ViT(nn.Module):
             self.layers.append(
                 ViTLayer(
                     num_heads=num_heads,
+                    embed_dim=embed_dim,
                     hidden_dim=hidden_dim,
-                    mlp_dim=mlp_dim,
                     dropout=dropout,
                     attention_dropout=attention_dropout,
                     norm_layer=norm_layer,
@@ -180,14 +185,12 @@ class ViT(nn.Module):
                 )
             )
         self.layers = nn.Sequential(*self.layers)
-        self.norm = norm_layer(hidden_dim, **factory_kwargs)
+        self.norm = norm_layer(embed_dim, **factory_kwargs)
 
     def forward(self, x):
         # x : (B, C, H, W)
-        embedding = self.patch_embedder(x)  # (B, embed_dim, num_patch_H, num_patch_W)
-
-        # Transpose to (B, "seq_len"=num_patches, embed_dim)
-        embedding = embedding.flatten(2).transpose(1, 2).contiguous()
+        embedding = self.patch_embedder(x)  # (B, src_len, embed_dim)
+        print(f"Out embedding : {embedding.shape}")
 
         out = self.layers(self.dropout(embedding))
 
