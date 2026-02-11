@@ -630,6 +630,28 @@ class SpatialResize:
 
         return resized_array
 
+class HWC2CHW(BaseTransform):
+    """Converts an input array/tensor from HWC to CHW format.
+
+    This transform reorders the dimensions of the input array/tensor from Height x Width x Channel
+    to Channel x Height x Width format.
+
+    Returns:
+        np.ndarray | torch.Tensor: Input with dimensions reordered to Channel x Height x Width.
+
+    Example:
+        >>> transform = HWC2CHW()
+        >>> x = torch.randn(3, 4, 5)  # Shape (3, 4, 5)
+        >>> y = transform(x)          # Shape (5, 3, 4)
+    """
+
+    def __call_numpy__(self, x: np.ndarray) -> np.ndarray:
+        assert len(x.shape) == 3, f"Expected 3D arrays, got {len(x.shape)} dimensions"
+        return np.moveaxis(x, -1, 0)
+
+    def __call_torch__(self, x: torch.Tensor) -> torch.Tensor:
+        assert len(x.shape) == 3, f"Expected 3D tensors, got {len(x.shape)} dimensions"
+        return x.permute(2, 0, 1)
 
 class PolSAR(BaseTransform):
     """Handling Polarimetric Synthetic Aperture Radar (PolSAR) data channel conversions.
