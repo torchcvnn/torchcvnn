@@ -325,7 +325,7 @@ class MultiheadAttention(nn.Module):
         dropout: Dropout probability on `attn_output_weights`. Default: `0.0`
         kdim: Total number of features for keys. Default `None` which uses `kdim=embed_dim`
         vdim: Total number of features for keys. Default `None` which uses `vdim=embed_dim`
-        batch_first: If `True`, then the input and output tensors are provided as (batch, seq, feature). Default `False` with tensors as (seq, batch, feature)
+        batch_first: If `True`, then the input (query, key, value) and output tensors (attn_outputs) are provided as (batch, seq, feature). Default `False` with tensors as (seq, batch, feature)
 
 
     Example:
@@ -343,7 +343,7 @@ class MultiheadAttention(nn.Module):
             multihead_attn = c_nn.MultiheadAttention(embed_dim=num_features, num_heads=nhead)
             src = torch.rand(seq_len, batch_size, num_features, dtype=torch.complex64)
             attn_output, attn_output_weights = multihead_attn(src, src, src)
-            # attn_output is (seq_len, batch_size, numè_features)
+            # attn_output is (seq_len, batch_size, num_features)
 
     """
 
@@ -406,11 +406,20 @@ class MultiheadAttention(nn.Module):
         Computes attention outputs using query, key and value embeddings.
 
         This function is adapted from torch.nn.MultiheadAttention to support complex valued tensors. 
+
+        Shape:
+            Inputs:
+            - query: :math:`(T, E)` or :math:`(T, B, E)` (``batch_first=False``) or :math:`(B, T, E) (``batch_first=True``), where T is the target sequence length, B is the batch size, E is the embedding dimension
+            - key: :math:`(S, E)` or :math:`(S, B, E)` (``batch_first=False``) or :math:`(B, S, E) (``batch_first=True``), where S is the source sequence length, B is the batch size, E is the embedding dimension.
+            - value: :math:`(S, E)` or :math:`(S, B, E)` (``batch_first=False``) or :math:`(B, S, E) (``batch_first=True``), where S is the source sequence length, B is the batch size, E is the embedding dimension.
+
         """
 
         is_batched = query.dim() == 3
 
         if self.batch_first and is_batched:
+            # In this case, query is (B, T, E), key is (B, S, E) and value is (B, S, E)
+
             # These steps prevent multiple transpose on the same tensors
             # for example when using self-attention
             if key is value:
@@ -420,11 +429,11 @@ class MultiheadAttention(nn.Module):
                     query, key = (x.transpose(1, 0) for x in (query, key))
                     value = key
             else:
-                query, key, value = (x.transpose(1, 0) for x in (query, key, value))
+                query, key, value = (x.transpose(1, 0) for x in (query, key, value)) # (T, B, E), (S, B, E), (S, B, E)
     
-        print(f"Key shapes : {key.shape}") # src_len, B, embed_dim
-        print(f"Value shapes : {value.shape}") # src_len, B, embed_dim
-        print(f"Query shapes : {query.shape}") # tgt_len, B, embed_dim 
+        print(f"Query shapes : {query.shape}") # T, B, E
+        print(f"Key shapes : {key.shape}") # S, B, E
+        print(f"Value shapes : {value.shape}") # S, B, E
 
         attn_output, attn_output_weights = c_F.multi_head_attention_forward(
             query,
@@ -442,7 +451,9 @@ class MultiheadAttention(nn.Module):
             average_attn_weights=average_attn_weights,
             is_causal=is_causal,
         )
-        if self.batch_first and is_batched:
+        # attn_output is (T, E) or (T, B, E)
+        # attn_output_weights is (T, S) or (B, T, S) (already batch_first)
+        if is_batched and self.batch_first:
             return attn_output.transpose(1, 0), attn_output_weights
         else:
             return attn_output, attn_output_weights

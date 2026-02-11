@@ -81,24 +81,18 @@ def multi_head_attention_forward(
             Otherwise, ``attn_weights`` are provided separately per head. Note that this flag only has an effect
             when ``need_weights=True.``. Default: True
 
-
     Shape:
         Inputs:
-        - query: :math:`(L, E)` or :math:`(L, N, E)` where L is the target sequence length, N is the batch size, E is
-          the embedding dimension.
-        - key: :math:`(S, E)` or :math:`(S, N, E)`, where S is the source sequence length, N is the batch size, E is
-          the embedding dimension.
-        - value: :math:`(S, E)` or :math:`(S, N, E)` where S is the source sequence length, N is the batch size, E is
-          the embedding dimension.
+        - query: :math:`(T, E)` or :math:`(T, B, E)` where T is the target sequence length, B is the batch size, E is the embedding dimension.
+        - key: :math:`(S, E)` or :math:`(S, B, E)`, where S is the source sequence length, B is the batch size, E is the embedding dimension.
+        - value: :math:`(S, E)` or :math:`(S, B, E)` where S is the source sequence length, B is the batch size, E is the embedding dimension.
 
         Outputs:
-        - attn_output: :math:`(L, E)` or :math:`(L, N, E)` where L is the target sequence length, N is the batch size,
-          E is the embedding dimension.
+        - attn_output: :math:`(T, E)` or :math:`(T, B, E)` where T is the target sequence length, B is the batch size, E is the embedding dimension.
         - attn_output_weights: Only returned when ``need_weights=True``. If ``average_attn_weights=True``, returns
-          attention weights averaged across heads of shape :math:`(L, S)` when input is unbatched or
-          :math:`(N, L, S)`, where :math:`N` is the batch size, :math:`L` is the target sequence length, and
-          :math:`S` is the source sequence length. If ``average_attn_weights=False``, returns attention weights per
-          head of shape :math:`(num_heads, L, S)` when input is unbatched or :math:`(N, num_heads, L, S)`.
+          attention weights averaged across heads of shape :math:`(T, S)` when input is unbatched or
+          :math:`(B, T, S)`, where :math:`B` is the batch size, :math:`T` is the target sequence length, and
+          :math:`S` is the source sequence length. If ``average_attn_weights=False``, returns attention weights per head of shape :math:`(num_heads, T, S)` when input is unbatched or :math:`(B, num_heads, T, S)`.
     """
 
     # set up shape vars
