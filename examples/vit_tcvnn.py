@@ -42,6 +42,45 @@ class PatchEmbedderPos(nn.Module):
 
         return x
 
+
+
+class PatchEmbedderPos(nn.Module):
+
+    def __init__(self, num_patches, patch_size, hidden_dim, num_channels, dropout):
+        super().__init__()
+        
+        self.i2p = embedders.Image2Patch(patch_size) # (B, number of patch, C * patch_size * patch_size)
+
+        input_layer_channels = num_channels * (patch_size**2)
+        embed_dim = hidden_dim # int(hidden_dim / 2)
+        self.input_layer = nn.Linear(
+            input_layer_channels, embed_dim, dtype=torch.complex64
+        )
+
+        self.dropout = c_nn.Dropout(dropout)
+
+        # Class tokens
+        self.cls_token = nn.Parameter(
+            torch.rand(1, 1, embed_dim, dtype=torch.complex64)
+        )
+        # Positional embeddings
+        self.pos_embedding = nn.Parameter(
+            torch.rand(1, 1 + num_patches, embed_dim, dtype=torch.complex64)
+        )
+
+    def forward(self, x):
+        x = self.i2p(x) # B, number of patch, C * patch_size * patch_size
+        x = self.input_layer(x) # B, number_of_patch, embed_dim
+
+        B = x.shape[0]
+        cls_token = self.cls_token.repeat(B, 1, 1)
+        x = torch.cat([cls_token, x], dim=1) # B, 1 + number_of_patch, embed_dim
+        x = x + self.pos_embedding
+
+        x = self.dropout(x) # B, 1 + number_of_patch, embed_dim
+
+        return x
+
 class Model(nn.Module):
 
     def __init__(self, opt: dict, num_classes: int):
