@@ -29,6 +29,7 @@ from .normalization import LayerNorm, RMSNorm
 from .transformer import (
     TransformerEncoder,
     TransformerEncoderLayer,
+    TransformerDecoder,
     TransformerDecoderLayer,
     Transformer,
 )
