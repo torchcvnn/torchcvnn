@@ -29,7 +29,7 @@ import torch.nn as nn
 
 # Local imports
 from .normalization import LayerNorm
-from .activation import modReLU, MultiheadAttention, CGELU
+from .activation import MultiheadAttention, CGELU
 from .dropout import Dropout
 
 
@@ -100,7 +100,7 @@ class ViTLayer(nn.Module):
             x: Input tensor of shape (B, seq_len, hidden_dim)
         """
         norm_x = self.norm1(x)
-        x = x + self.dropout1(self.attn(norm_x, norm_x, norm_x, need_weights=False)[0])
+        x = x + self.dropout1(self.attn(norm_x, norm_x, norm_x, need_weights=False))
         x = x + self.ffn(x)
 
         return x

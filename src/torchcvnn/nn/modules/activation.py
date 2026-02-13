@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 # Standard imports
-from typing import Optional
+from typing import Callable
 
 # External imports
 import torch
@@ -30,7 +30,7 @@ import torch.nn.functional as F
 
 # Local imports
 from torchcvnn.nn import functional as c_F
-from torchcvnn.nn.modules.normalization import RMSNorm
+from torchcvnn.nn.modules.normalization import RMSNorm, LayerNorm
 from .initialization import complex_xavier_uniform_
 
 
@@ -419,6 +419,9 @@ class MultiheadAttention(nn.Module):
             - key: :math:`(S, E)` or :math:`(S, B, E)` (``batch_first=False``) or :math:`(B, S, E) (``batch_first=True``), where S is the source sequence length, B is the batch size, E is the embedding dimension.
             - value: :math:`(S, E)` or :math:`(S, B, E)` (``batch_first=False``) or :math:`(B, S, E) (``batch_first=True``), where S is the source sequence length, B is the batch size, E is the embedding dimension.
 
+            Outputs:
+            - attn_output: :math:`(T, E)` or :math:`(T, B, E)` (``batch_first=False``) or :math:`(B, T, E) (``batch_first=True``), where T is the target sequence length, B is the batch size, E is the embedding dimension
+            - attn_output_weights :math:`(T, S)` or :math:`(B, T, S)` Optional output, not available if need_weights=False
         """
 
         is_batched = query.dim() == 3
@@ -438,17 +441,17 @@ class MultiheadAttention(nn.Module):
                 query, key, value = (x.transpose(1, 0) for x in (query, key, value)) # (T, B, E), (S, B, E), (S, B, E)
    
         attn_output, attn_output_weights = c_F.multi_head_attention_forward(
-            query,
-            key,
-            value,
-            self.embed_dim,
-            self.num_heads,
-            self.q_norm,
-            self.k_norm,
-            self.in_proj_weight,
-            self.in_proj_bias,
-            self.dropout,
-            self.out_proj,
+            query=query,
+            key=key,
+            value=value,
+            embed_dim_to_check=self.embed_dim,
+            num_heads=self.num_heads,
+            q_norm=self.q_norm,
+            k_norm=self.k_norm,
+            in_proj_weight=self.in_proj_weight,
+            in_proj_bias=self.in_proj_bias,
+            dropout_p=self.dropout,
+            out_proj=self.out_proj,
             training=self.training,
             need_weights=need_weights,
             average_attn_weights=average_attn_weights,
@@ -456,6 +459,9 @@ class MultiheadAttention(nn.Module):
         # attn_output is (T, E) or (T, B, E)
         # attn_output_weights is (T, S) or (B, T, S) (already batch_first)
         if is_batched and self.batch_first:
-            return attn_output.transpose(1, 0), attn_output_weights
-        else:
+            return attn_output.transpose(1, 0)
+
+        if need_weights:
             return attn_output, attn_output_weights
+        else:
+            return attn_output
