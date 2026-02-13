@@ -28,9 +28,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.modules.transformer import (
-    _get_clones,
-    _get_seq_len,
-    _detect_is_causal_mask,
     TransformerEncoder,
     TransformerDecoder,
 )
@@ -150,19 +147,16 @@ class TransformerEncoderLayer(nn.Module):
     def forward(
         self,
         src: torch.Tensor,
-        src_mask: Optional[torch.Tensor] = None,
-        src_key_padding_mask: Optional[torch.Tensor] = None,
-        is_causal: bool = False,
     ) -> torch.Tensor:
 
         x = src
         if self.norm_first:
             x = x + self._sa_block(
-                self.norm1(x), src_mask, src_key_padding_mask, is_causal
+                self.norm1(x)
             )
             x = x + self._ff_block(self.norm2(x))
         else:
-            x = x + self._sa_block(x, src_mask, src_key_padding_mask, is_causal)
+            x = x + self._sa_block(x)
             x = self.norm1(x)
             x = x + self._ff_block(x)
             x = self.norm2(x)
@@ -172,19 +166,13 @@ class TransformerEncoderLayer(nn.Module):
     def _sa_block(
         self,
         x: torch.Tensor,
-        attn_mask: Optional[torch.Tensor],
-        key_padding_mask: Optional[torch.Tensor],
-        is_causal: bool,
     ) -> torch.Tensor:
         x = self.self_attn(
             x,
             x,
             x,
-            attn_mask=attn_mask,
-            key_padding_mask=key_padding_mask,
-            need_weights=False,
-            is_causal=is_causal,
-        )[0]
+            need_weights=False
+        )
         x = self.dropout1(x)
         return x
 
@@ -317,37 +305,12 @@ class TransformerDecoderLayer(nn.Module):
         self,
         tgt: torch.Tensor,
         memory: torch.Tensor,
-        tgt_mask: Optional[torch.Tensor] = None,
-        memory_mask: Optional[torch.Tensor] = None,
-        tgt_key_padding_mask: Optional[torch.Tensor] = None,
-        memory_key_padding_mask: Optional[torch.Tensor] = None,
-        tgt_is_causal: bool = False,
-        memory_is_causal: bool = False,
     ) -> torch.Tensor:
-        r"""Pass the inputs (and mask) through the decoder layer.
+        r"""Pass the inputs through the decoder layer.
 
         Args:
             tgt: the sequence to the decoder layer (required).
             memory: the sequence from the last layer of the encoder (required).
-            tgt_mask: the mask for the tgt sequence (optional).
-            memory_mask: the mask for the memory sequence (optional).
-            tgt_key_padding_mask: the mask for the tgt keys per batch (optional).
-            memory_key_padding_mask: the mask for the memory keys per batch (optional).
-            tgt_is_causal: If specified, applies a causal mask as ``tgt mask``.
-                Default: ``False``.
-                Warning:
-                ``tgt_is_causal`` provides a hint that ``tgt_mask`` is
-                the causal mask. Providing incorrect hints can result in
-                incorrect execution, including forward and backward
-                compatibility.
-            memory_is_causal: If specified, applies a causal mask as
-                ``memory mask``.
-                Default: ``False``.
-                Warning:
-                ``memory_is_causal`` provides a hint that
-                ``memory_mask`` is the causal mask. Providing incorrect
-                hints can result in incorrect execution, including
-                forward and backward compatibility.
 
         Shape:
             see the docs in :class:`~torch.nn.Transformer`.
@@ -357,24 +320,21 @@ class TransformerDecoderLayer(nn.Module):
         x = tgt
         if self.norm_first:
             x = x + self._sa_block(
-                self.norm1(x), tgt_mask, tgt_key_padding_mask, tgt_is_causal
+                self.norm1(x)
             )
             x = x + self._mha_block(
                 self.norm2(x),
                 memory,
-                memory_mask,
-                memory_key_padding_mask,
-                memory_is_causal,
             )
             x = x + self._ff_block(self.norm3(x))
         else:
             x = self.norm1(
-                x + self._sa_block(x, tgt_mask, tgt_key_padding_mask, tgt_is_causal)
+                x + self._sa_block(x)
             )
             x = self.norm2(
                 x
                 + self._mha_block(
-                    x, memory, memory_mask, memory_key_padding_mask, memory_is_causal
+                    x, memory
                 )
             )
             x = self.norm3(x + self._ff_block(x))
@@ -386,17 +346,11 @@ class TransformerDecoderLayer(nn.Module):
     def _sa_block(
         self,
         x: torch.Tensor,
-        attn_mask: Optional[torch.Tensor],
-        key_padding_mask: Optional[torch.Tensor],
-        is_causal: bool = False,
     ) -> torch.Tensor:
         x = self.self_attn(
             x,
             x,
             x,
-            attn_mask=attn_mask,
-            key_padding_mask=key_padding_mask,
-            is_causal=is_causal,
             need_weights=False,
         )[0]
         return self.dropout1(x)
@@ -407,17 +361,11 @@ class TransformerDecoderLayer(nn.Module):
         self,
         x: torch.Tensor,
         mem: torch.Tensor,
-        attn_mask: Optional[torch.Tensor],
-        key_padding_mask: Optional[torch.Tensor],
-        is_causal: bool = False,
     ) -> torch.Tensor:
         x = self.multihead_attn(
             x,
             mem,
             mem,
-            attn_mask=attn_mask,
-            key_padding_mask=key_padding_mask,
-            is_causal=is_causal,
             need_weights=False,
         )[0]
         return self.dropout2(x)
@@ -544,30 +492,12 @@ class Transformer(nn.Module):
         self,
         src: torch.Tensor,
         tgt: torch.Tensor,
-        src_mask: Optional[torch.Tensor] = None,
-        tgt_mask: Optional[torch.Tensor] = None,
-        memory_mask: Optional[torch.Tensor] = None,
-        src_key_padding_mask: Optional[torch.Tensor] = None,
-        tgt_key_padding_mask: Optional[torch.Tensor] = None,
-        memory_key_padding_mask: Optional[torch.Tensor] = None,
-        src_is_causal: Optional[bool] = None,
-        tgt_is_causal: Optional[bool] = None,
-        memory_is_causal: bool = False,
     ) -> torch.Tensor:
         memory = self.encoder(
-            src,
-            mask=src_mask,
-            src_key_padding_mask=src_key_padding_mask,
-            is_causal=src_is_causal,
+            src
         )
         output = self.decoder(
             tgt,
             memory,
-            tgt_mask=tgt_mask,
-            memory_mask=memory_mask,
-            tgt_key_padding_mask=tgt_key_padding_mask,
-            memory_key_padding_mask=memory_key_padding_mask,
-            tgt_is_causal=tgt_is_causal,
-            memory_is_causal=memory_is_causal,
         )
         return output

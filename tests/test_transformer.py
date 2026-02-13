@@ -77,33 +77,31 @@ def test_multihead_scaleddotproduct():
     tgt_seq_len = 20
 
     embed_dim = 16  # multiple of nheads, so that head_dim = embed_dim // nheads
-    kdim = 12
-    vdim = 13
 
     batch_size = 32
 
     # Batch_first = False
     query = torch.rand(tgt_seq_len, batch_size, embed_dim, dtype=torch.complex64)
-    key = torch.rand(src_seq_len, batch_size, kdim, dtype=torch.complex64)
-    value = torch.rand(src_seq_len, batch_size, vdim, dtype=torch.complex64)
+    key = torch.rand(src_seq_len, batch_size, embed_dim, dtype=torch.complex64)
+    value = torch.rand(src_seq_len, batch_size, embed_dim, dtype=torch.complex64)
 
     multihead_attn = c_nn.MultiheadAttention(
-        embed_dim=embed_dim, num_heads=nheads, kdim=kdim, vdim=vdim
+        embed_dim=embed_dim, num_heads=nheads, batch_first=False
     )
-    attn_output, attn_output_weights = multihead_attn(query, key, value)
+    attn_output = multihead_attn(query, key, value, need_weights=False)
 
     assert attn_output.shape == (tgt_seq_len, batch_size, embed_dim)
 
     # Batch_first = True
     query = torch.rand(batch_size, tgt_seq_len, embed_dim, dtype=torch.complex64)
-    key = torch.rand(batch_size, src_seq_len, kdim, dtype=torch.complex64)
-    value = torch.rand(batch_size, src_seq_len, vdim, dtype=torch.complex64)
+    key = torch.rand(batch_size, src_seq_len, embed_dim, dtype=torch.complex64)
+    value = torch.rand(batch_size, src_seq_len, embed_dim, dtype=torch.complex64)
 
     multihead_attn = c_nn.MultiheadAttention(
-        embed_dim=embed_dim, num_heads=nheads, kdim=kdim, vdim=vdim, batch_first=True
+        embed_dim=embed_dim, num_heads=nheads, batch_first=True
     )
 
-    attn_output, attn_output_weights = multihead_attn(query, key, value)
+    attn_output = multihead_attn(query, key, value, need_weights=False)
 
     assert attn_output.shape == (batch_size, tgt_seq_len, embed_dim)
 
