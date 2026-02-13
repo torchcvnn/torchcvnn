@@ -124,14 +124,12 @@ def test_multiheadattention():
     target_seq_len = 11
 
     embed_dim = 12
-    kdim = 8
-    vdim = 9
     num_heads = 3
 
     for batch_first in [True, False]:
 
         mha = c_nn.MultiheadAttention(
-            embed_dim, num_heads, batch_first=batch_first, kdim=kdim, vdim=vdim
+            embed_dim, num_heads, batch_first=batch_first
         )
 
         query = torch.randn(
@@ -144,24 +142,24 @@ def test_multiheadattention():
         )
         key = torch.randn(
             (
-                (batch_size, source_seq_len, kdim)
+                (batch_size, source_seq_len, embed_dim)
                 if batch_first
-                else (source_seq_len, batch_size, kdim)
+                else (source_seq_len, batch_size, embed_dim)
             ),
             dtype=torch.complex64,
         )
         value = torch.randn(
             (
-                (batch_size, source_seq_len, vdim)
+                (batch_size, source_seq_len, embed_dim)
                 if batch_first
-                else (source_seq_len, batch_size, vdim)
+                else (source_seq_len, batch_size, embed_dim)
             ),
             dtype=torch.complex64,
         )
 
         # Check for the forward pass
         # Ensure it runs without exception
-        output = mha(query, key, value)
+        output = mha(query, key, value, need_weights=False)
 
         expected_output_shape = (
             [batch_size, target_seq_len, embed_dim]
@@ -170,7 +168,7 @@ def test_multiheadattention():
         )
 
         # Check for the shape
-        assert list(output[0].shape) == expected_output_shape
+        assert list(output.shape) == expected_output_shape
 
 
 if __name__ == "__main__":
