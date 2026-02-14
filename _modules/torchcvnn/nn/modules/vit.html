@@ -321,7 +321,7 @@
 
 <span class="c1"># Local imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.normalization</span><span class="w"> </span><span class="kn">import</span> <span class="n">LayerNorm</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.activation</span><span class="w"> </span><span class="kn">import</span> <span class="n">modReLU</span><span class="p">,</span> <span class="n">MultiheadAttention</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.activation</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiheadAttention</span><span class="p">,</span> <span class="n">CGELU</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.dropout</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dropout</span>
 
 
@@ -334,11 +334,12 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">num_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">embed_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">mlp_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">attention_dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">norm_layer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="n">LayerNorm</span><span class="p">,</span>
+        <span class="n">activation_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="n">CGELU</span><span class="p">,</span>
         <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -347,8 +348,8 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            num_heads: Number of heads in the multi-head attention block.</span>
-<span class="sd">            hidden_dim: Hidden dimension of the transformer.</span>
-<span class="sd">            mlp_dim: Hidden dimension of the feed-forward network.</span>
+<span class="sd">            embed_dim: Hidden dimension of the transformer.</span>
+<span class="sd">            hidden_dim: Hidden dimension of the feed-forward network.</span>
 <span class="sd">            dropout: Dropout rate (default: 0.0).</span>
 <span class="sd">            attention_dropout: Dropout rate in the attention block (default: 0.0).</span>
 <span class="sd">            norm_layer: Normalization layer (default :py:class:`LayerNorm`).</span>
@@ -365,23 +366,26 @@
 
         <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="n">MultiheadAttention</span><span class="p">(</span>
-            <span class="n">embed_dim</span><span class="o">=</span><span class="n">hidden_dim</span><span class="p">,</span>
-            <span class="n">dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+            <span class="n">embed_dim</span><span class="o">=</span><span class="n">embed_dim</span><span class="p">,</span>
             <span class="n">num_heads</span><span class="o">=</span><span class="n">num_heads</span><span class="p">,</span>
+            <span class="n">dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
+            <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span>
             <span class="n">batch_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="o">**</span><span class="n">factory_kwargs</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout1</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">ffn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">mlp_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">),</span>
-            <span class="n">norm_layer</span><span class="p">(</span><span class="n">mlp_dim</span><span class="p">),</span>
-            <span class="n">modReLU</span><span class="p">(),</span>
+            <span class="n">norm_layer</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">),</span>
+            <span class="n">activation_fn</span><span class="p">(),</span>
             <span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">),</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">mlp_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">),</span>
-            <span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">),</span>
+            <span class="n">norm_layer</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">),</span>
+            <span class="n">activation_fn</span><span class="p">(),</span>
+            <span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
         <span class="p">)</span></div>
 
 
@@ -393,8 +397,8 @@
 <span class="sd">            x: Input tensor of shape (B, seq_len, hidden_dim)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">norm_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attn</span><span class="p">(</span><span class="n">norm_x</span><span class="p">,</span> <span class="n">norm_x</span><span class="p">,</span> <span class="n">norm_x</span><span class="p">,</span> <span class="n">need_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ffn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attn</span><span class="p">(</span><span class="n">norm_x</span><span class="p">,</span> <span class="n">norm_x</span><span class="p">,</span> <span class="n">norm_x</span><span class="p">,</span> <span class="n">need_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ffn</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">x</span></div>
 
@@ -411,8 +415,8 @@
         <span class="n">patch_embedder</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
         <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">num_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">embed_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">mlp_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">attention_dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">norm_layer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="n">LayerNorm</span><span class="p">,</span>
@@ -430,8 +434,8 @@
 <span class="sd">                embedder,</span>
 <span class="sd">                num_layers,</span>
 <span class="sd">                num_heads,</span>
+<span class="sd">                embed_dim,</span>
 <span class="sd">                hidden_dim,</span>
-<span class="sd">                mlp_dim,</span>
 <span class="sd">                dropout=dropout,</span>
 <span class="sd">                attention_dropout=attention_dropout,</span>
 <span class="sd">                norm_layer=norm_layer,</span>
@@ -439,25 +443,23 @@
 
 <span class="sd">            # A Linear decoding head to project on the logits</span>
 <span class="sd">            head = nn.Sequential(</span>
-<span class="sd">                nn.Linear(hidden_dim, 10, dtype=torch.complex64), c_nn.Mod()</span>
+<span class="sd">                nn.Linear(embed_dim, 10, dtype=torch.complex64), c_nn.Mod()</span>
 <span class="sd">            )</span>
 
 <span class="sd">            x = torch.randn(B C, H, W)</span>
-<span class="sd">            features = backbone(x)  # B, num_patches, hidden_dim</span>
+<span class="sd">            features = backbone(x)  # B, num_patches, embed_dim</span>
 
 <span class="sd">            # Global average pooling of the patches encoding</span>
-<span class="sd">            mean_features = features.mean(dim=1) # B, hidden_dim</span>
+<span class="sd">            mean_features = features.mean(dim=1) # B, embed_dim</span>
 
 <span class="sd">            head(mean_features)</span>
-
-
 
 <span class="sd">        Args:</span>
 <span class="sd">            patch_embedder: PatchEmbedder instance.</span>
 <span class="sd">            num_layers: Number of layers in the transformer.</span>
 <span class="sd">            num_heads: Number of heads in the multi-head attention block.</span>
-<span class="sd">            hidden_dim: Hidden dimension of the transformer.</span>
-<span class="sd">            mlp_dim: Hidden dimension of the feed-forward network.</span>
+<span class="sd">            embed_dim: Hidden dimension of the transformer.</span>
+<span class="sd">            hidden_dim: Hidden dimension of the feed-forward network.</span>
 <span class="sd">            dropout: Dropout rate (default: 0.0).</span>
 <span class="sd">            attention_dropout: Dropout rate in the attention block (default: 0.0).</span>
 <span class="sd">            norm_layer: Normalization layer (default :py:class:`LayerNorm`).</span>
@@ -473,8 +475,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">ViTLayer</span><span class="p">(</span>
                     <span class="n">num_heads</span><span class="o">=</span><span class="n">num_heads</span><span class="p">,</span>
+                    <span class="n">embed_dim</span><span class="o">=</span><span class="n">embed_dim</span><span class="p">,</span>
                     <span class="n">hidden_dim</span><span class="o">=</span><span class="n">hidden_dim</span><span class="p">,</span>
-                    <span class="n">mlp_dim</span><span class="o">=</span><span class="n">mlp_dim</span><span class="p">,</span>
                     <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
                     <span class="n">attention_dropout</span><span class="o">=</span><span class="n">attention_dropout</span><span class="p">,</span>
                     <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span>
@@ -482,21 +484,17 @@
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="c1"># x : (B, C, H, W)</span>
-        <span class="n">embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_embedder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># (B, embed_dim, num_patch_H, num_patch_W)</span>
-
-        <span class="c1"># Transpose to (B, &quot;seq_len&quot;=num_patches, embed_dim)</span>
-        <span class="n">embedding</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+        <span class="n">embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_embedder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># (B, src_len, embed_dim)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">embedding</span><span class="p">))</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 
-        <span class="c1"># Transpose to batch_first</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
 </pre></div>

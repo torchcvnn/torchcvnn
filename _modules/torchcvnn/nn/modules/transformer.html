@@ -320,11 +320,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn.modules.transformer</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">_get_clones</span><span class="p">,</span>
-    <span class="n">_get_seq_len</span><span class="p">,</span>
-    <span class="n">_detect_is_causal_mask</span><span class="p">,</span>
-    <span class="n">TransformerEncoder</span><span class="p">,</span>
-    <span class="n">TransformerDecoder</span><span class="p">,</span>
+    <span class="n">_get_clones</span>
 <span class="p">)</span>
 
 <span class="c1"># Local imports</span>
@@ -447,19 +443,16 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">src</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">src_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">src_key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">is_causal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">src</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_first</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sa_block</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">src_mask</span><span class="p">,</span> <span class="n">src_key_padding_mask</span><span class="p">,</span> <span class="n">is_causal</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ff_block</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sa_block</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">src_mask</span><span class="p">,</span> <span class="n">src_key_padding_mask</span><span class="p">,</span> <span class="n">is_causal</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sa_block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ff_block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -469,25 +462,91 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_sa_block</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">attn_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
-        <span class="n">key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
-        <span class="n">is_causal</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_attn</span><span class="p">(</span>
             <span class="n">x</span><span class="p">,</span>
             <span class="n">x</span><span class="p">,</span>
             <span class="n">x</span><span class="p">,</span>
-            <span class="n">attn_mask</span><span class="o">=</span><span class="n">attn_mask</span><span class="p">,</span>
-            <span class="n">key_padding_mask</span><span class="o">=</span><span class="n">key_padding_mask</span><span class="p">,</span>
-            <span class="n">need_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">is_causal</span><span class="o">=</span><span class="n">is_causal</span><span class="p">,</span>
-        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">need_weights</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_ff_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear1</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TransformerEncoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;TransformerEncoder is a stack of N encoder layers.</span>
+
+<span class="sd">    This class is adapted from pytorch :py:class:`torch.nn.TransformerEncoder`</span>
+
+<span class="sd">    This TransformerEncoder layer implements the original architecture described</span>
+<span class="sd">    in the `Attention Is All You Need &lt;https://arxiv.org/abs/1706.03762&gt;`_ paper. The</span>
+<span class="sd">    intent of this layer is as a reference implementation for foundational understanding</span>
+<span class="sd">    and thus it contains only limited features relative to newer Transformer architectures.</span>
+<span class="sd">    Given the fast pace of innovation in transformer-like architectures, we recommend</span>
+<span class="sd">    exploring this `tutorial &lt;https://pytorch.org/tutorials/intermediate/transformer_building_blocks.html&gt;`_</span>
+<span class="sd">    to build efficient layers from building blocks in core or using higher</span>
+<span class="sd">    level libraries from the `PyTorch Ecosystem &lt;https://landscape.pytorch.org/&gt;`_.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        All layers in the TransformerEncoder are initialized with the same parameters.</span>
+<span class="sd">        It is recommended to manually initialize the layers after creating the TransformerEncoder instance.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        encoder_layer: an instance of the TransformerEncoderLayer() class (required).</span>
+<span class="sd">        num_layers: the number of sub-encoder-layers in the encoder (required).</span>
+<span class="sd">        norm: the layer normalization component (optional).</span>
+<span class="sd">        enable_nested_tensor: if True, input will automatically convert to nested tensor</span>
+<span class="sd">            (and convert back on output). This will improve the overall performance of</span>
+<span class="sd">            TransformerEncoder when padding rate is high. Default: ``True`` (enabled).</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; encoder_layer = nn.TransformerEncoderLayer(d_model=512, nhead=8)</span>
+<span class="sd">        &gt;&gt;&gt; transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=6)</span>
+<span class="sd">        &gt;&gt;&gt; src = torch.rand(10, 32, 512)</span>
+<span class="sd">        &gt;&gt;&gt; out = transformer_encoder(src)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;norm&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">encoder_layer</span><span class="p">:</span> <span class="s2">&quot;TransformerEncoderLayer&quot;</span><span class="p">,</span>
+        <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">norm</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">_get_clones</span><span class="p">(</span><span class="n">encoder_layer</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="n">num_layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">norm</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">src</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Pass the input through the encoder layers in turn.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            src: the sequence to the encoder (required).</span>
+
+<span class="sd">        Shape:</span>
+<span class="sd">            see the docs in :class:`~torch.nn.Transformer`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">src</span>
+
+        <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">mod</span><span class="p">(</span>
+                <span class="n">output</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span>
 
 
 
@@ -620,37 +679,12 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">tgt</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">memory</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">tgt_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">memory_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">tgt_key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">memory_key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">tgt_is_causal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">memory_is_causal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Pass the inputs (and mask) through the decoder layer.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Pass the inputs through the decoder layer.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            tgt: the sequence to the decoder layer (required).</span>
 <span class="sd">            memory: the sequence from the last layer of the encoder (required).</span>
-<span class="sd">            tgt_mask: the mask for the tgt sequence (optional).</span>
-<span class="sd">            memory_mask: the mask for the memory sequence (optional).</span>
-<span class="sd">            tgt_key_padding_mask: the mask for the tgt keys per batch (optional).</span>
-<span class="sd">            memory_key_padding_mask: the mask for the memory keys per batch (optional).</span>
-<span class="sd">            tgt_is_causal: If specified, applies a causal mask as ``tgt mask``.</span>
-<span class="sd">                Default: ``False``.</span>
-<span class="sd">                Warning:</span>
-<span class="sd">                ``tgt_is_causal`` provides a hint that ``tgt_mask`` is</span>
-<span class="sd">                the causal mask. Providing incorrect hints can result in</span>
-<span class="sd">                incorrect execution, including forward and backward</span>
-<span class="sd">                compatibility.</span>
-<span class="sd">            memory_is_causal: If specified, applies a causal mask as</span>
-<span class="sd">                ``memory mask``.</span>
-<span class="sd">                Default: ``False``.</span>
-<span class="sd">                Warning:</span>
-<span class="sd">                ``memory_is_causal`` provides a hint that</span>
-<span class="sd">                ``memory_mask`` is the causal mask. Providing incorrect</span>
-<span class="sd">                hints can result in incorrect execution, including</span>
-<span class="sd">                forward and backward compatibility.</span>
 
 <span class="sd">        Shape:</span>
 <span class="sd">            see the docs in :class:`~torch.nn.Transformer`.</span>
@@ -660,24 +694,21 @@
         <span class="n">x</span> <span class="o">=</span> <span class="n">tgt</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_first</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sa_block</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">tgt_mask</span><span class="p">,</span> <span class="n">tgt_key_padding_mask</span><span class="p">,</span> <span class="n">tgt_is_causal</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mha_block</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">x</span><span class="p">),</span>
                 <span class="n">memory</span><span class="p">,</span>
-                <span class="n">memory_mask</span><span class="p">,</span>
-                <span class="n">memory_key_padding_mask</span><span class="p">,</span>
-                <span class="n">memory_is_causal</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ff_block</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm3</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span>
-                <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sa_block</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tgt_mask</span><span class="p">,</span> <span class="n">tgt_key_padding_mask</span><span class="p">,</span> <span class="n">tgt_is_causal</span><span class="p">)</span>
+                <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sa_block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span>
                 <span class="n">x</span>
                 <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mha_block</span><span class="p">(</span>
-                    <span class="n">x</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">memory_mask</span><span class="p">,</span> <span class="n">memory_key_padding_mask</span><span class="p">,</span> <span class="n">memory_is_causal</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">memory</span>
                 <span class="p">)</span>
             <span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm3</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ff_block</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
@@ -689,17 +720,11 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_sa_block</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">attn_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
-        <span class="n">key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
-        <span class="n">is_causal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_attn</span><span class="p">(</span>
             <span class="n">x</span><span class="p">,</span>
             <span class="n">x</span><span class="p">,</span>
             <span class="n">x</span><span class="p">,</span>
-            <span class="n">attn_mask</span><span class="o">=</span><span class="n">attn_mask</span><span class="p">,</span>
-            <span class="n">key_padding_mask</span><span class="o">=</span><span class="n">key_padding_mask</span><span class="p">,</span>
-            <span class="n">is_causal</span><span class="o">=</span><span class="n">is_causal</span><span class="p">,</span>
             <span class="n">need_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -710,17 +735,11 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">mem</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">attn_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
-        <span class="n">key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
-        <span class="n">is_causal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multihead_attn</span><span class="p">(</span>
             <span class="n">x</span><span class="p">,</span>
             <span class="n">mem</span><span class="p">,</span>
             <span class="n">mem</span><span class="p">,</span>
-            <span class="n">attn_mask</span><span class="o">=</span><span class="n">attn_mask</span><span class="p">,</span>
-            <span class="n">key_padding_mask</span><span class="o">=</span><span class="n">key_padding_mask</span><span class="p">,</span>
-            <span class="n">is_causal</span><span class="o">=</span><span class="n">is_causal</span><span class="p">,</span>
             <span class="n">need_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -732,6 +751,76 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 
+<span class="k">class</span><span class="w"> </span><span class="nc">TransformerDecoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;TransformerDecoder is a stack of N decoder layers.</span>
+
+<span class="sd">    Adapted from :py:class:`torch.nn.TransformerDecodder`.</span>
+
+<span class="sd">    This TransformerDecoder layer implements the original architecture described</span>
+<span class="sd">    in the `Attention Is All You Need &lt;https://arxiv.org/abs/1706.03762&gt;`_ paper. The</span>
+<span class="sd">    intent of this layer is as a reference implementation for foundational understanding</span>
+<span class="sd">    and thus it contains only limited features relative to newer Transformer architectures.</span>
+<span class="sd">    Given the fast pace of innovation in transformer-like architectures, we recommend</span>
+<span class="sd">    exploring this `tutorial &lt;https://pytorch.org/tutorials/intermediate/transformer_building_blocks.html&gt;`_</span>
+<span class="sd">    to build efficient layers from building blocks in core or using higher</span>
+<span class="sd">    level libraries from the `PyTorch Ecosystem &lt;https://landscape.pytorch.org/&gt;`_.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        All layers in the TransformerDecoder are initialized with the same parameters.</span>
+<span class="sd">        It is recommended to manually initialize the layers after creating the TransformerDecoder instance.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        decoder_layer: an instance of the TransformerDecoderLayer() class (required).</span>
+<span class="sd">        num_layers: the number of sub-decoder-layers in the decoder (required).</span>
+<span class="sd">        norm: the layer normalization component (optional).</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; decoder_layer = nn.TransformerDecoderLayer(d_model=512, nhead=8)</span>
+<span class="sd">        &gt;&gt;&gt; transformer_decoder = nn.TransformerDecoder(decoder_layer, num_layers=6)</span>
+<span class="sd">        &gt;&gt;&gt; memory = torch.rand(10, 32, 512)</span>
+<span class="sd">        &gt;&gt;&gt; tgt = torch.rand(20, 32, 512)</span>
+<span class="sd">        &gt;&gt;&gt; out = transformer_decoder(tgt, memory)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;norm&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">decoder_layer</span><span class="p">:</span> <span class="s2">&quot;TransformerDecoderLayer&quot;</span><span class="p">,</span>
+        <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">norm</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">_get_clones</span><span class="p">(</span><span class="n">decoder_layer</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="n">num_layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">norm</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tgt</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">memory</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Pass the inputs (and mask) through the decoder layer in turn.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tgt: the sequence to the decoder (required).</span>
+<span class="sd">            memory: the sequence from the last layer of the encoder (required).</span>
+
+<span class="sd">        Shape:</span>
+<span class="sd">            see the docs in :class:`~torch.nn.Transformer`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">tgt</span>
+
+        <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">mod</span><span class="p">(</span>
+                <span class="n">output</span><span class="p">,</span>
+                <span class="n">memory</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span>
 
 <div class="viewcode-block" id="Transformer">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Transformer.html#torchcvnn.nn.Transformer">[docs]</a>
@@ -853,31 +942,13 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">src</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">tgt</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">src_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">tgt_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">memory_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">src_key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">tgt_key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">memory_key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">src_is_causal</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">tgt_is_causal</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">memory_is_causal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span>
-            <span class="n">src</span><span class="p">,</span>
-            <span class="n">mask</span><span class="o">=</span><span class="n">src_mask</span><span class="p">,</span>
-            <span class="n">src_key_padding_mask</span><span class="o">=</span><span class="n">src_key_padding_mask</span><span class="p">,</span>
-            <span class="n">is_causal</span><span class="o">=</span><span class="n">src_is_causal</span><span class="p">,</span>
+            <span class="n">src</span>
         <span class="p">)</span>
         <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span>
             <span class="n">tgt</span><span class="p">,</span>
             <span class="n">memory</span><span class="p">,</span>
-            <span class="n">tgt_mask</span><span class="o">=</span><span class="n">tgt_mask</span><span class="p">,</span>
-            <span class="n">memory_mask</span><span class="o">=</span><span class="n">memory_mask</span><span class="p">,</span>
-            <span class="n">tgt_key_padding_mask</span><span class="o">=</span><span class="n">tgt_key_padding_mask</span><span class="p">,</span>
-            <span class="n">memory_key_padding_mask</span><span class="o">=</span><span class="n">memory_key_padding_mask</span><span class="p">,</span>
-            <span class="n">tgt_is_causal</span><span class="o">=</span><span class="n">tgt_is_causal</span><span class="p">,</span>
-            <span class="n">memory_is_causal</span><span class="o">=</span><span class="n">memory_is_causal</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">output</span></div>
 
