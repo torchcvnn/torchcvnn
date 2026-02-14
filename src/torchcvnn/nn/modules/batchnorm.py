@@ -243,6 +243,16 @@ class _BatchNormNd(nn.Module):
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
         # z : [B, C, d1, d2, ..] (complex)
+        # Validate input dimensions
+        if z.dim() < 2:
+            raise RuntimeError(
+                f"Expected at least 2D input (got {z.dim()}D input)"
+            )
+        if z.shape[1] != self.num_features:
+            raise RuntimeError(
+                f"Expected input with {self.num_features} channels, but got input with {z.shape[1]} channels"
+            )
+
         batch_size = z.shape[0]
         dim1 = z.shape[1]
         other_dims = z.shape[2:]
