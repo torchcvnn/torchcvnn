@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 # Standard imports
-from typing import Optional
+from typing import Callable
 
 # External imports
 import torch
@@ -30,6 +30,7 @@ import torch.nn.functional as F
 
 # Local imports
 from torchcvnn.nn import functional as c_F
+from torchcvnn.nn.modules.normalization import RMSNorm, LayerNorm
 from .initialization import complex_xavier_uniform_
 
 
@@ -325,7 +326,7 @@ class MultiheadAttention(nn.Module):
         dropout: Dropout probability on `attn_output_weights`. Default: `0.0`
         kdim: Total number of features for keys. Default `None` which uses `kdim=embed_dim`
         vdim: Total number of features for keys. Default `None` which uses `vdim=embed_dim`
-        batch_first: If `True`, then the input and output tensors are provided as (batch, seq, feature). Default `False` with tensors as (seq, batch, feature)
+        batch_first: If `True`, then the input (query, key, value) and output tensors (attn_outputs) are provided as (batch, seq, feature). Default `False` with tensors as (seq, batch, feature)
 
 
     Example:
@@ -343,7 +344,7 @@ class MultiheadAttention(nn.Module):
             multihead_attn = c_nn.MultiheadAttention(embed_dim=num_features, num_heads=nhead)
             src = torch.rand(seq_len, batch_size, num_features, dtype=torch.complex64)
             attn_output, attn_output_weights = multihead_attn(src, src, src)
-            # attn_output is (seq_len, batch_size, numè_features)
+            # attn_output is (seq_len, batch_size, num_features)
 
     """
 
@@ -352,11 +353,8 @@ class MultiheadAttention(nn.Module):
         embed_dim: int,
         num_heads: int,
         dropout: float = 0.0,
+        norm_layer: Callable[..., nn.Module] = LayerNorm,
         bias: bool = True,
-        add_bias_kv=False,
-        add_zero_attn=False,
-        kdim: int = None,
-        vdim: int = None,
         batch_first: bool = False,
         device: torch.device = None,
         dtype: torch.dtype = torch.complex64,
@@ -364,9 +362,6 @@ class MultiheadAttention(nn.Module):
         factory_kwargs = {"device": device, "dtype": dtype}
         super().__init__()
         self.embed_dim = embed_dim
-        self.kdim = kdim if kdim is not None else embed_dim
-        self.vdim = vdim if vdim is not None else embed_dim
-        self._qkv_same_embed_dim = self.kdim == embed_dim and self.vdim == embed_dim
 
         self.num_heads = num_heads
         self.dropout = dropout
@@ -376,24 +371,12 @@ class MultiheadAttention(nn.Module):
             self.head_dim * num_heads == self.embed_dim
         ), "embed_dim must be divisible by num_heads"
 
-        if not self._qkv_same_embed_dim:
-            self.q_proj_weight = torch.nn.parameter.Parameter(
-                torch.empty((embed_dim, embed_dim), **factory_kwargs)
-            )
-            self.k_proj_weight = torch.nn.parameter.Parameter(
-                torch.empty((embed_dim, self.kdim), **factory_kwargs)
-            )
-            self.v_proj_weight = torch.nn.parameter.Parameter(
-                torch.empty((embed_dim, self.vdim), **factory_kwargs)
-            )
-            self.register_parameter("in_proj_weight", None)
-        else:
-            self.in_proj_weight = torch.nn.parameter.Parameter(
-                torch.empty((3 * embed_dim, embed_dim), **factory_kwargs)
-            )
-            self.register_parameter("q_proj_weight", None)
-            self.register_parameter("k_proj_weight", None)
-            self.register_parameter("v_proj_weight", None)
+        self.q_norm = norm_layer(self.head_dim)
+        self.k_norm = norm_layer(self.head_dim)
+
+        self.in_proj_weight = torch.nn.parameter.Parameter(
+            torch.empty((3 * embed_dim, embed_dim), **factory_kwargs)
+        )
 
         if bias:
             self.in_proj_bias = torch.nn.parameter.Parameter(
@@ -406,85 +389,46 @@ class MultiheadAttention(nn.Module):
             embed_dim, embed_dim, bias=bias, **factory_kwargs
         )
 
-        if add_bias_kv:
-            self.bias_k = torch.nn.parameter.Parameter(
-                torch.empty((1, 1, embed_dim), **factory_kwargs)
-            )
-            self.bias_v = torch.nn.parameter.Parameter(
-                torch.empty((1, 1, embed_dim), **factory_kwargs)
-            )
-        else:
-            self.bias_k = self.bias_v = None
-
-        self.add_zero_attn = add_zero_attn
-        if bias:
-            self.in_proj_bias = torch.nn.parameter.Parameter(
-                torch.empty(3 * embed_dim, **factory_kwargs)
-            )
-
         self._reset_parameters()
 
     def _reset_parameters(self):
-        if self._qkv_same_embed_dim:
-            complex_xavier_uniform_(self.in_proj_weight)
-        else:
-            complex_xavier_uniform_(self.q_proj_weight)
-            complex_xavier_uniform_(self.k_proj_weight)
-            complex_xavier_uniform_(self.v_proj_weight)
-
+        complex_xavier_uniform_(self.in_proj_weight)
         if self.in_proj_bias is not None:
             torch.nn.init.constant_(self.in_proj_bias, 0.0)
+
+        complex_xavier_uniform_(self.out_proj.weight)
+        if self.out_proj.bias is not None:
             torch.nn.init.constant_(self.out_proj.bias, 0.0)
-        if self.bias_k is not None:
-            torch.nn.init.constant_(self.bias_k, 0.0)
-        if self.bias_v is not None:
-            torch.nn.init.constant_(self.bias_v, 0.0)
 
     def forward(
         self,
         query: torch.Tensor,
         key: torch.Tensor,
         value: torch.Tensor,
-        key_padding_mask: Optional[torch.Tensor] = None,
         need_weights: bool = True,
-        attn_mask: Optional[torch.Tensor] = None,
         average_attn_weights: bool = True,
-        is_causal: bool = False,
     ) -> torch.Tensor:
         """
         Computes attention outputs using query, key and value embeddings.
 
-        This function is adapted from torch.nn.MultiheadAttention to support complex valued tensors. It keeps the same
-        signature but does not support yet key_padding_mask and attn_mask.
+        This function is adapted from torch.nn.MultiheadAttention to support complex valued tensors. 
+
+        Shape:
+            Inputs:
+            - query: :math:`(T, E)` or :math:`(T, B, E)` (``batch_first=False``) or :math:`(B, T, E) (``batch_first=True``), where T is the target sequence length, B is the batch size, E is the embedding dimension
+            - key: :math:`(S, E)` or :math:`(S, B, E)` (``batch_first=False``) or :math:`(B, S, E) (``batch_first=True``), where S is the source sequence length, B is the batch size, E is the embedding dimension.
+            - value: :math:`(S, E)` or :math:`(S, B, E)` (``batch_first=False``) or :math:`(B, S, E) (``batch_first=True``), where S is the source sequence length, B is the batch size, E is the embedding dimension.
+
+            Outputs:
+            - attn_output: :math:`(T, E)` or :math:`(T, B, E)` (``batch_first=False``) or :math:`(B, T, E) (``batch_first=True``), where T is the target sequence length, B is the batch size, E is the embedding dimension
+            - attn_output_weights :math:`(T, S)` or :math:`(B, T, S)` Optional output, not available if need_weights=False
         """
 
         is_batched = query.dim() == 3
 
-        if key_padding_mask is not None:
-            raise NotImplementedError("key_padding_mask is not supported yet")
-        # key_padding_mask = F._canonical_mask(
-        #     mask=key_padding_mask,
-        #     mask_name="key_padding_mask",
-        #     other_type=F._none_or_dtype(attn_mask),
-        #     other_name="attn_mask",
-        #     target_type=query.dtype,  # Adapted because q is complex
-        # )
-        # But
-        # F._canonical_mask raises an exception
-        # AssertionError: only bool and floating types of key_padding_mask are supported
-
-        if attn_mask is not None:
-            raise NotImplementedError("attn_mask is not supported yet")
-        # attn_mask = F._canonical_mask(
-        #     mask=attn_mask,
-        #     mask_name="attn_mask",
-        #     other_type=None,
-        #     other_name="",
-        #     target_type=query.dtype,  # Adapted because q is complex
-        #     check_other=False,
-        # )
-
         if self.batch_first and is_batched:
+            # In this case, query is (B, T, E), key is (B, S, E) and value is (B, S, E)
+
             # These steps prevent multiple transpose on the same tensors
             # for example when using self-attention
             if key is value:
@@ -494,57 +438,30 @@ class MultiheadAttention(nn.Module):
                     query, key = (x.transpose(1, 0) for x in (query, key))
                     value = key
             else:
-                query, key, value = (x.transpose(1, 0) for x in (query, key, value))
+                query, key, value = (x.transpose(1, 0) for x in (query, key, value)) # (T, B, E), (S, B, E), (S, B, E)
+   
+        attn_output, attn_output_weights = c_F.multi_head_attention_forward(
+            query=query,
+            key=key,
+            value=value,
+            embed_dim_to_check=self.embed_dim,
+            num_heads=self.num_heads,
+            q_norm=self.q_norm,
+            k_norm=self.k_norm,
+            in_proj_weight=self.in_proj_weight,
+            in_proj_bias=self.in_proj_bias,
+            dropout_p=self.dropout,
+            out_proj=self.out_proj,
+            training=self.training,
+            need_weights=need_weights,
+            average_attn_weights=average_attn_weights,
+        )
+        # attn_output is (T, E) or (T, B, E)
+        # attn_output_weights is (T, S) or (B, T, S) (already batch_first)
+        if is_batched and self.batch_first:
+            return attn_output.transpose(1, 0)
 
-        if not self._qkv_same_embed_dim:
-            attn_output, attn_output_weights = c_F.multi_head_attention_forward(
-                query,
-                key,
-                value,
-                self.embed_dim,
-                self.num_heads,
-                self.in_proj_weight,
-                self.in_proj_bias,
-                self.bias_k,
-                self.bias_v,
-                self.add_zero_attn,
-                self.dropout,
-                self.out_proj.weight,
-                self.out_proj.bias,
-                training=self.training,
-                key_padding_mask=key_padding_mask,
-                need_weights=need_weights,
-                attn_mask=attn_mask,
-                use_separate_proj_weight=True,
-                q_proj_weight=self.q_proj_weight,
-                k_proj_weight=self.k_proj_weight,
-                v_proj_weight=self.v_proj_weight,
-                average_attn_weights=average_attn_weights,
-                is_causal=is_causal,
-            )
-        else:
-            attn_output, attn_output_weights = c_F.multi_head_attention_forward(
-                query,
-                key,
-                value,
-                self.embed_dim,
-                self.num_heads,
-                self.in_proj_weight,
-                self.in_proj_bias,
-                self.bias_k,
-                self.bias_v,
-                self.add_zero_attn,
-                self.dropout,
-                self.out_proj.weight,
-                self.out_proj.bias,
-                training=self.training,
-                key_padding_mask=key_padding_mask,
-                need_weights=need_weights,
-                attn_mask=attn_mask,
-                average_attn_weights=average_attn_weights,
-                is_causal=is_causal,
-            )
-        if self.batch_first and is_batched:
-            return attn_output.transpose(1, 0), attn_output_weights
-        else:
+        if need_weights:
             return attn_output, attn_output_weights
+        else:
+            return attn_output

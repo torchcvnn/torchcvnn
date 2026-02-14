@@ -35,17 +35,25 @@ import torchcvnn.models as c_models
 def test_vit_layer():
 
     batch_size = 16
-    hidden_dim = 768
-    mlp_dim = 3072
+    embed_dim = 768
+    hidden_dim = 3072
     num_patches = 14 * 14
 
-    X = torch.randn(num_patches, batch_size, hidden_dim, dtype=torch.complex64)
+    X = torch.randn(num_patches, batch_size, embed_dim, dtype=torch.complex64)
 
-    vit_layer = c_nn.ViTLayer(num_heads=8, hidden_dim=hidden_dim, mlp_dim=mlp_dim)
+    vit_layer = c_nn.ViTLayer(num_heads=8, embed_dim=embed_dim, hidden_dim=hidden_dim)
     out = vit_layer(X)
 
     assert out.shape == X.shape
 
+class Transposer(nn.Module):
+    def __init__(self, dim0, dim1):
+        super().__init__()
+        self.dim0 = dim0
+        self.dim1 = dim1
+
+    def forward(self, x):
+        return x.transpose(self.dim0, self.dim1)
 
 def test_vit():
     batch_size = 16
@@ -53,8 +61,8 @@ def test_vit():
     num_layers = 6
     patch_size = 16
     num_heads = 8
-    hidden_dim = 32
-    mlp_dim = 4 * hidden_dim
+    embed_dim = 32
+    hidden_dim = 4 * embed_dim
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -63,27 +71,29 @@ def test_vit():
     patch_embedding = nn.Sequential(
         nn.Conv2d(
             C,
-            hidden_dim,
+            embed_dim,
             kernel_size=patch_size,
             stride=patch_size,
             dtype=torch.complex64,
         ),
-        c_nn.LayerNorm(hidden_dim),
+        c_nn.LayerNorm(embed_dim),
+        nn.Flatten(2),
+        Transposer(1, 2)
     )
-    patch_embedding = patch_embedding.to(device)
+    patch_embedding = patch_embedding.to(device) # B, C, embed_dim, H//patch_size, W//patch_size
 
     vit = c_nn.ViT(
         patch_embedding,
         num_layers=num_layers,
         num_heads=num_heads,
+        embed_dim=embed_dim,
         hidden_dim=hidden_dim,
-        mlp_dim=mlp_dim,
     )
     vit = vit.to(device)
     out = vit(X)
 
     num_patches = (H // patch_size) * (W // patch_size)
-    assert out.shape == (batch_size, num_patches, hidden_dim)
+    assert out.shape == (batch_size, num_patches, embed_dim)
 
 
 class PatchEmbedder(nn.Module):
@@ -92,7 +102,7 @@ class PatchEmbedder(nn.Module):
         self,
         image_size: Union[int, Tuple[int, int]],
         cin,
-        hidden_dim,
+        embed_dim,
         patch_size,
         norm_layer: nn.Module = c_nn.LayerNorm,
         device: torch.device = None,
@@ -109,16 +119,18 @@ class PatchEmbedder(nn.Module):
             norm_layer([cin, *image_size], **factory_kwargs),
             nn.Conv2d(
                 cin,
-                hidden_dim,
+                embed_dim,
                 kernel_size=patch_size,
                 stride=patch_size,
                 **factory_kwargs,
             ),
-            # norm_layer([hidden_dim], **factory_kwargs),
+            # norm_layer([embed_dim], **factory_kwargs),
             norm_layer(
-                [hidden_dim, image_size[0] // patch_size, image_size[1] // patch_size],
+                [embed_dim, image_size[0] // patch_size, image_size[1] // patch_size],
                 **factory_kwargs,
             ),
+            nn.Flatten(2),
+            Transposer(1, 2)
         )
 
     def forward(self, x):
@@ -135,10 +147,10 @@ def test_vit_bhl():
 
     vit_models = [("vit_b", 768)]  # , ("vit_l", 1024), ("vit_h", 1280)]
 
-    for mvit, hidden_dim in vit_models:
+    for mvit, embed_dim in vit_models:
         for patch_size in [16, 32]:
             patch_embedding = PatchEmbedder(
-                (H, W), C, hidden_dim, patch_size, c_nn.LayerNorm, device=device
+                (H, W), C, embed_dim, patch_size, c_nn.LayerNorm, device=device
             )
 
             vit = eval(f"c_models.{mvit}(patch_embedding).to(device)")
@@ -146,7 +158,7 @@ def test_vit_bhl():
             out = vit(X)
 
             num_patches = (H // patch_size) * (W // patch_size)
-            assert out.shape == (batch_size, num_patches, hidden_dim)
+            assert out.shape == (batch_size, num_patches, embed_dim)
 
 
 if __name__ == "__main__":

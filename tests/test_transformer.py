@@ -22,7 +22,6 @@
 
 # External imports
 import torch
-from torch.nn.modules.transformer import TransformerDecoder, TransformerEncoder
 
 # Local imports
 import torchcvnn.nn as c_nn
@@ -77,33 +76,31 @@ def test_multihead_scaleddotproduct():
     tgt_seq_len = 20
 
     embed_dim = 16  # multiple of nheads, so that head_dim = embed_dim // nheads
-    kdim = 12
-    vdim = 13
 
     batch_size = 32
 
     # Batch_first = False
     query = torch.rand(tgt_seq_len, batch_size, embed_dim, dtype=torch.complex64)
-    key = torch.rand(src_seq_len, batch_size, kdim, dtype=torch.complex64)
-    value = torch.rand(src_seq_len, batch_size, vdim, dtype=torch.complex64)
+    key = torch.rand(src_seq_len, batch_size, embed_dim, dtype=torch.complex64)
+    value = torch.rand(src_seq_len, batch_size, embed_dim, dtype=torch.complex64)
 
     multihead_attn = c_nn.MultiheadAttention(
-        embed_dim=embed_dim, num_heads=nheads, kdim=kdim, vdim=vdim
+        embed_dim=embed_dim, num_heads=nheads, batch_first=False
     )
-    attn_output, attn_output_weights = multihead_attn(query, key, value)
+    attn_output = multihead_attn(query, key, value, need_weights=False)
 
     assert attn_output.shape == (tgt_seq_len, batch_size, embed_dim)
 
     # Batch_first = True
     query = torch.rand(batch_size, tgt_seq_len, embed_dim, dtype=torch.complex64)
-    key = torch.rand(batch_size, src_seq_len, kdim, dtype=torch.complex64)
-    value = torch.rand(batch_size, src_seq_len, vdim, dtype=torch.complex64)
+    key = torch.rand(batch_size, src_seq_len, embed_dim, dtype=torch.complex64)
+    value = torch.rand(batch_size, src_seq_len, embed_dim, dtype=torch.complex64)
 
     multihead_attn = c_nn.MultiheadAttention(
-        embed_dim=embed_dim, num_heads=nheads, kdim=kdim, vdim=vdim, batch_first=True
+        embed_dim=embed_dim, num_heads=nheads, batch_first=True
     )
 
-    attn_output, attn_output_weights = multihead_attn(query, key, value)
+    attn_output = multihead_attn(query, key, value, need_weights=False)
 
     assert attn_output.shape == (batch_size, tgt_seq_len, embed_dim)
 
@@ -136,7 +133,7 @@ def test_transformer_encoder():
     num_features = 512
 
     encoder_layer = c_nn.TransformerEncoderLayer(d_model=num_features, nhead=nhead)
-    transformer_encoder = TransformerEncoder(encoder_layer, num_layers=4)
+    transformer_encoder = c_nn.TransformerEncoder(encoder_layer, num_layers=4)
 
     src = torch.randn((seq_len, batch_size, num_features), dtype=torch.complex64)
     out = transformer_encoder(src)
@@ -175,7 +172,7 @@ def test_transformer_decoder():
     num_features = 512
 
     decoder_layer = c_nn.TransformerDecoderLayer(d_model=num_features, nhead=nhead)
-    transformer_decoder = TransformerDecoder(decoder_layer, num_layers=4)
+    transformer_decoder = c_nn.TransformerDecoder(decoder_layer, num_layers=4)
     memory = torch.rand((src_seq_len, batch_size, num_features), dtype=torch.complex64)
     tgt = torch.rand((tgt_seq_len, batch_size, num_features), dtype=torch.complex64)
     out = transformer_decoder(tgt, memory)

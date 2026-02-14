@@ -28,11 +28,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.modules.transformer import (
-    _get_clones,
-    _get_seq_len,
-    _detect_is_causal_mask,
-    TransformerEncoder,
-    TransformerDecoder,
+    _get_clones
 )
 
 # Local imports
@@ -150,19 +146,16 @@ class TransformerEncoderLayer(nn.Module):
     def forward(
         self,
         src: torch.Tensor,
-        src_mask: Optional[torch.Tensor] = None,
-        src_key_padding_mask: Optional[torch.Tensor] = None,
-        is_causal: bool = False,
     ) -> torch.Tensor:
 
         x = src
         if self.norm_first:
             x = x + self._sa_block(
-                self.norm1(x), src_mask, src_key_padding_mask, is_causal
+                self.norm1(x)
             )
             x = x + self._ff_block(self.norm2(x))
         else:
-            x = x + self._sa_block(x, src_mask, src_key_padding_mask, is_causal)
+            x = x + self._sa_block(x)
             x = self.norm1(x)
             x = x + self._ff_block(x)
             x = self.norm2(x)
@@ -172,25 +165,91 @@ class TransformerEncoderLayer(nn.Module):
     def _sa_block(
         self,
         x: torch.Tensor,
-        attn_mask: Optional[torch.Tensor],
-        key_padding_mask: Optional[torch.Tensor],
-        is_causal: bool,
     ) -> torch.Tensor:
         x = self.self_attn(
             x,
             x,
             x,
-            attn_mask=attn_mask,
-            key_padding_mask=key_padding_mask,
-            need_weights=False,
-            is_causal=is_causal,
-        )[0]
+            need_weights=False
+        )
         x = self.dropout1(x)
         return x
 
     def _ff_block(self, x: torch.Tensor) -> torch.Tensor:
         x = self.linear2(self.dropout(self.activation(self.linear1(x))))
         return self.dropout2(x)
+
+
+class TransformerEncoder(nn.Module):
+    r"""TransformerEncoder is a stack of N encoder layers.
+
+    This class is adapted from pytorch :py:class:`torch.nn.TransformerEncoder`
+
+    This TransformerEncoder layer implements the original architecture described
+    in the `Attention Is All You Need <https://arxiv.org/abs/1706.03762>`_ paper. The
+    intent of this layer is as a reference implementation for foundational understanding
+    and thus it contains only limited features relative to newer Transformer architectures.
+    Given the fast pace of innovation in transformer-like architectures, we recommend
+    exploring this `tutorial <https://pytorch.org/tutorials/intermediate/transformer_building_blocks.html>`_
+    to build efficient layers from building blocks in core or using higher
+    level libraries from the `PyTorch Ecosystem <https://landscape.pytorch.org/>`_.
+
+    .. warning::
+        All layers in the TransformerEncoder are initialized with the same parameters.
+        It is recommended to manually initialize the layers after creating the TransformerEncoder instance.
+
+    Args:
+        encoder_layer: an instance of the TransformerEncoderLayer() class (required).
+        num_layers: the number of sub-encoder-layers in the encoder (required).
+        norm: the layer normalization component (optional).
+        enable_nested_tensor: if True, input will automatically convert to nested tensor
+            (and convert back on output). This will improve the overall performance of
+            TransformerEncoder when padding rate is high. Default: ``True`` (enabled).
+
+    Examples:
+        >>> encoder_layer = nn.TransformerEncoderLayer(d_model=512, nhead=8)
+        >>> transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=6)
+        >>> src = torch.rand(10, 32, 512)
+        >>> out = transformer_encoder(src)
+    """
+
+    __constants__ = ["norm"]
+
+    def __init__(
+        self,
+        encoder_layer: "TransformerEncoderLayer",
+        num_layers: int,
+        norm: nn.Module | None = None,
+    ) -> None:
+        super().__init__()
+        self.layers = _get_clones(encoder_layer, num_layers)
+        self.num_layers = num_layers
+        self.norm = norm
+
+    def forward(
+        self,
+        src: torch.Tensor,
+    ) -> torch.Tensor:
+        r"""Pass the input through the encoder layers in turn.
+
+        Args:
+            src: the sequence to the encoder (required).
+
+        Shape:
+            see the docs in :class:`~torch.nn.Transformer`.
+        """
+        output = src
+
+        for mod in self.layers:
+            output = mod(
+                output,
+            )
+
+        if self.norm is not None:
+            output = self.norm(output)
+
+        return output
+
 
 
 class TransformerDecoderLayer(nn.Module):
@@ -317,37 +376,12 @@ class TransformerDecoderLayer(nn.Module):
         self,
         tgt: torch.Tensor,
         memory: torch.Tensor,
-        tgt_mask: Optional[torch.Tensor] = None,
-        memory_mask: Optional[torch.Tensor] = None,
-        tgt_key_padding_mask: Optional[torch.Tensor] = None,
-        memory_key_padding_mask: Optional[torch.Tensor] = None,
-        tgt_is_causal: bool = False,
-        memory_is_causal: bool = False,
     ) -> torch.Tensor:
-        r"""Pass the inputs (and mask) through the decoder layer.
+        r"""Pass the inputs through the decoder layer.
 
         Args:
             tgt: the sequence to the decoder layer (required).
             memory: the sequence from the last layer of the encoder (required).
-            tgt_mask: the mask for the tgt sequence (optional).
-            memory_mask: the mask for the memory sequence (optional).
-            tgt_key_padding_mask: the mask for the tgt keys per batch (optional).
-            memory_key_padding_mask: the mask for the memory keys per batch (optional).
-            tgt_is_causal: If specified, applies a causal mask as ``tgt mask``.
-                Default: ``False``.
-                Warning:
-                ``tgt_is_causal`` provides a hint that ``tgt_mask`` is
-                the causal mask. Providing incorrect hints can result in
-                incorrect execution, including forward and backward
-                compatibility.
-            memory_is_causal: If specified, applies a causal mask as
-                ``memory mask``.
-                Default: ``False``.
-                Warning:
-                ``memory_is_causal`` provides a hint that
-                ``memory_mask`` is the causal mask. Providing incorrect
-                hints can result in incorrect execution, including
-                forward and backward compatibility.
 
         Shape:
             see the docs in :class:`~torch.nn.Transformer`.
@@ -357,24 +391,21 @@ class TransformerDecoderLayer(nn.Module):
         x = tgt
         if self.norm_first:
             x = x + self._sa_block(
-                self.norm1(x), tgt_mask, tgt_key_padding_mask, tgt_is_causal
+                self.norm1(x)
             )
             x = x + self._mha_block(
                 self.norm2(x),
                 memory,
-                memory_mask,
-                memory_key_padding_mask,
-                memory_is_causal,
             )
             x = x + self._ff_block(self.norm3(x))
         else:
             x = self.norm1(
-                x + self._sa_block(x, tgt_mask, tgt_key_padding_mask, tgt_is_causal)
+                x + self._sa_block(x)
             )
             x = self.norm2(
                 x
                 + self._mha_block(
-                    x, memory, memory_mask, memory_key_padding_mask, memory_is_causal
+                    x, memory
                 )
             )
             x = self.norm3(x + self._ff_block(x))
@@ -386,17 +417,11 @@ class TransformerDecoderLayer(nn.Module):
     def _sa_block(
         self,
         x: torch.Tensor,
-        attn_mask: Optional[torch.Tensor],
-        key_padding_mask: Optional[torch.Tensor],
-        is_causal: bool = False,
     ) -> torch.Tensor:
         x = self.self_attn(
             x,
             x,
             x,
-            attn_mask=attn_mask,
-            key_padding_mask=key_padding_mask,
-            is_causal=is_causal,
             need_weights=False,
         )[0]
         return self.dropout1(x)
@@ -407,17 +432,11 @@ class TransformerDecoderLayer(nn.Module):
         self,
         x: torch.Tensor,
         mem: torch.Tensor,
-        attn_mask: Optional[torch.Tensor],
-        key_padding_mask: Optional[torch.Tensor],
-        is_causal: bool = False,
     ) -> torch.Tensor:
         x = self.multihead_attn(
             x,
             mem,
             mem,
-            attn_mask=attn_mask,
-            key_padding_mask=key_padding_mask,
-            is_causal=is_causal,
             need_weights=False,
         )[0]
         return self.dropout2(x)
@@ -428,6 +447,76 @@ class TransformerDecoderLayer(nn.Module):
         x = self.linear2(self.dropout(self.activation(self.linear1(x))))
         return self.dropout3(x)
 
+class TransformerDecoder(nn.Module):
+    r"""TransformerDecoder is a stack of N decoder layers.
+
+    Adapted from :py:class:`torch.nn.TransformerDecodder`.
+
+    This TransformerDecoder layer implements the original architecture described
+    in the `Attention Is All You Need <https://arxiv.org/abs/1706.03762>`_ paper. The
+    intent of this layer is as a reference implementation for foundational understanding
+    and thus it contains only limited features relative to newer Transformer architectures.
+    Given the fast pace of innovation in transformer-like architectures, we recommend
+    exploring this `tutorial <https://pytorch.org/tutorials/intermediate/transformer_building_blocks.html>`_
+    to build efficient layers from building blocks in core or using higher
+    level libraries from the `PyTorch Ecosystem <https://landscape.pytorch.org/>`_.
+
+    .. warning::
+        All layers in the TransformerDecoder are initialized with the same parameters.
+        It is recommended to manually initialize the layers after creating the TransformerDecoder instance.
+
+    Args:
+        decoder_layer: an instance of the TransformerDecoderLayer() class (required).
+        num_layers: the number of sub-decoder-layers in the decoder (required).
+        norm: the layer normalization component (optional).
+
+    Examples:
+        >>> decoder_layer = nn.TransformerDecoderLayer(d_model=512, nhead=8)
+        >>> transformer_decoder = nn.TransformerDecoder(decoder_layer, num_layers=6)
+        >>> memory = torch.rand(10, 32, 512)
+        >>> tgt = torch.rand(20, 32, 512)
+        >>> out = transformer_decoder(tgt, memory)
+    """
+
+    __constants__ = ["norm"]
+
+    def __init__(
+        self,
+        decoder_layer: "TransformerDecoderLayer",
+        num_layers: int,
+        norm: nn.Module | None = None,
+    ) -> None:
+        super().__init__()
+        self.layers = _get_clones(decoder_layer, num_layers)
+        self.num_layers = num_layers
+        self.norm = norm
+
+    def forward(
+        self,
+        tgt: torch.Tensor,
+        memory: torch.Tensor,
+    ) -> torch.Tensor:
+        r"""Pass the inputs (and mask) through the decoder layer in turn.
+
+        Args:
+            tgt: the sequence to the decoder (required).
+            memory: the sequence from the last layer of the encoder (required).
+
+        Shape:
+            see the docs in :class:`~torch.nn.Transformer`.
+        """
+        output = tgt
+
+        for mod in self.layers:
+            output = mod(
+                output,
+                memory
+            )
+
+        if self.norm is not None:
+            output = self.norm(output)
+
+        return output
 
 class Transformer(nn.Module):
     r"""A transformer model.
@@ -544,30 +633,12 @@ class Transformer(nn.Module):
         self,
         src: torch.Tensor,
         tgt: torch.Tensor,
-        src_mask: Optional[torch.Tensor] = None,
-        tgt_mask: Optional[torch.Tensor] = None,
-        memory_mask: Optional[torch.Tensor] = None,
-        src_key_padding_mask: Optional[torch.Tensor] = None,
-        tgt_key_padding_mask: Optional[torch.Tensor] = None,
-        memory_key_padding_mask: Optional[torch.Tensor] = None,
-        src_is_causal: Optional[bool] = None,
-        tgt_is_causal: Optional[bool] = None,
-        memory_is_causal: bool = False,
     ) -> torch.Tensor:
         memory = self.encoder(
-            src,
-            mask=src_mask,
-            src_key_padding_mask=src_key_padding_mask,
-            is_causal=src_is_causal,
+            src
         )
         output = self.decoder(
             tgt,
             memory,
-            tgt_mask=tgt_mask,
-            memory_mask=memory_mask,
-            tgt_key_padding_mask=tgt_key_padding_mask,
-            memory_key_padding_mask=memory_key_padding_mask,
-            tgt_is_causal=tgt_is_causal,
-            memory_is_causal=memory_is_causal,
         )
         return output
