@@ -39,6 +39,26 @@ import torchcvnn.nn.modules.batchnorm as bn
 _shape_t = Union[int, List[int], Size]
 
 
+def _validate_normalized_shape_input(
+    z: torch.Tensor, normalized_shape: tuple
+) -> None:
+    """Validate that input tensor dimensions match the normalized_shape."""
+    normalized_ndim = len(normalized_shape)
+    if z.dim() < normalized_ndim:
+        raise RuntimeError(
+            f"Given normalized_shape={list(normalized_shape)}, "
+            f"expected input with at least {normalized_ndim} dimensions, "
+            f"but got input with {z.dim()} dimensions"
+        )
+    input_shape = z.shape[-normalized_ndim:]
+    if input_shape != torch.Size(normalized_shape):
+        raise RuntimeError(
+            f"Given normalized_shape={list(normalized_shape)}, "
+            f"expected input with shape [*, {', '.join(str(s) for s in normalized_shape)}], "
+            f"but got input of size {list(z.shape)}"
+        )
+
+
 class LayerNorm(nn.Module):
     r"""
     Implementation of the torch.nn.LayerNorm for complex numbers.
@@ -106,6 +126,8 @@ class LayerNorm(nn.Module):
         Performs the forward pass
         """
         # z: *, normalized_shape[0] , ..., normalized_shape[-1]
+        _validate_normalized_shape_input(z, self.normalized_shape)
+
         z_ravel = z.view(-1, self.combined_dimensions).transpose(0, 1)
 
         # Compute the means
@@ -202,6 +224,8 @@ class RMSNorm(nn.Module):
         Performs the forward pass
         """
         # z: *, normalized_shape[0] , ..., normalized_shape[-1]
+        _validate_normalized_shape_input(z, self.normalized_shape)
+
         z_ravel = z.view(-1, self.combined_dimensions).transpose(0, 1)
 
         z_ravel = torch.view_as_real(z_ravel)  # combined_dimensions,num_samples, 2

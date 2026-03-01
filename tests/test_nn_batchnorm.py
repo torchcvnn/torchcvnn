@@ -128,9 +128,40 @@ def test_batchnorm2d():
     assert torch.allclose(covs, id_cov, atol=1e-3)
 
 
+def test_batchnorm_input_validation():
+    """Test that BatchNorm layers raise errors for mismatched input dimensions."""
+    # Test BatchNorm1d with wrong number of channels
+    m = c_nn.BatchNorm1d(16)
+    x = torch.randn((20, 8), dtype=torch.complex64)  # 8 channels instead of 16
+    try:
+        m(x)
+        assert False, "Expected RuntimeError"
+    except RuntimeError as e:
+        assert "Expected input with 16 channels, but got input with 8 channels" in str(e)
+
+    # Test BatchNorm2d with wrong number of channels
+    m = c_nn.BatchNorm2d(16)
+    x = torch.randn((20, 8, 50, 100), dtype=torch.complex64)  # 8 channels instead of 16
+    try:
+        m(x)
+        assert False, "Expected RuntimeError"
+    except RuntimeError as e:
+        assert "Expected input with 16 channels, but got input with 8 channels" in str(e)
+
+    # Test BatchNorm with 1D input (too few dimensions)
+    m = c_nn.BatchNorm1d(16)
+    x = torch.randn((16,), dtype=torch.complex64)
+    try:
+        m(x)
+        assert False, "Expected RuntimeError"
+    except RuntimeError as e:
+        assert "Expected at least 2D input" in str(e)
+
+
 if __name__ == "__main__":
     test_inv()
     test_inv_sqrt()
     # time_inv_sqrt()
     test_batchnorm1d()
     test_batchnorm2d()
+    test_batchnorm_input_validation()
