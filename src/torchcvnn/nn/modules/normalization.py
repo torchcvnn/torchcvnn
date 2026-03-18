@@ -134,12 +134,14 @@ class LayerNorm(nn.Module):
 
         # Shift by beta and scale by gamma
         # weight is (num_features, 2, 2) real valued
-        outz = torch.bmm(self.weight, outz)  # combined_dimensions, 2, num_samples
+        if self.elementwise_affine:
+            outz = torch.bmm(self.weight, outz)  # combined_dimensions, 2, num_samples
         outz = outz.transpose(1, 2).contiguous()  # combined_dimensions, num_samples, 2
         outz = torch.view_as_complex(outz)  # combined_dimensions, num_samples
 
         # bias is (C, ) complex dtype
-        outz += self.bias.view(-1, 1)
+        if getattr(self, "bias", None) is not None:
+            outz += self.bias.view(-1, 1)
 
         outz = outz.transpose(0, 1).contiguous()  # num_samples, comnbined_dimensions
 
@@ -147,6 +149,114 @@ class LayerNorm(nn.Module):
 
         return outz
 
+class GroupNorm(nn.Module):
+    r"""
+    Implementation of Group Normalization for complex numbers.
+    
+    Arguments:
+        num_groups (int): number of groups to separate the channels into
+        num_channels (int): number of channels expected in input
+        eps (float): a value added to the denominator for numerical stability. Default: 1e-5
+        affine (bool): a boolean value that when set to `True`, this module has learnable affine parameters. Default: `True`
+    """
+
+    def __init__(
+        self,
+        num_groups: int,
+        num_channels: int,
+        eps: float = 1e-5,
+        affine: bool = True,
+        device: torch.device = None,
+        dtype: torch.dtype = torch.complex64,
+    ) -> None:
+        super().__init__()
+        if num_channels % num_groups != 0:
+            raise ValueError('num_channels must be divisible by num_groups')
+            
+        self.num_groups = num_groups
+        self.num_channels = num_channels
+        self.eps = eps
+        self.affine = affine
+
+        if self.affine:
+            # Weights are per channel (C), not per group
+            self.weight = torch.nn.parameter.Parameter(
+                torch.empty((num_channels, 2, 2), device=device)
+            )
+            self.bias = torch.nn.parameter.Parameter(
+                torch.empty((num_channels,), device=device, dtype=dtype)
+            )
+        else:
+            self.register_parameter("weight", None)
+            self.register_parameter("bias", None)
+        
+        self.reset_parameters()
+
+    def reset_parameters(self) -> None:
+        if self.affine:
+            with torch.no_grad():
+                init.zeros_(self.weight)
+                self.weight.view(-1, 2, 2)[:, 0, 0] = 1 / math.sqrt(2.0)
+                self.weight.view(-1, 2, 2)[:, 1, 1] = 1 / math.sqrt(2.0)
+                init.zeros_(self.bias)
+
+    def forward(self, z: torch.Tensor) -> torch.Tensor:
+        # z: N, C, * (spatial dims)
+        N, C = z.shape[:2]
+        if C != self.num_channels:
+             raise ValueError(f"Expected {self.num_channels} channels, got {C}")
+             
+        # Reshape to separate groups: (N, G, C//G, *)
+        z_grouped = z.view(N, self.num_groups, C // self.num_groups, *z.shape[2:])
+        
+        # Flatten for statistics: 
+        # Feature dim = N * G
+        # Sample dim = (C//G) * Spatial
+        z_flat = z_grouped.view(N * self.num_groups, -1)
+        
+        # 1. Whitening (Group Norm logic)
+        mus = z_flat.mean(dim=-1) # (N*G,)
+        
+        z_centered = z_flat - mus.unsqueeze(-1)
+        z_centered_real = torch.view_as_real(z_centered) # (N*G, Sample, 2)
+        
+        covs = bn.batch_cov(z_centered_real, centered=True) # (N*G, 2, 2)
+        
+        invsqrt_covs = bn.inv_sqrt_2x2(
+            covs + self.eps * torch.eye(2, device=covs.device)
+        ) # (N*G, 2, 2)
+        
+        # Apply whitening
+        outz = torch.bmm(invsqrt_covs, z_centered_real.transpose(1, 2)) # (N*G, 2, Sample)
+        outz = outz.transpose(1, 2).contiguous() # (N*G, Sample, 2)
+        outz = torch.view_as_complex(outz) # (N*G, Sample)
+        
+        # Reshape back to (N, C, *) to prepare for Affine (which is per-channel)
+        outz = outz.view(z.shape) 
+        
+        # 2. Affine Transformation (if enabled)
+        if self.affine:
+            # We need to apply weights (C, 2, 2) to input (N, C, *)
+            # Move C to front to use batch matmul: (C, N, *)
+            # Flatten tail: (C, N*Spatial)
+            outz_permuted = outz.transpose(0, 1).reshape(C, -1) 
+            outz_real = torch.view_as_real(outz_permuted) # (C, N*Spatial, 2)
+            
+            # Apply Gamma
+            # weight: (C, 2, 2)
+            # input: (C, N*Spatial, 2) -> transpose to (C, 2, N*Spatial)
+            outz_affine = torch.bmm(self.weight, outz_real.transpose(1, 2))
+            outz_affine = outz_affine.transpose(1, 2).contiguous() # (C, N*Spatial, 2)
+            outz_affine = torch.view_as_complex(outz_affine) # (C, N*Spatial)
+            
+            # Apply Beta (bias)
+            outz_affine = outz_affine + self.bias.unsqueeze(-1)
+            
+            # Reshape back to (C, N, *) then (N, C, *)
+            outz_affine = outz_affine.view(C, N, *z.shape[2:]).transpose(0, 1)
+            return outz_affine
+        
+        return outz
 
 class RMSNorm(nn.Module):
     r"""
@@ -223,7 +333,9 @@ class RMSNorm(nn.Module):
 
         # Scale by gamma
         # weight is (num_features, 2, 2) real valued
-        outz = torch.bmm(self.weight, outz)  # combined_dimensions, 2, num_samples
+        if self.elementwise_affine:
+            outz = torch.bmm(self.weight, outz)  # combined_dimensions, 2, num_samples
+
         outz = outz.transpose(1, 2).contiguous()  # combined_dimensions, num_samples, 2
         outz = torch.view_as_complex(outz)  # combined_dimensions, num_samples
 
