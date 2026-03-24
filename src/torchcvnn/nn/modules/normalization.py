@@ -150,6 +150,10 @@ class LayerNorm(nn.Module):
 class GroupNorm(nn.Module):
     r"""
     Implementation of Group Normalization for complex numbers.
+
+    This class is adapted from pytorch :py:class:`torch.nn.GroupNorm`. 
+
+    It implements `Group Normalization <https://arxiv.org/abs/1803.08494>`_
     
     Arguments:
         num_groups (int): number of groups to separate the channels into
