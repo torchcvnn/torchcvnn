@@ -332,7 +332,6 @@ class RMSNorm(nn.Module):
         # Scale by gamma
         # weight is (num_features, 2, 2) real valued
         outz = torch.bmm(self.weight, outz)  # combined_dimensions, 2, num_samples
-
         outz = outz.transpose(1, 2).contiguous()  # combined_dimensions, num_samples, 2
         outz = torch.view_as_complex(outz)  # combined_dimensions, num_samples
 
