@@ -139,13 +139,21 @@ def test_rmsnorm():
     embedding = torch.randn(
         (batch, sentence_length, embedding_dim), dtype=torch.complex64
     )
-    rms_norm = c_nn.RMSNorm(embedding_dim)
+    rms_norm = c_nn.RMSNorm(embedding_dim, elementwise_affine=False)
     rms_norm.eval()
 
     # Activate module
     out = rms_norm(embedding)
 
     assert out.shape == embedding.shape  # batch x sentence_length x embedding_dim
+
+    # Verify standard deviation (uncentered) matches for RMSNorm
+    out_transposed = out.view(-1, embedding_dim).transpose(0, 1)
+    out_real = torch.view_as_real(out_transposed)
+    covs = bn.batch_cov(out_real, centered=True)  # uncentered second moment
+    id_cov = torch.eye(2).tile(embedding_dim, 1, 1) # RMSNorm scales to 1 directly
+
+    assert torch.allclose(covs, id_cov, atol=1e-3)
 
     ###############
     # Image Example
@@ -155,7 +163,7 @@ def test_rmsnorm():
 
     # Normalize over the last three dimensions (i.e. the channel and spatial dimensions)
     # as shown in the image below
-    rms_norm = c_nn.RMSNorm([C, H, W])
+    rms_norm = c_nn.RMSNorm([C, H, W], elementwise_affine=False)
     rms_norm.eval()
 
     # Activate module
