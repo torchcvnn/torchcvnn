@@ -134,14 +134,12 @@ class LayerNorm(nn.Module):
 
         # Shift by beta and scale by gamma
         # weight is (num_features, 2, 2) real valued
-        if self.elementwise_affine:
-            outz = torch.bmm(self.weight, outz)  # combined_dimensions, 2, num_samples
+        outz = torch.bmm(self.weight, outz)  # combined_dimensions, 2, num_samples
         outz = outz.transpose(1, 2).contiguous()  # combined_dimensions, num_samples, 2
         outz = torch.view_as_complex(outz)  # combined_dimensions, num_samples
 
         # bias is (C, ) complex dtype
-        if getattr(self, "bias", None) is not None:
-            outz += self.bias.view(-1, 1)
+        outz += self.bias.view(-1, 1)
 
         outz = outz.transpose(0, 1).contiguous()  # num_samples, comnbined_dimensions
 
