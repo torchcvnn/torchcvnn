@@ -445,6 +445,118 @@
         <span class="k">return</span> <span class="n">outz</span></div>
 
 
+<span class="k">class</span><span class="w"> </span><span class="nc">GroupNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of Group Normalization for complex numbers.</span>
+
+<span class="sd">    This class is adapted from pytorch :py:class:`torch.nn.GroupNorm`. </span>
+
+<span class="sd">    It implements `Group Normalization &lt;https://arxiv.org/abs/1803.08494&gt;`_</span>
+<span class="sd">    </span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        num_groups (int): number of groups to separate the channels into</span>
+<span class="sd">        num_channels (int): number of channels expected in input</span>
+<span class="sd">        eps (float): a value added to the denominator for numerical stability. Default: 1e-5</span>
+<span class="sd">        affine (bool): a boolean value that when set to `True`, this module has learnable affine parameters. Default: `True`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_groups</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">,</span>
+        <span class="n">affine</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">num_channels</span> <span class="o">%</span> <span class="n">num_groups</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;num_channels must be divisible by num_groups&#39;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_groups</span> <span class="o">=</span> <span class="n">num_groups</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span> <span class="o">=</span> <span class="n">num_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">affine</span> <span class="o">=</span> <span class="n">affine</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">:</span>
+            <span class="c1"># Weights are per channel (C), not per group</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">num_channels</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">num_channels</span><span class="p">,),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="s2">&quot;bias&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_parameters</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+                <span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="c1"># z: N, C, * (spatial dims)</span>
+        <span class="n">N</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">C</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="p">:</span>
+             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="si">}</span><span class="s2"> channels, got </span><span class="si">{</span><span class="n">C</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+             
+        <span class="c1"># Reshape to separate groups: (N, G, C//G, *)</span>
+        <span class="n">z_grouped</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_groups</span><span class="p">,</span> <span class="n">C</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_groups</span><span class="p">,</span> <span class="o">*</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+        
+        <span class="c1"># Flatten for statistics: </span>
+        <span class="c1"># Feature dim = N * G</span>
+        <span class="c1"># Sample dim = (C//G) * Spatial</span>
+        <span class="n">z_flat</span> <span class="o">=</span> <span class="n">z_grouped</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_groups</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># 1. Whitening (Group Norm logic)</span>
+        <span class="n">mus</span> <span class="o">=</span> <span class="n">z_flat</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># (N*G,)</span>
+        
+        <span class="n">z_centered</span> <span class="o">=</span> <span class="n">z_flat</span> <span class="o">-</span> <span class="n">mus</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">z_centered_real</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_real</span><span class="p">(</span><span class="n">z_centered</span><span class="p">)</span> <span class="c1"># (N*G, Sample, 2)</span>
+        
+        <span class="n">covs</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">batch_cov</span><span class="p">(</span><span class="n">z_centered_real</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># (N*G, 2, 2)</span>
+        
+        <span class="n">invsqrt_covs</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inv_sqrt_2x2</span><span class="p">(</span>
+            <span class="n">covs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">covs</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="p">)</span> <span class="c1"># (N*G, 2, 2)</span>
+        
+        <span class="c1"># Apply whitening</span>
+        <span class="n">outz</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">invsqrt_covs</span><span class="p">,</span> <span class="n">z_centered_real</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="c1"># (N*G, 2, Sample)</span>
+        <span class="n">outz</span> <span class="o">=</span> <span class="n">outz</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span> <span class="c1"># (N*G, Sample, 2)</span>
+        <span class="n">outz</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_complex</span><span class="p">(</span><span class="n">outz</span><span class="p">)</span> <span class="c1"># (N*G, Sample)</span>
+        
+        <span class="c1"># Reshape back to (N, C, *) to prepare for Affine (which is per-channel)</span>
+        <span class="n">outz</span> <span class="o">=</span> <span class="n">outz</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> 
+        
+        <span class="c1"># 2. Affine Transformation (if enabled)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">:</span>
+            <span class="c1"># We need to apply weights (C, 2, 2) to input (N, C, *)</span>
+            <span class="c1"># Move C to front to use batch matmul: (C, N, *)</span>
+            <span class="c1"># Flatten tail: (C, N*Spatial)</span>
+            <span class="n">outz_permuted</span> <span class="o">=</span> <span class="n">outz</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+            <span class="n">outz_real</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_real</span><span class="p">(</span><span class="n">outz_permuted</span><span class="p">)</span> <span class="c1"># (C, N*Spatial, 2)</span>
+            
+            <span class="c1"># Apply Gamma</span>
+            <span class="c1"># weight: (C, 2, 2)</span>
+            <span class="c1"># input: (C, N*Spatial, 2) -&gt; transpose to (C, 2, N*Spatial)</span>
+            <span class="n">outz_affine</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">outz_real</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">outz_affine</span> <span class="o">=</span> <span class="n">outz_affine</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span> <span class="c1"># (C, N*Spatial, 2)</span>
+            <span class="n">outz_affine</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_complex</span><span class="p">(</span><span class="n">outz_affine</span><span class="p">)</span> <span class="c1"># (C, N*Spatial)</span>
+            
+            <span class="c1"># Apply Beta (bias)</span>
+            <span class="n">outz_affine</span> <span class="o">=</span> <span class="n">outz_affine</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            
+            <span class="c1"># Reshape back to (C, N, *) then (N, C, *)</span>
+            <span class="n">outz_affine</span> <span class="o">=</span> <span class="n">outz_affine</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="o">*</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">outz_affine</span>
+        
+        <span class="k">return</span> <span class="n">outz</span>
 
 <div class="viewcode-block" id="RMSNorm">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.RMSNorm.html#torchcvnn.nn.RMSNorm">[docs]</a>
