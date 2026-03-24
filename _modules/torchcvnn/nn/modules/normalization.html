@@ -241,6 +241,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.BatchNorm1d.html">torchcvnn.nn.BatchNorm1d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.LayerNorm.html">torchcvnn.nn.LayerNorm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.RMSNorm.html">torchcvnn.nn.RMSNorm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.GroupNorm.html">torchcvnn.nn.GroupNorm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.Transformer.html">torchcvnn.nn.Transformer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.TransformerEncoderLayer.html">torchcvnn.nn.TransformerEncoderLayer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../modules/_autosummary/torchcvnn.nn.TransformerDecoderLayer.html">torchcvnn.nn.TransformerDecoderLayer</a></li>
@@ -447,6 +448,8 @@
         <span class="k">return</span> <span class="n">outz</span></div>
 
 
+<div class="viewcode-block" id="GroupNorm">
+<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.GroupNorm.html#torchcvnn.nn.GroupNorm">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GroupNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implementation of Group Normalization for complex numbers.</span>
@@ -462,6 +465,8 @@
 <span class="sd">        affine (bool): a boolean value that when set to `True`, this module has learnable affine parameters. Default: `True`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="GroupNorm.__init__">
+<a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.GroupNorm.html#torchcvnn.nn.GroupNorm.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">num_groups</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -492,7 +497,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="s2">&quot;bias&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_parameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_parameters</span><span class="p">()</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reset_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">:</span>
@@ -558,7 +564,8 @@
             <span class="n">outz_affine</span> <span class="o">=</span> <span class="n">outz_affine</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="o">*</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">outz_affine</span>
         
-        <span class="k">return</span> <span class="n">outz</span>
+        <span class="k">return</span> <span class="n">outz</span></div>
+
 
 <div class="viewcode-block" id="RMSNorm">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.RMSNorm.html#torchcvnn.nn.RMSNorm">[docs]</a>

@@ -1,0 +1,82 @@
+﻿torchcvnn.nn.GroupNorm
+======================
+
+.. currentmodule:: torchcvnn.nn
+
+.. autoclass:: GroupNorm
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~GroupNorm.__init__
+      ~GroupNorm.add_module
+      ~GroupNorm.apply
+      ~GroupNorm.bfloat16
+      ~GroupNorm.buffers
+      ~GroupNorm.children
+      ~GroupNorm.compile
+      ~GroupNorm.cpu
+      ~GroupNorm.cuda
+      ~GroupNorm.double
+      ~GroupNorm.eval
+      ~GroupNorm.extra_repr
+      ~GroupNorm.float
+      ~GroupNorm.forward
+      ~GroupNorm.get_buffer
+      ~GroupNorm.get_extra_state
+      ~GroupNorm.get_parameter
+      ~GroupNorm.get_submodule
+      ~GroupNorm.half
+      ~GroupNorm.ipu
+      ~GroupNorm.load_state_dict
+      ~GroupNorm.modules
+      ~GroupNorm.mtia
+      ~GroupNorm.named_buffers
+      ~GroupNorm.named_children
+      ~GroupNorm.named_modules
+      ~GroupNorm.named_parameters
+      ~GroupNorm.parameters
+      ~GroupNorm.register_backward_hook
+      ~GroupNorm.register_buffer
+      ~GroupNorm.register_forward_hook
+      ~GroupNorm.register_forward_pre_hook
+      ~GroupNorm.register_full_backward_hook
+      ~GroupNorm.register_full_backward_pre_hook
+      ~GroupNorm.register_load_state_dict_post_hook
+      ~GroupNorm.register_load_state_dict_pre_hook
+      ~GroupNorm.register_module
+      ~GroupNorm.register_parameter
+      ~GroupNorm.register_state_dict_post_hook
+      ~GroupNorm.register_state_dict_pre_hook
+      ~GroupNorm.requires_grad_
+      ~GroupNorm.reset_parameters
+      ~GroupNorm.set_extra_state
+      ~GroupNorm.set_submodule
+      ~GroupNorm.share_memory
+      ~GroupNorm.state_dict
+      ~GroupNorm.to
+      ~GroupNorm.to_empty
+      ~GroupNorm.train
+      ~GroupNorm.type
+      ~GroupNorm.xpu
+      ~GroupNorm.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~GroupNorm.T_destination
+      ~GroupNorm.call_super_init
+      ~GroupNorm.dump_patches
+      ~GroupNorm.training
+   
+   

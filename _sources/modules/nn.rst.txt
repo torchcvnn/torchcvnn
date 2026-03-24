@@ -85,6 +85,7 @@ Normalization layers
    BatchNorm1d
    LayerNorm
    RMSNorm
+   GroupNorm
 
 Transformer layers
 ------------------

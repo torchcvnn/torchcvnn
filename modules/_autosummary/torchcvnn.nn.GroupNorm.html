@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="torchcvnn.nn.zLeakyReLU" href="torchcvnn.nn.zLeakyReLU.html"><link rel="prev" title="torchcvnn.nn.modReLU" href="torchcvnn.nn.modReLU.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="torchcvnn.nn.Transformer" href="torchcvnn.nn.Transformer.html"><link rel="prev" title="torchcvnn.nn.RMSNorm" href="torchcvnn.nn.RMSNorm.html">
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
-        <title>torchcvnn.nn.zAbsReLU - torchcvnn 0.10.0 documentation</title>
+        <title>torchcvnn.nn.GroupNorm - torchcvnn 0.10.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -234,7 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.Cardioid.html">torchcvnn.nn.Cardioid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.Mod.html">torchcvnn.nn.Mod</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.modReLU.html">torchcvnn.nn.modReLU</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">torchcvnn.nn.zAbsReLU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.zAbsReLU.html">torchcvnn.nn.zAbsReLU</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.zLeakyReLU.html">torchcvnn.nn.zLeakyReLU</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.zReLU.html">torchcvnn.nn.zReLU</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.MultiheadAttention.html">torchcvnn.nn.MultiheadAttention</a></li>
@@ -242,7 +242,7 @@
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.BatchNorm1d.html">torchcvnn.nn.BatchNorm1d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.LayerNorm.html">torchcvnn.nn.LayerNorm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.RMSNorm.html">torchcvnn.nn.RMSNorm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.GroupNorm.html">torchcvnn.nn.GroupNorm</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">torchcvnn.nn.GroupNorm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.Transformer.html">torchcvnn.nn.Transformer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.TransformerEncoderLayer.html">torchcvnn.nn.TransformerEncoderLayer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="torchcvnn.nn.TransformerDecoderLayer.html">torchcvnn.nn.TransformerDecoderLayer</a></li>
@@ -279,12 +279,12 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="https://github.com/torchcvnn/torchcvnn/blob/main/docs/source/modules/_autosummary/torchcvnn.nn.zAbsReLU.rst?plain=true" title="View this page">
+  <a class="muted-link" href="https://github.com/torchcvnn/torchcvnn/blob/main/docs/source/modules/_autosummary/torchcvnn.nn.GroupNorm.rst?plain=true" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
 </div><div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/torchcvnn/torchcvnn/edit/main/docs/source/modules/_autosummary/torchcvnn.nn.zAbsReLU.rst" rel="edit" title="Edit this page">
+  <a class="muted-link" href="https://github.com/torchcvnn/torchcvnn/edit/main/docs/source/modules/_autosummary/torchcvnn.nn.GroupNorm.rst" rel="edit" title="Edit this page">
     <svg><use href="#svg-pencil"></use></svg>
     <span class="visually-hidden">Edit this page</span>
   </a>
@@ -301,18 +301,27 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="torchcvnn-nn-zabsrelu">
-<h1>torchcvnn.nn.zAbsReLU<a class="headerlink" href="#torchcvnn-nn-zabsrelu" title="Link to this heading">¶</a></h1>
+          <section id="torchcvnn-nn-groupnorm">
+<h1>torchcvnn.nn.GroupNorm<a class="headerlink" href="#torchcvnn-nn-groupnorm" title="Link to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="torchcvnn.nn.zAbsReLU">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.</span></span><span class="sig-name descname"><span class="pre">zAbsReLU</span></span><a class="reference internal" href="../../_modules/torchcvnn/nn/modules/activation.html#zAbsReLU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.zAbsReLU" title="Link to this definition">¶</a></dt>
-<dd><p>Applies a zAbsReLU</p>
-<p><span class="math notranslate nohighlight">\(zAbsReLU(z) = \begin{cases} z &amp; \mbox{if } |z| \geq a\\ 0 &amp; \mbox{otherwise}  \end{cases}\)</span></p>
-<p>This cancels all the complex plane in the circle of radius <span class="math notranslate nohighlight">\(a\)</span>, where <span class="math notranslate nohighlight">\(a\)</span> is
-trainable.</p>
+<dt class="sig sig-object py" id="torchcvnn.nn.GroupNorm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchcvnn.nn.</span></span><span class="sig-name descname"><span class="pre">GroupNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.11)"><span class="pre">device</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.11)"><span class="pre">dtype</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">torch.complex64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/nn/modules/normalization.html#GroupNorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.GroupNorm" title="Link to this definition">¶</a></dt>
+<dd><p>Implementation of Group Normalization for complex numbers.</p>
+<p>This class is adapted from pytorch <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.GroupNorm.html#torch.nn.GroupNorm" title="(in PyTorch v2.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.GroupNorm</span></code></a>.</p>
+<p>It implements <a class="reference external" href="https://arxiv.org/abs/1803.08494">Group Normalization</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – number of groups to separate the channels into</p></li>
+<li><p><strong>num_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – number of channels expected in input</p></li>
+<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – a value added to the denominator for numerical stability. Default: 1e-5</p></li>
+<li><p><strong>affine</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – a boolean value that when set to <cite>True</cite>, this module has learnable affine parameters. Default: <cite>True</cite></p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="torchcvnn.nn.zAbsReLU.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchcvnn/nn/modules/activation.html#zAbsReLU.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.zAbsReLU.__init__" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchcvnn.nn.GroupNorm.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.11)"><span class="pre">device</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.11)"><span class="pre">dtype</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">torch.complex64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/torchcvnn/nn/modules/normalization.html#GroupNorm.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchcvnn.nn.GroupNorm.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize internal Module state, shared by both nn.Module and ScriptModule.</p>
 </dd></dl>
 
@@ -320,7 +329,7 @@ trainable.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.nn.zAbsReLU.__init__" title="torchcvnn.nn.zAbsReLU.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#torchcvnn.nn.GroupNorm.__init__" title="torchcvnn.nn.GroupNorm.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(num_groups, num_channels[, eps, ...])</p></td>
 <td><p>Initialize internal Module state, shared by both nn.Module and ScriptModule.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_module</span></code>(name, module)</p></td>
@@ -360,7 +369,7 @@ trainable.</p>
 <td><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">float</span></code> datatype.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code>(z)</p></td>
-<td><p>Performs the forward pass.</p></td>
+<td><p>Define the computation performed at every call.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_buffer</span></code>(target)</p></td>
 <td><p>Return the buffer given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throw an error.</p></td>
@@ -443,34 +452,37 @@ trainable.</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">requires_grad_</span></code>([requires_grad])</p></td>
 <td><p>Change if autograd should record operations on parameters in this module.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_extra_state</span></code>(state)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_parameters</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_extra_state</span></code>(state)</p></td>
 <td><p>Set extra state contained in the loaded <cite>state_dict</cite>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_submodule</span></code>(target, module[, strict])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_submodule</span></code>(target, module[, strict])</p></td>
 <td><p>Set the submodule given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throw an error.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">share_memory</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">share_memory</span></code>()</p></td>
 <td><p>See <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.Tensor.share_memory_.html#torch.Tensor.share_memory_" title="(in PyTorch v2.11)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.share_memory_()</span></code></a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code>(*args[, destination, prefix, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code>(*args[, destination, prefix, ...])</p></td>
 <td><p>Return a dictionary containing references to the whole state of the module.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to</span></code>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to</span></code>(*args, **kwargs)</p></td>
 <td><p>Move and/or cast the parameters and buffers.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_empty</span></code>(*, device[, recurse])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_empty</span></code>(*, device[, recurse])</p></td>
 <td><p>Move the parameters and buffers to the specified device without copying storage.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code>([mode])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code>([mode])</p></td>
 <td><p>Set the module in training mode.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code>(dst_type)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code>(dst_type)</p></td>
 <td><p>Casts all parameters and buffers to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dst_type</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">xpu</span></code>([device])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">xpu</span></code>([device])</p></td>
 <td><p>Move all model parameters and buffers to the XPU.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">zero_grad</span></code>([set_to_none])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">zero_grad</span></code>([set_to_none])</p></td>
 <td><p>Reset gradients of all model parameters.</p></td>
 </tr>
 </tbody>
@@ -504,23 +516,23 @@ trainable.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="torchcvnn.nn.zLeakyReLU.html">
+          <a class="next-page" href="torchcvnn.nn.Transformer.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">torchcvnn.nn.zLeakyReLU</div>
+                <div class="title">torchcvnn.nn.Transformer</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="torchcvnn.nn.modReLU.html">
+          <a class="prev-page" href="torchcvnn.nn.RMSNorm.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">torchcvnn.nn.modReLU</div>
+                <div class="title">torchcvnn.nn.RMSNorm</div>
                 
               </div>
             </a>
@@ -561,9 +573,9 @@ trainable.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">torchcvnn.nn.zAbsReLU</a><ul>
-<li><a class="reference internal" href="#torchcvnn.nn.zAbsReLU"><code class="docutils literal notranslate"><span class="pre">zAbsReLU</span></code></a><ul>
-<li><a class="reference internal" href="#torchcvnn.nn.zAbsReLU.__init__"><code class="docutils literal notranslate"><span class="pre">zAbsReLU.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#">torchcvnn.nn.GroupNorm</a><ul>
+<li><a class="reference internal" href="#torchcvnn.nn.GroupNorm"><code class="docutils literal notranslate"><span class="pre">GroupNorm</span></code></a><ul>
+<li><a class="reference internal" href="#torchcvnn.nn.GroupNorm.__init__"><code class="docutils literal notranslate"><span class="pre">GroupNorm.__init__()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -583,6 +595,5 @@ trainable.</p>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>
