@@ -431,12 +431,14 @@
 
         <span class="c1"># Shift by beta and scale by gamma</span>
         <span class="c1"># weight is (num_features, 2, 2) real valued</span>
-        <span class="n">outz</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">outz</span><span class="p">)</span>  <span class="c1"># combined_dimensions, 2, num_samples</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">elementwise_affine</span><span class="p">:</span>
+            <span class="n">outz</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">outz</span><span class="p">)</span>  <span class="c1"># combined_dimensions, 2, num_samples</span>
         <span class="n">outz</span> <span class="o">=</span> <span class="n">outz</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>  <span class="c1"># combined_dimensions, num_samples, 2</span>
         <span class="n">outz</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_complex</span><span class="p">(</span><span class="n">outz</span><span class="p">)</span>  <span class="c1"># combined_dimensions, num_samples</span>
 
         <span class="c1"># bias is (C, ) complex dtype</span>
-        <span class="n">outz</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;bias&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">outz</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="n">outz</span> <span class="o">=</span> <span class="n">outz</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>  <span class="c1"># num_samples, comnbined_dimensions</span>
 
@@ -638,7 +640,8 @@
 
         <span class="c1"># Scale by gamma</span>
         <span class="c1"># weight is (num_features, 2, 2) real valued</span>
-        <span class="n">outz</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">outz</span><span class="p">)</span>  <span class="c1"># combined_dimensions, 2, num_samples</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">elementwise_affine</span><span class="p">:</span>
+            <span class="n">outz</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">outz</span><span class="p">)</span>  <span class="c1"># combined_dimensions, 2, num_samples</span>
         <span class="n">outz</span> <span class="o">=</span> <span class="n">outz</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>  <span class="c1"># combined_dimensions, num_samples, 2</span>
         <span class="n">outz</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_complex</span><span class="p">(</span><span class="n">outz</span><span class="p">)</span>  <span class="c1"># combined_dimensions, num_samples</span>
 
