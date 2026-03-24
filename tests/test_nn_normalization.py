@@ -163,8 +163,60 @@ def test_rmsnorm():
 
     assert out.shape == x.shape  # N, C, H, W
 
+def test_groupnorm():
+    #############
+    # NLP Example
+    batch, sentence_length, embedding_dim = 20, 5, 10
+    # In PyTorch 1D sequence data for GroupNorm is formatted as (N, C, L)
+    embedding = torch.randn(
+        (batch, embedding_dim, sentence_length), dtype=torch.complex64
+    )
+    num_groups = 5
+    group_norm = c_nn.GroupNorm(num_groups=num_groups, num_channels=embedding_dim, affine=False)
+    group_norm.eval()
+
+    # Activate module
+    out = group_norm(embedding)
+
+    assert out.shape == embedding.shape  # batch x embedding_dim x sentence_length
+
+    # Flatten and verify mean and covariance per group
+    out_grouped = out.view(batch * num_groups, -1)
+    mus = out_grouped.mean(axis=-1)
+    assert torch.allclose(mus, torch.zeros_like(mus), atol=1e-5)
+
+    out_real = torch.view_as_real(out_grouped)
+    covs = bn.batch_cov(out_real, centered=False)
+    id_cov = torch.eye(2).tile(batch * num_groups, 1, 1)
+
+    assert torch.allclose(covs, id_cov, atol=1e-3)
+
+    ###############
+    # Image Example
+    N, C, H, W = 20, 5, 10, 10
+    x = torch.randn((N, C, H, W), dtype=torch.complex64)
+
+    num_groups = 5
+    group_norm = c_nn.GroupNorm(num_groups=num_groups, num_channels=C, affine=False)
+    group_norm.eval()
+
+    # Activate module
+    out = group_norm(x)
+
+    assert out.shape == x.shape  # N, C, H, W
+
+    out_grouped = out.view(N * num_groups, -1)
+    mus = out_grouped.mean(axis=-1)
+    assert torch.allclose(mus, torch.zeros_like(mus), atol=1e-5)
+
+    out_real = torch.view_as_real(out_grouped)
+    covs = bn.batch_cov(out_real, centered=False)
+    id_cov = torch.eye(2).tile(N * num_groups, 1, 1)
+
+    assert torch.allclose(covs, id_cov, atol=1e-3)
 
 if __name__ == "__main__":
     test_layernorm_real()
     test_layernorm()
     test_rmsnorm()
+    test_groupnorm()

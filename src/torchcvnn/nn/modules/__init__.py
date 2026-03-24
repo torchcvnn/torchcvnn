@@ -25,7 +25,7 @@ from .dropout import Dropout, Dropout2d
 from .conv import ConvTranspose2d
 from .batchnorm import BatchNorm1d, BatchNorm2d
 from .upsampling import Upsample
-from .normalization import LayerNorm, RMSNorm
+from .normalization import LayerNorm, RMSNorm, GroupNorm
 from .transformer import (
     TransformerEncoder,
     TransformerEncoderLayer,
