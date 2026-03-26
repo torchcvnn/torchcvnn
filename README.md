@@ -15,6 +15,25 @@ This is a library that uses [pytorch](https://pytorch.org) as a back-end for com
 
 It was initially developed by Victor Dhédin and Jérémie Levi during their third year project at CentraleSupélec. 
 
+## Citing
+
+If you use this library for your research, we will enjoy you cite the following reference :
+
+```bib
+@INPROCEEDINGS{11229081,
+  author={Fix, Jérémy and Gabot, Quentin and Nguyen, X. Huy and Frontera-Pons, Joana and Ren, Chengfang and Ovarlez, Jean-Philippe},
+  booktitle={2025 International Joint Conference on Neural Networks (IJCNN)}, 
+  title={torchcvnn: A PyTorch-based library to easily experiment with state-of-the-art Complex-Valued Neural Networks}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={1-9},
+  keywords={Magnetic resonance imaging;Neural networks;Electromagnetic scattering;Libraries;Sensors;Remote sensing},
+  doi={10.1109/IJCNN64981.2025.11229081}}
+```
+
+The paper is available as [https://ieeexplore.ieee.org/document/11229081](https://ieeexplore.ieee.org/document/11229081)
+
 ## Installation
 
 To install the library, it is simple as :
