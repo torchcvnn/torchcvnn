@@ -268,7 +268,7 @@ class modReLU(nn.Module):
         Arguments:
             z: the input tensor on which to apply the activation function
         """
-        return nn.functional.relu(z.abs() + self.b) * torch.exp(1j * z.angle())
+        return nn.functional.relu(z.abs() + self.b) * torch.sgn(z)
 
 
 class Cardioid(nn.Module):
@@ -292,7 +292,7 @@ class Cardioid(nn.Module):
         Arguments:
             z: the input tensor on which to apply the activation function
         """
-        return 0.5 * (1 + torch.cos(z.angle())) * z
+        return 0.5 * (1 + torch.sgn(z).real) * z
 
 
 class MultiheadAttention(nn.Module):
