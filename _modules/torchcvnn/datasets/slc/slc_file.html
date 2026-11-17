@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -325,29 +325,29 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_slc_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Parses a filename of a SLC file</span>
 <span class="sd">    {site name}_{line ID}_{flight ID}_{data take counter}_{acquisition date}_{band}{steering}{polarization}_{stack_version}... _{baseline correction}_{segment number}_{downsample factor}.slc</span>
 
 <span class="sd">    and returns all the information in a dictionary</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Remove the .slc extension and split the fields</span>
-    <span class="n">fields</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;site_name&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-        <span class="s2">&quot;line_ID&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-        <span class="s2">&quot;flight_ID&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-        <span class="s2">&quot;data_take_counter&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
-        <span class="s2">&quot;acquisition_date&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
-        <span class="s2">&quot;band&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-        <span class="s2">&quot;steering&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span>
-        <span class="s2">&quot;polarization&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">:],</span>
-        <span class="s2">&quot;stack_version&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
-        <span class="s2">&quot;baseline_correction&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
-        <span class="s2">&quot;segment_number&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="s2">"site_name"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">"line_ID"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">"flight_ID"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="s2">"data_take_counter"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="s2">"acquisition_date"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="s2">"band"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">"steering"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+        <span class="s2">"polarization"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">:],</span>
+        <span class="s2">"stack_version"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="s2">"baseline_correction"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+        <span class="s2">"segment_number"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span>
             <span class="n">fields</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
         <span class="p">),</span>  <span class="c1"># the segment is encoded as  s{segment_number}</span>
-        <span class="s2">&quot;downsample_factor&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="s2">"downsample_factor"</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">parameters</span>
 
@@ -355,7 +355,7 @@
 <div class="viewcode-block" id="SLCFile">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.slc.slc_file.SLCFile">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SLCFile</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Reads a SLC file</span>
 
 <span class="sd">    The filenames contain interesting information:</span>
@@ -378,7 +378,7 @@
 <span class="sd">    - downsample factor : 1x1</span>
 
 <span class="sd">    There is one SLC file per segment and per polarization.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">patch_stride</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -391,24 +391,24 @@
         <span class="c1"># The annotation filename is almost the same as the SLC filename, except we drop</span>
         <span class="c1"># the segment number and downsample factor</span>
         <span class="c1"># We expect it to be colocated with the SLC file</span>
-        <span class="n">ann_filename</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;.ann&quot;</span>
+        <span class="n">ann_filename</span> <span class="o">=</span> <span class="s2">"_"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="s2">".ann"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ann_file</span> <span class="o">=</span> <span class="n">AnnFile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">ann_filename</span><span class="p">))</span>
 
-        <span class="n">downsample_factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;downsample_factor&quot;</span><span class="p">]</span>
-        <span class="n">segment_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;segment_number&quot;</span><span class="p">]</span>
+        <span class="n">downsample_factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"downsample_factor"</span><span class="p">]</span>
+        <span class="n">segment_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"segment_number"</span><span class="p">]</span>
         <span class="c1"># self.azimuth_pixel_spacing = getattr(</span>
-        <span class="c1">#     self.ann_file, f&quot;{downsample_factor}_slc_azimuth_pixel_spacing&quot;</span>
+        <span class="c1">#     self.ann_file, f"{downsample_factor}_slc_azimuth_pixel_spacing"</span>
         <span class="c1"># )</span>
         <span class="c1"># self.range_pixel_spacing = getattr(</span>
-        <span class="c1">#     self.ann_file, f&quot;{downsample_factor}_slc_range_pixel_spacing&quot;</span>
+        <span class="c1">#     self.ann_file, f"{downsample_factor}_slc_range_pixel_spacing"</span>
         <span class="c1"># )</span>
         <span class="c1"># self.global_average_squint_angle = self.ann_file.global_average_squint_angle</span>
         <span class="c1"># self.center_wavelength = self.ann_file.center_wavelength</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_rows</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ann_file</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;slc_</span><span class="si">{</span><span class="n">segment_number</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">downsample_factor</span><span class="si">}</span><span class="s2">_rows&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ann_file</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"slc_</span><span class="si">{</span><span class="n">segment_number</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">downsample_factor</span><span class="si">}</span><span class="s2">_rows"</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_cols</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ann_file</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;slc_</span><span class="si">{</span><span class="n">segment_number</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">downsample_factor</span><span class="si">}</span><span class="s2">_columns&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ann_file</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"slc_</span><span class="si">{</span><span class="n">segment_number</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">downsample_factor</span><span class="si">}</span><span class="s2">_columns"</span>
         <span class="p">)</span>
 
         <span class="c1"># Precompute the dimension of the grid of patches</span>
@@ -420,34 +420,34 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="k">return</span> <span class="s2">"_"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;site_name&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;line_ID&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;flight_ID&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;data_take_counter&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;acquisition_date&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;band&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;steering&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;stack_version&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;baseline_correction&quot;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"site_name"</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"line_ID"</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"flight_ID"</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"data_take_counter"</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"acquisition_date"</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"band"</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"steering"</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"stack_version"</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"baseline_correction"</span><span class="p">],</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">polarization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;polarization&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">"polarization"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the number of patches that can be extracted from the SLC file</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsamples_per_rows</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsamples_per_cols</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the item-th patch from the SLC file</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">item</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1"># Compute the row and column index of the patch</span>
         <span class="n">row</span> <span class="o">=</span> <span class="n">item</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsamples_per_cols</span>
@@ -461,7 +461,7 @@
         <span class="c1"># Read the patch</span>
         <span class="c1"># The SLC file is a binary file of complex64</span>
         <span class="n">patch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
                 <span class="n">fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span>
                     <span class="p">(</span><span class="n">row_start</span> <span class="o">+</span> <span class="n">row</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cols</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">col_start</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_SET</span>

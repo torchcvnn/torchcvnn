@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -321,54 +321,54 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_utils</span>
 
 <span class="n">descriptor_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;record_sequence_number&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;first_record_subtype_code&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">192</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;record_type_code&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">192</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;second_subtype_code&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;third_subtype_code&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;length_record&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">360</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;flag&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;A &quot;</span><span class="p">),</span>
-    <span class="c1"># (&quot;blanks&quot;, 14, 2, &quot;A&quot;, &quot;  &quot;),</span>
-    <span class="p">(</span><span class="s2">&quot;superstructure_doc_id&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;CEOS-SAR    &quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;superstructure_doc_rev_level&quot;</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot; A&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;superstructure_fmt_rev_level&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot; A&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;software_release_level&quot;</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;physical_volume_id&quot;</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;logical_volume_id&quot;</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;volume_set_id&quot;</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;total_number_volumes&quot;</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;physical_volume_seq_num_first&quot;</span><span class="p">,</span> <span class="mi">94</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;physical_volume_seq_num_last&quot;</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;physical_volume_seq_num_cur&quot;</span><span class="p">,</span> <span class="mi">98</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;file_number&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;logical_volume_within_volume&quot;</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;logical_volume_within_physical&quot;</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;logical_volume_creation_date&quot;</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># YYYYMMDD</span>
-    <span class="p">(</span><span class="s2">&quot;logical_volume_creation_time&quot;</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># HHMMSSXX</span>
-    <span class="p">(</span><span class="s2">&quot;logical_volume_creation_country&quot;</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;logical_volume_creation_agency&quot;</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;logical_volume_generation_facility&quot;</span><span class="p">,</span> <span class="mi">148</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_of_file_pointer_records&quot;</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_of_text_records&quot;</span><span class="p">,</span> <span class="mi">164</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"record_sequence_number"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"first_record_subtype_code"</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">192</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"record_type_code"</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">192</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"second_subtype_code"</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"third_subtype_code"</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"length_record"</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">360</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"flag"</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"A "</span><span class="p">),</span>
+    <span class="c1"># ("blanks", 14, 2, "A", "  "),</span>
+    <span class="p">(</span><span class="s2">"superstructure_doc_id"</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"CEOS-SAR    "</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"superstructure_doc_rev_level"</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">" A"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"superstructure_fmt_rev_level"</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">" A"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"software_release_level"</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"physical_volume_id"</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"logical_volume_id"</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"volume_set_id"</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"total_number_volumes"</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"physical_volume_seq_num_first"</span><span class="p">,</span> <span class="mi">94</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"physical_volume_seq_num_last"</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"physical_volume_seq_num_cur"</span><span class="p">,</span> <span class="mi">98</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"file_number"</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"logical_volume_within_volume"</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"logical_volume_within_physical"</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"logical_volume_creation_date"</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># YYYYMMDD</span>
+    <span class="p">(</span><span class="s2">"logical_volume_creation_time"</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># HHMMSSXX</span>
+    <span class="p">(</span><span class="s2">"logical_volume_creation_country"</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"logical_volume_creation_agency"</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"logical_volume_generation_facility"</span><span class="p">,</span> <span class="mi">148</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_of_file_pointer_records"</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_of_text_records"</span><span class="p">,</span> <span class="mi">164</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="c1"># Volume descriptor spare A92 + local use segment A100</span>
 <span class="p">]</span>
 <span class="n">volume_descriptor_record_length</span> <span class="o">=</span> <span class="mi">360</span>
 
 <span class="n">file_pointer_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;record_number&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;record_type&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;reference_id&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;reference_file_class_code&quot;</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="c1"># (&quot;number_of_records&quot;, 100, 8, &quot;I&quot;, None),</span>
-    <span class="c1"># (&quot;number_of_physical&quot;, 140, 2, &quot;I&quot;, None),</span>
+    <span class="p">(</span><span class="s2">"record_number"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"record_type"</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"reference_id"</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"reference_file_class_code"</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="c1"># ("number_of_records", 100, 8, "I", None),</span>
+    <span class="c1"># ("number_of_physical", 140, 2, "I", None),</span>
 <span class="p">]</span>
 <span class="n">file_pointer_record_length</span> <span class="o">=</span> <span class="mi">360</span>
 
 <span class="n">text_records_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;record_number&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;product_id&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;scene_id&quot;</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;scene_location_id&quot;</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"record_number"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"product_id"</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"scene_id"</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"scene_location_id"</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="n">text_record_length</span> <span class="o">=</span> <span class="mi">360</span>
 
@@ -376,21 +376,21 @@
 <div class="viewcode-block" id="VolFile">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.alos2.VolFile">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">VolFile</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Processing a Volume Directory file in the CEOS format. The parsed</span>
 <span class="sd">    informations can be accessed through the attributes `descriptor_records`,</span>
 <span class="sd">    `file_pointer_records` and `text_records`</span>
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        filepath: the path to the volume directory file</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_pointer_records</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text_record</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
             <span class="c1"># Parsing the volume descriptor</span>
             <span class="n">fh_offset</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">fh_offset</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">parse_from_format</span><span class="p">(</span>
@@ -404,7 +404,7 @@
 
             <span class="c1"># Parsing the file pointer</span>
             <span class="n">number_of_file_pointer_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">[</span>
-                <span class="s2">&quot;number_of_file_pointer_records&quot;</span>
+                <span class="s2">"number_of_file_pointer_records"</span>
             <span class="p">]</span>
             <span class="n">fh_offset</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">parse_from_format</span><span class="p">(</span>
                 <span class="n">fh</span><span class="p">,</span>
@@ -431,20 +431,20 @@
             <span class="p">[</span>
                 <span class="kc">True</span>
                 <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_pointer_records</span>
-                <span class="k">if</span> <span class="n">fp</span><span class="p">[</span><span class="s2">&quot;reference_file_class_code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;IMOP&quot;</span>
+                <span class="k">if</span> <span class="n">fp</span><span class="p">[</span><span class="s2">"reference_file_class_code"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"IMOP"</span>
             <span class="p">]</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">descriptor_txt</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="c1"># text_txt = parse_utils.format_dictionary(self.text_records, 1)</span>
-        <span class="n">fp_texts</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">fp_texts</span> <span class="o">=</span> <span class="s2">""</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_pointer_records</span><span class="p">):</span>
-            <span class="n">fp_texts</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;File pointer </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> : </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="n">fi</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="n">fp_texts</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">fp_texts</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"File pointer </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> : </span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="n">fi</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">fp_texts</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
 
         <span class="n">text_texts</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text_record</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="s2">Descriptor:</span>
 <span class="si">{</span><span class="n">descriptor_txt</span><span class="si">}</span>
 <span class="s2">File pointers : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_pointer_records</span><span class="p">)</span><span class="si">}</span><span class="s2"> records</span>
@@ -452,7 +452,7 @@
 
 <span class="s2">Text records:</span>
 <span class="si">{</span><span class="n">text_texts</span><span class="si">}</span>
-<span class="s2">        &quot;&quot;&quot;</span></div>
+<span class="s2">        """</span></div>
 
 </pre></div>
         </article>

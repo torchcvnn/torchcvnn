@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -329,13 +329,13 @@
 <span class="c1"># Local imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.filelist</span><span class="w"> </span><span class="kn">import</span> <span class="n">filelist</span>
 
-<span class="n">SAMPLE_base_link</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/benjaminlewis-afrl/SAMPLE_dataset_public/raw/refs/heads/master/mat_files/&quot;</span>
+<span class="n">SAMPLE_base_link</span> <span class="o">=</span> <span class="s2">"https://github.com/benjaminlewis-afrl/SAMPLE_dataset_public/raw/refs/heads/master/mat_files/"</span>
 
 
 <div class="viewcode-block" id="SAMPLE">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.SAMPLE">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SAMPLE</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    The SAMPLE dataset is made partly from real data provided by MSTAR and partly from synthetic data.</span>
 
 <span class="sd">    The dataset is public and will be downloaded if requested and missing on drive.</span>
@@ -370,20 +370,20 @@
 <span class="sd">           :alt: Samples from MSTAR</span>
 <span class="sd">           :width: 60%</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">download</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">class_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">filelist</span><span class="p">[</span><span class="s2">&quot;real&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">filelist</span><span class="p">[</span><span class="s2">"real"</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
         <span class="c1"># We look into rootdir if the data are available</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_samples</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">cl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_names</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filelist</span><span class="p">[</span><span class="s2">&quot;real&quot;</span><span class="p">][</span><span class="n">cl</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filelist</span><span class="p">[</span><span class="s2">&quot;synth&quot;</span><span class="p">][</span><span class="n">cl</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filelist</span><span class="p">[</span><span class="s2">"real"</span><span class="p">][</span><span class="n">cl</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filelist</span><span class="p">[</span><span class="s2">"synth"</span><span class="p">][</span><span class="n">cl</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data_files</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_data_files</span> <span class="o">=</span> <span class="p">{}</span>
@@ -391,50 +391,50 @@
 
         <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tot_num_samples</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">cl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_names</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;real&quot;</span><span class="p">,</span> <span class="s2">&quot;synth&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"real"</span><span class="p">,</span> <span class="s2">"synth"</span><span class="p">]:</span>
                 <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">[</span><span class="n">mode</span><span class="p">][</span><span class="n">cl</span><span class="p">]:</span>
                     <span class="n">filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span> <span class="o">/</span> <span class="n">cl</span> <span class="o">/</span> <span class="n">filename</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">filepath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                         <span class="k">if</span> <span class="n">download</span><span class="p">:</span>
-                            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SAMPLE_base_link</span><span class="si">}{</span><span class="n">mode</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">cl</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">SAMPLE_base_link</span><span class="si">}{</span><span class="n">mode</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">cl</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> not found&quot;</span><span class="p">)</span>
+                            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> not found"</span><span class="p">)</span>
                     <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_files</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span> <span class="o">/</span> <span class="n">cl</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.mat&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_files</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span> <span class="o">/</span> <span class="n">cl</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.mat"</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">num_data_files</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_files</span><span class="p">[</span><span class="n">cl</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_data_files</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_data_files</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span>
 
 <div class="viewcode-block" id="SAMPLE.download_file">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.SAMPLE.download_file">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Download a file from an URL and save it on disk</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            url (str): URL to download the file from</span>
 <span class="sd">            filepath (pathlib.Path): Path to save the file</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloading </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Downloading </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="c1"># Ensure the target directory exists</span>
         <span class="n">filepath</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Donwload and save the file on disk</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
             <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return the total number of samples in the dataset</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_data_files</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return a sample from the dataset</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_data_files</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IndexError</span>
 
@@ -445,28 +445,28 @@
             <span class="n">index</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_data_files</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
         <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_files</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reading SAMPLE file : </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Reading SAMPLE file : </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
         <span class="c1"># Below are the keys available in the mat files</span>
-        <span class="c1"># dict_keys([&#39;__header__&#39;, &#39;__version__&#39;, &#39;__globals__&#39;, &#39;aligned&#39;, &#39;azimuth&#39;, &#39;bandwidth&#39;, &#39;center_freq&#39;, &#39;complex_img&#39;, &#39;complex_img_unshifted&#39;, &#39;elevation&#39;, &#39;explanation&#39;, &#39;range_pixel_spacing&#39;, &#39;range_resolution&#39;, &#39;source_mstar_file&#39;, &#39;target_name&#39;, &#39;taylor_weights&#39;, &#39;xrange_pixel_spacing&#39;, &#39;xrange_resolution&#39;]</span>
+        <span class="c1"># dict_keys(['__header__', '__version__', '__globals__', 'aligned', 'azimuth', 'bandwidth', 'center_freq', 'complex_img', 'complex_img_unshifted', 'elevation', 'explanation', 'range_pixel_spacing', 'range_resolution', 'source_mstar_file', 'target_name', 'taylor_weights', 'xrange_pixel_spacing', 'xrange_resolution']</span>
 
         <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">k</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span>
-                <span class="s2">&quot;azimuth&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;elevation&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;bandwidth&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;center_freq&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;range_pixel_spacing&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;range_resolution&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;xrange_pixel_spacing&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;xrange_resolution&quot;</span><span class="p">,</span>
+                <span class="s2">"azimuth"</span><span class="p">,</span>
+                <span class="s2">"elevation"</span><span class="p">,</span>
+                <span class="s2">"bandwidth"</span><span class="p">,</span>
+                <span class="s2">"center_freq"</span><span class="p">,</span>
+                <span class="s2">"range_pixel_spacing"</span><span class="p">,</span>
+                <span class="s2">"range_resolution"</span><span class="p">,</span>
+                <span class="s2">"xrange_pixel_spacing"</span><span class="p">,</span>
+                <span class="s2">"xrange_resolution"</span><span class="p">,</span>
             <span class="p">]</span>
         <span class="p">}</span>
 
-        <span class="n">complex_img</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;complex_img&quot;</span><span class="p">][:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">complex_img</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"complex_img"</span><span class="p">][:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 
         <span class="n">class_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 

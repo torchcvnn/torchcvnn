@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2025 Quentin Gabot, Jeremy Fix, Huy Nguyen</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -328,7 +328,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">BaseTransform</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract base class for transforms that can handle both numpy arrays and PyTorch tensors.</span>
+<span class="w">    </span><span class="sd">"""Abstract base class for transforms that can handle both numpy arrays and PyTorch tensors.</span>
 <span class="sd">    This class serves as a template for implementing transforms that can be applied to both numpy arrays</span>
 <span class="sd">    and PyTorch tensors while maintaining consistent behavior.</span>
 <span class="sd">    Inputs must be in CHW (Channel, Height, Width) format. If inputs have only 2 dimensions (Height, Width),</span>
@@ -336,7 +336,7 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        dtype (str, optional): Data type to convert inputs to. Must be one of:</span>
-<span class="sd">            &#39;float32&#39;, &#39;float64&#39;, &#39;complex64&#39;, &#39;complex128&#39;. If None, no type conversion is performed.</span>
+<span class="sd">            'float32', 'float64', 'complex64', 'complex128'. If None, no type conversion is performed.</span>
 <span class="sd">            Default: None.</span>
 
 <span class="sd">    Raises:</span>
@@ -356,24 +356,24 @@
 <span class="sd">        &gt;&gt;&gt;     def __call_torch__(self, x):</span>
 <span class="sd">        &gt;&gt;&gt;         # Implement torch transform</span>
 <span class="sd">        &gt;&gt;&gt;         pass</span>
-<span class="sd">        &gt;&gt;&gt; transform = MyTransform(dtype=&#39;float32&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; transform = MyTransform(dtype='float32')</span>
 <span class="sd">        &gt;&gt;&gt; output = transform(input_data)  # Works with both numpy arrays and torch tensors</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;dtype should be a string&quot;</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">"dtype should be a string"</span>
             <span class="k">assert</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span>
-                <span class="s2">&quot;float32&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;float64&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;complex64&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;complex128&quot;</span><span class="p">,</span>
-            <span class="p">],</span> <span class="s2">&quot;dtype should be one of float32, float64, complex64, complex128&quot;</span>
+                <span class="s2">"float32"</span><span class="p">,</span>
+                <span class="s2">"float64"</span><span class="p">,</span>
+                <span class="s2">"complex64"</span><span class="p">,</span>
+                <span class="s2">"complex128"</span><span class="p">,</span>
+            <span class="p">],</span> <span class="s2">"dtype should be one of float32, float64, complex64, complex128"</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">np_dtype</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">torch_dtype</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply transform to input.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Apply transform to input."""</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">check_input</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__call_numpy__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -382,19 +382,19 @@
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply transform to numpy array.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Apply transform to numpy array."""</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply transform to torch tensor.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Apply transform to torch tensor."""</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 
 <div class="viewcode-block" id="LogAmplitude">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.LogAmplitude.html#torchcvnn.transforms.LogAmplitude">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LogAmplitude</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This transform applies a logarithmic scaling to the amplitude/magnitude of complex values</span>
+<span class="w">    </span><span class="sd">"""This transform applies a logarithmic scaling to the amplitude/magnitude of complex values</span>
 <span class="sd">    while optionally preserving the phase information. The amplitude is first clipped to</span>
 <span class="sd">    [min_value, max_value] range, then log10-transformed and normalized to [0,1] range.</span>
 
@@ -422,7 +422,7 @@
 <span class="sd">    Note:</span>
 <span class="sd">        The transform works with both NumPy arrays and PyTorch tensors through</span>
 <span class="sd">        separate internal implementations (__call_numpy__ and __call_torch__).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="LogAmplitude.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.LogAmplitude.html#torchcvnn.transforms.LogAmplitude.__init__">[docs]</a>
@@ -448,7 +448,7 @@
 <div class="viewcode-block" id="Normalize">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.Normalize.html#torchcvnn.transforms.Normalize">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Normalize</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-channel 2x2 normalization of [Re, Im]. </span>
+<span class="w">    </span><span class="sd">"""Per-channel 2x2 normalization of [Re, Im]. </span>
 <span class="sd">    This transform normalizes complex-valued input data by centering and scaling it.</span>
 <span class="sd">    It supports both numpy arrays and PyTorch tensors as input.</span>
 <span class="sd">    Args:</span>
@@ -463,7 +463,7 @@
 <span class="sd">        &gt;&gt;&gt; covs = [[[1,0],[0,1]], [[2,0],[0,2]]]</span>
 <span class="sd">        &gt;&gt;&gt; transform = Normalize(means, covs)</span>
 <span class="sd">        &gt;&gt;&gt; output = transform(input_data)  # Normalizes each channel independently</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     
 <div class="viewcode-block" id="Normalize.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.Normalize.html#torchcvnn.transforms.Normalize.__init__">[docs]</a>
@@ -488,26 +488,26 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">iscomplexobj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expect complex CHW ndarray.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Expect complex CHW ndarray."</span><span class="p">)</span>
         <span class="n">C</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="n">C</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Channel mismatch.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Channel mismatch."</span><span class="p">)</span>
 
         <span class="c1"># Stack to (C,2,H,W)</span>
         <span class="n">Z</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>                              <span class="c1"># FIX: (C,2,H,W)</span>
         <span class="n">Zc</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">means</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>                                <span class="c1"># center</span>
 
         <span class="c1"># FIX: correct contraction over the 2-dim</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;cij,cjhw-&gt;cihw&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">W_np</span><span class="p">,</span> <span class="n">Zc</span><span class="p">)</span>                       <span class="c1"># (C,2,H,W)</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'cij,cjhw-&gt;cihw'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">W_np</span><span class="p">,</span> <span class="n">Zc</span><span class="p">)</span>                       <span class="c1"># (C,2,H,W)</span>
 
         <span class="k">return</span> <span class="n">Y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">Y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">is_complex</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expect complex CHW tensor.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Expect complex CHW tensor."</span><span class="p">)</span>
         <span class="n">C</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="n">C</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Channel mismatch.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Channel mismatch."</span><span class="p">)</span>
 
         <span class="c1"># Move precomputed params to device/dtype</span>
         <span class="n">Wc</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W_np</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>    <span class="c1"># NEW</span>
@@ -518,7 +518,7 @@
         <span class="n">Zc</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">-</span> <span class="n">muc</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># FIX: correct contraction over 2-dim</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;cij,cjhw-&gt;cihw&#39;</span><span class="p">,</span> <span class="n">Wc</span><span class="p">,</span> <span class="n">Zc</span><span class="p">)</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'cij,cjhw-&gt;cihw'</span><span class="p">,</span> <span class="n">Wc</span><span class="p">,</span> <span class="n">Zc</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex</span><span class="p">(</span><span class="n">Y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">Y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span></div>
 
@@ -526,18 +526,18 @@
 <div class="viewcode-block" id="Amplitude">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.Amplitude.html#torchcvnn.transforms.Amplitude">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Amplitude</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform a complex-valued tensor into its amplitude/magnitude.</span>
+<span class="w">    </span><span class="sd">"""Transform a complex-valued tensor into its amplitude/magnitude.</span>
 
 <span class="sd">    This transform computes the absolute value (magnitude) of complex input data,</span>
 <span class="sd">    converting complex values to real values.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        dtype (str): Data type for the output (&#39;float32&#39;, &#39;float64&#39;, etc)</span>
+<span class="sd">        dtype (str): Data type for the output ('float32', 'float64', etc)</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        np.ndarray | torch.Tensor: Real-valued tensor containing the amplitudes,</span>
 <span class="sd">            with same shape as input but real-valued type specified by dtype.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="Amplitude.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.Amplitude.html#torchcvnn.transforms.Amplitude.__init__">[docs]</a>
@@ -556,7 +556,7 @@
 <div class="viewcode-block" id="RealImaginary">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.RealImaginary.html#torchcvnn.transforms.RealImaginary">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RealImaginary</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform a complex-valued tensor into its real and imaginary components.</span>
+<span class="w">    </span><span class="sd">"""Transform a complex-valued tensor into its real and imaginary components.</span>
 
 <span class="sd">    This transform separates a complex-valued tensor into its real and imaginary parts,</span>
 <span class="sd">    stacking them along a new channel dimension. The output tensor has twice the number</span>
@@ -565,7 +565,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        np.ndarray | torch.Tensor: Real-valued tensor containing real and imaginary parts,</span>
 <span class="sd">            with shape (2*C, H, W) where C is the original number of channels.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># CHW -&gt; 2CHW</span>
@@ -582,7 +582,7 @@
 <div class="viewcode-block" id="RandomPhase">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.RandomPhase.html#torchcvnn.transforms.RandomPhase">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RandomPhase</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly phase-shifts complex-valued input data.</span>
+<span class="w">    </span><span class="sd">"""Randomly phase-shifts complex-valued input data.</span>
 <span class="sd">    This transform applies a random phase shift to complex-valued input tensors/arrays by</span>
 <span class="sd">    multiplying the input with exp(j*phi), where phi is uniformly distributed in [0, 2π]</span>
 <span class="sd">    or [-π, π] if centering is enabled.</span>
@@ -597,7 +597,7 @@
 <span class="sd">            Phase-shifted complex-valued data with the same shape as input.</span>
 
 <span class="sd">    Examples</span>
-<span class="sd">        &gt;&gt;&gt; transform = RandomPhase(dtype=&#39;complex64&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; transform = RandomPhase(dtype='complex64')</span>
 <span class="sd">        &gt;&gt;&gt; x = torch.ones(3,3, dtype=torch.complex64)</span>
 <span class="sd">        &gt;&gt;&gt; output = transform(x)  # Applies random phase shifts</span>
 
@@ -607,7 +607,7 @@
 <span class="sd">        - Phase shifts are uniformly distributed in:</span>
 <span class="sd">            - [0, 2π] when centering=False</span>
 <span class="sd">            - [-π, π] when centering=True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="RandomPhase.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.RandomPhase.html#torchcvnn.transforms.RandomPhase.__init__">[docs]</a>
@@ -633,7 +633,7 @@
 <div class="viewcode-block" id="ToReal">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.ToReal.html#torchcvnn.transforms.ToReal">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ToReal</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the real part of a complex-valued input tensor.</span>
+<span class="w">    </span><span class="sd">"""Extracts the real part of a complex-valued input tensor.</span>
 
 <span class="sd">    The `ToReal` transform takes either a numpy array or a PyTorch tensor containing complex numbers</span>
 <span class="sd">    and returns only their real parts. If the input is already real-valued, it remains unchanged.</span>
@@ -645,7 +645,7 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; to_real = ToReal()</span>
 <span class="sd">        &gt;&gt;&gt; output = to_real(complex_tensor)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">real</span></div>
@@ -655,7 +655,7 @@
 <div class="viewcode-block" id="ToImaginary">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.ToImaginary.html#torchcvnn.transforms.ToImaginary">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ToImaginary</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the imaginary part of a complex-valued input tensor.</span>
+<span class="w">    </span><span class="sd">"""Extracts the imaginary part of a complex-valued input tensor.</span>
 
 <span class="sd">    The `ToImaginary` transform takes either a numpy array or a PyTorch tensor containing complex numbers</span>
 <span class="sd">    and returns only their imaginary parts. If the input is already real-valued, it remains unchanged.</span>
@@ -667,7 +667,7 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; to_imaginary = ToImaginary()</span>
 <span class="sd">        &gt;&gt;&gt; output = to_imaginary(complex_tensor)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">imag</span></div>
@@ -677,7 +677,7 @@
 <div class="viewcode-block" id="FFT2">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.FFT2.html#torchcvnn.transforms.FFT2">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FFT2</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies 2D Fast Fourier Transform (FFT) to the input.</span>
+<span class="w">    </span><span class="sd">"""Applies 2D Fast Fourier Transform (FFT) to the input.</span>
 <span class="sd">    This transform computes the 2D FFT along specified dimensions of the input array/tensor.</span>
 <span class="sd">    It applies FFT2 and shifts zero-frequency components to the center.</span>
 
@@ -692,7 +692,7 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">        - Transform is applied along specified dimensions (`axis`).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="FFT2.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.FFT2.html#torchcvnn.transforms.FFT2.__init__">[docs]</a>
@@ -711,7 +711,7 @@
 <div class="viewcode-block" id="IFFT2">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.IFFT2.html#torchcvnn.transforms.IFFT2">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">IFFT2</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies 2D inverse Fast Fourier Transform (IFFT) to the input.</span>
+<span class="w">    </span><span class="sd">"""Applies 2D inverse Fast Fourier Transform (IFFT) to the input.</span>
 <span class="sd">    This transform computes the 2D IFFT along the last two dimensions of the input array/tensor.</span>
 <span class="sd">    It applies inverse FFT shift before IFFT2.</span>
 
@@ -726,7 +726,7 @@
 
 <span class="sd">    Notes:</span>
 <span class="sd">        - Transform is applied along specified dimensions (`axis`).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="IFFT2.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.IFFT2.html#torchcvnn.transforms.IFFT2.__init__">[docs]</a>
@@ -745,7 +745,7 @@
 <div class="viewcode-block" id="PadIfNeeded">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.PadIfNeeded.html#torchcvnn.transforms.PadIfNeeded">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PadIfNeeded</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pad an image if its dimensions are smaller than specified minimum dimensions.</span>
+<span class="w">    </span><span class="sd">"""Pad an image if its dimensions are smaller than specified minimum dimensions.</span>
 
 <span class="sd">    This transform pads images that are smaller than given minimum dimensions by adding</span>
 <span class="sd">    padding according to the specified border mode. The padding is added symmetrically</span>
@@ -756,7 +756,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        min_height (int): Minimum height requirement for the image</span>
 <span class="sd">        min_width (int): Minimum width requirement for the image</span>
-<span class="sd">        border_mode (str): Type of padding to apply (&#39;constant&#39;, &#39;reflect&#39;, etc.). Default is &#39;constant&#39;.</span>
+<span class="sd">        border_mode (str): Type of padding to apply ('constant', 'reflect', etc.). Default is 'constant'.</span>
 <span class="sd">        pad_value (float): Value for constant padding (if applicable). Default is 0.</span>
 
 <span class="sd">    Returns:</span>
@@ -766,7 +766,7 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; transform = PadIfNeeded(min_height=256, min_width=256)</span>
 <span class="sd">        &gt;&gt;&gt; padded_image = transform(small_image)  # Pads if image is smaller than 256x256</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="PadIfNeeded.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.PadIfNeeded.html#torchcvnn.transforms.PadIfNeeded.__init__">[docs]</a>
@@ -774,7 +774,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">min_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">min_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">border_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span>
+        <span class="n">border_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"constant"</span><span class="p">,</span>
         <span class="n">pad_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_height</span> <span class="o">=</span> <span class="n">min_height</span>
@@ -798,7 +798,7 @@
 <div class="viewcode-block" id="CenterCrop">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.CenterCrop.html#torchcvnn.transforms.CenterCrop">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CenterCrop</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Center crops an input array/tensor to the specified size.</span>
+<span class="w">    </span><span class="sd">"""Center crops an input array/tensor to the specified size.</span>
 
 <span class="sd">    This transform extracts a centered rectangular region from the input array/tensor</span>
 <span class="sd">    with the specified dimensions. The crop is centered on both height and width axes.</span>
@@ -819,7 +819,7 @@
 <span class="sd">        - If input is smaller than crop size, it will return the original input</span>
 <span class="sd">        - Crop is applied identically to all channels</span>
 <span class="sd">        - Uses functional.center_crop() implementation for both numpy and torch</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="CenterCrop.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.CenterCrop.html#torchcvnn.transforms.CenterCrop.__init__">[docs]</a>
@@ -839,7 +839,7 @@
 <div class="viewcode-block" id="FFTResize">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.FFTResize.html#torchcvnn.transforms.FFTResize">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FFTResize</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resizes an input image in spectral domain with Fourier Transformations.</span>
+<span class="w">    </span><span class="sd">"""Resizes an input image in spectral domain with Fourier Transformations.</span>
 
 <span class="sd">    This transform first applies a 2D FFT to the input array/tensor of shape CHW along specified axes,</span>
 <span class="sd">    followed by padding or center cropping to achieve the target size, then applies</span>
@@ -876,7 +876,7 @@
 <span class="sd">        - Based on the Fourier Transform properties of scaling and periodicity</span>
 <span class="sd">        - The output is complex-valued due to the nature of FFT operations. If you are working with real-valued data,</span>
 <span class="sd">        it is recommended to call ToReal after applying this transform.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="FFTResize.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.FFTResize.html#torchcvnn.transforms.FFTResize.__init__">[docs]</a>
@@ -885,14 +885,14 @@
         <span class="n">size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
         <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
         <span class="n">scale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">dtype</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;complex64&quot;</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"complex64"</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s2">&quot;complex&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
-            <span class="n">dtype</span> <span class="o">=</span> <span class="s2">&quot;complex64&quot;</span>
+        <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s2">"complex"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="s2">"complex64"</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">),</span> <span class="s2">&quot;size must be a tuple&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">),</span> <span class="s2">&quot;axis must be a tuple&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">),</span> <span class="s2">"size must be a tuple"</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">),</span> <span class="s2">"axis must be a tuple"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span>
@@ -930,13 +930,13 @@
 <div class="viewcode-block" id="SpatialResize">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.SpatialResize.html#torchcvnn.transforms.SpatialResize">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SpatialResize</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Resize a complex tensor to a given size. The resize is performed in the image space</span>
 <span class="sd">    using a Bicubic interpolation.</span>
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        size: The target size of the resized tensor.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="SpatialResize.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.SpatialResize.html#torchcvnn.transforms.SpatialResize.__init__">[docs]</a>
@@ -995,7 +995,7 @@
 <div class="viewcode-block" id="HWC2CHW">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.HWC2CHW.html#torchcvnn.transforms.HWC2CHW">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HWC2CHW</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts an input array/tensor from HWC to CHW format.</span>
+<span class="w">    </span><span class="sd">"""Converts an input array/tensor from HWC to CHW format.</span>
 
 <span class="sd">    This transform reorders the dimensions of the input array/tensor from Height x Width x Channel</span>
 <span class="sd">    to Channel x Height x Width format.</span>
@@ -1007,22 +1007,22 @@
 <span class="sd">        &gt;&gt;&gt; transform = HWC2CHW()</span>
 <span class="sd">        &gt;&gt;&gt; x = torch.randn(3, 4, 5)  # Shape (3, 4, 5)</span>
 <span class="sd">        &gt;&gt;&gt; y = transform(x)          # Shape (5, 3, 4)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_numpy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Expected 3D arrays, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2"> dimensions&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Expected 3D arrays, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2"> dimensions"</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__call_torch__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Expected 3D tensors, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2"> dimensions&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Expected 3D tensors, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2"> dimensions"</span>
         <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">PolSAR</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handling Polarimetric Synthetic Aperture Radar (PolSAR) data channel conversions.</span>
+<span class="w">    </span><span class="sd">"""Handling Polarimetric Synthetic Aperture Radar (PolSAR) data channel conversions.</span>
 <span class="sd">    This class provides functionality to convert between different channel representations of PolSAR data,</span>
 <span class="sd">    supporting 1, 2, 3, and 4 output channel configurations. It can handle both NumPy arrays and PyTorch tensors.</span>
-<span class="sd">    If inputs is a dictionnary of type {&#39;HH&#39;: data1, &#39;VV&#39;: data2}, it will stack all values along axis 0 to form a CHW array.</span>
+<span class="sd">    If inputs is a dictionnary of type {'HH': data1, 'VV': data2}, it will stack all values along axis 0 to form a CHW array.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        out_channel (int): Desired number of output channels (1, 2, 3, or 4)</span>
@@ -1051,7 +1051,7 @@
 <span class="sd">    Note:</span>
 <span class="sd">        - Input data should have format Channels x Height x Width (CHW).</span>
 <span class="sd">        - By default, PolSAR always return HH polarization if out_channel is 1.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_channel</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_channel</span> <span class="o">=</span> <span class="n">out_channel</span>
@@ -1104,7 +1104,7 @@
         <span class="n">result</span> <span class="o">=</span> <span class="n">handlers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">o</span><span class="p">:</span> <span class="kc">None</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid conversion: </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">out_channels</span><span class="si">}</span><span class="s2"> channels&quot;</span>
+                <span class="sa">f</span><span class="s2">"Invalid conversion: </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">out_channels</span><span class="si">}</span><span class="s2"> channels"</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
 
@@ -1124,7 +1124,7 @@
 <div class="viewcode-block" id="Unsqueeze">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.Unsqueeze.html#torchcvnn.transforms.Unsqueeze">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Unsqueeze</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a singleton dimension to the input array/tensor.</span>
+<span class="w">    </span><span class="sd">"""Add a singleton dimension to the input array/tensor.</span>
 
 <span class="sd">    This transform inserts a new axis at the specified position, increasing</span>
 <span class="sd">    the dimensionality of the input by one.</span>
@@ -1140,7 +1140,7 @@
 <span class="sd">        &gt;&gt;&gt; transform = Unsqueeze(dim=0)</span>
 <span class="sd">        &gt;&gt;&gt; x = torch.randn(3,4)  # Shape (3,4)</span>
 <span class="sd">        &gt;&gt;&gt; y = transform(x)      # Shape (1,3,4)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="Unsqueeze.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.Unsqueeze.html#torchcvnn.transforms.Unsqueeze.__init__">[docs]</a>
@@ -1159,24 +1159,24 @@
 <div class="viewcode-block" id="ToTensor">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.ToTensor.html#torchcvnn.transforms.ToTensor">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ToTensor</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts numpy array or torch tensor to torch tensor of specified dtype.</span>
+<span class="w">    </span><span class="sd">"""Converts numpy array or torch tensor to torch tensor of specified dtype.</span>
 <span class="sd">    This transform converts input data to a PyTorch tensor with the specified data type.</span>
 <span class="sd">    It handles both numpy arrays and existing PyTorch tensors as input.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        dtype (str): Target data type for the output tensor. Should be one of PyTorch&#39;s</span>
-<span class="sd">            supported dtype strings (e.g. &#39;float32&#39;, &#39;float64&#39;, &#39;int32&#39;, etc.)</span>
+<span class="sd">        dtype (str): Target data type for the output tensor. Should be one of PyTorch's</span>
+<span class="sd">            supported dtype strings (e.g. 'float32', 'float64', 'int32', etc.)</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        torch.Tensor: The converted tensor with the specified dtype.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; transform = ToTensor(dtype=&#39;float32&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; transform = ToTensor(dtype='float32')</span>
 <span class="sd">        &gt;&gt;&gt; x_numpy = np.array([1, 2, 3])</span>
 <span class="sd">        &gt;&gt;&gt; x_tensor = transform(x_numpy)  # converts to torch.FloatTensor</span>
 <span class="sd">        &gt;&gt;&gt; x_existing = torch.tensor([1, 2, 3], dtype=torch.int32)</span>
 <span class="sd">        &gt;&gt;&gt; x_converted = transform(x_existing)  # converts to torch.FloatTensor</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="ToTensor.__init__">
 <a class="viewcode-back" href="../../../modules/_autosummary/torchcvnn.transforms.ToTensor.html#torchcvnn.transforms.ToTensor.__init__">[docs]</a>

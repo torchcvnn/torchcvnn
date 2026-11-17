@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2023 Jérémie Levi, Victor Dhédin, Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -325,7 +325,7 @@
 <div class="viewcode-block" id="MaxPool2d">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.MaxPool2d.html#torchcvnn.nn.MaxPool2d">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MaxPool2d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Applies a 2D max pooling on the module of the input signal</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Applies a 2D max pooling on the module of the input signal</span>
 
 <span class="sd">    In the simplest case, the output value of the layer with input size :math:`(N, C, H, W)`, output :math:`(N, C, H_{out}, W_{out})` and `kernel_size` `(kH, kW)` can be precisely described as:</span>
 
@@ -347,7 +347,7 @@
 <span class="sd">        ceil_mode: when `True`, use `ceil` instead of `floor` to compute the output shape</span>
 <span class="sd">        return_indices: if `True`, will return the max indices along with the outputs</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="MaxPool2d.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.MaxPool2d.html#torchcvnn.nn.MaxPool2d.__init__">[docs]</a>
@@ -373,9 +373,9 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Computes and return the MaxPool over the magnitude of the input</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_indices</span><span class="p">:</span>
@@ -388,7 +388,7 @@
 <div class="viewcode-block" id="AvgPool2d">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.AvgPool2d.html#torchcvnn.nn.AvgPool2d">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AvgPool2d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Implementation of torch.nn.AvgPool2d for complex numbers.</span>
 <span class="sd">    Apply AvgPool2d on the real and imaginary part.</span>
 <span class="sd">    Returns complex values associated to the AvgPool2d results.</span>
@@ -400,7 +400,7 @@
 <span class="sd">        ceil_mode: when `True`, use `ceil` instead of `floor` to compute the output shape</span>
 <span class="sd">        count_include_pad: when `True`, will include the zero-padding in the averaging calculation</span>
 <span class="sd">        divisor_override: if specified, it will be used as divisor, otherwise size of the pooling region will be used.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="AvgPool2d.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.AvgPool2d.html#torchcvnn.nn.AvgPool2d.__init__">[docs]</a>
@@ -449,16 +449,16 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Computes the average over the real and imaginery parts.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_complex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">view_as_real</span><span class="p">(</span><span class="n">z</span><span class="p">)))</span></div>
 
 
 <div class="viewcode-block" id="AdaptiveAvgPool2d">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.AdaptiveAvgPool2d.html#torchcvnn.nn.AdaptiveAvgPool2d">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AdaptiveAvgPool2d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Implementation of torch.nn.AdaptiveAvgPool2d for complex numbers.</span>
 <span class="sd">    Apply AdaptiveAvgPool2d on the real and imaginary part.</span>
 <span class="sd">    Returns complex values associated to the AdaptiveAvgPool2d results.</span>
@@ -466,7 +466,7 @@
 <span class="sd">    Arguments:</span>
 <span class="sd">        output_size: the target output size of the image of the form H x W.</span>
 <span class="sd">                     Can be a tuple or a single number H for a square image H x H.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="AdaptiveAvgPool2d.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.AdaptiveAvgPool2d.html#torchcvnn.nn.AdaptiveAvgPool2d.__init__">[docs]</a>
@@ -480,9 +480,9 @@
 
         
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Computes the average over the real and imaginary parts.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">real</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
         <span class="n">imag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">imag</span><span class="p">)</span></div>

@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Quentin Gabot</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -329,7 +329,7 @@
 <div class="viewcode-block" id="PolSFDataset">
 <a class="viewcode-back" href="../../../modules/datasets.html#torchcvnn.datasets.PolSFDataset">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PolSFDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    The Polarimetric SAR dataset with the labels provided by</span>
 <span class="sd">    https://ietr-lab.univ-rennes1.fr/polsarpro-bio/san-francisco/</span>
 
@@ -368,19 +368,19 @@
 <span class="sd">           :width: 100%</span>
 <span class="sd">           :align: center</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Class names</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;0 - unlabel&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;1 - Montain&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;2 - Water&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;3 - Vegetation&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;4 - High-Density Urban&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;5 - Low-Density Urban&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;6 - Developd&quot;</span><span class="p">,</span>
+        <span class="s2">"0 - unlabel"</span><span class="p">,</span>
+        <span class="s2">"1 - Montain"</span><span class="p">,</span>
+        <span class="s2">"2 - Water"</span><span class="p">,</span>
+        <span class="s2">"3 - Vegetation"</span><span class="p">,</span>
+        <span class="s2">"4 - High-Density Urban"</span><span class="p">,</span>
+        <span class="s2">"5 - Low-Density Urban"</span><span class="p">,</span>
+        <span class="s2">"6 - Developd"</span><span class="p">,</span>
     <span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -392,32 +392,32 @@
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
 
-        <span class="c1"># alos2_url = &quot;https://ietr-lab.univ-rennes1.fr/polsarpro-bio/san-francisco/dataset/SAN_FRANCISCO_ALOS2.zip&quot;</span>
-        <span class="c1"># labels_url = &quot;https://raw.githubusercontent.com/liuxuvip/PolSF/master/SF-ALOS2/SF-ALOS2-label2d.png&quot;</span>
+        <span class="c1"># alos2_url = "https://ietr-lab.univ-rennes1.fr/polsarpro-bio/san-francisco/dataset/SAN_FRANCISCO_ALOS2.zip"</span>
+        <span class="c1"># labels_url = "https://raw.githubusercontent.com/liuxuvip/PolSF/master/SF-ALOS2/SF-ALOS2-label2d.png"</span>
 
         <span class="n">crop_coordinates</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2832</span><span class="p">,</span> <span class="mi">736</span><span class="p">),</span> <span class="p">(</span><span class="mi">7888</span><span class="p">,</span> <span class="mi">3520</span><span class="p">))</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;VOL-ALOS2044980750-150324-HBQR1.1__A&quot;</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"VOL-ALOS2044980750-150324-HBQR1.1__A"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span> <span class="o">=</span> <span class="n">ALOSDataset</span><span class="p">(</span>
             <span class="n">root</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">crop_coordinates</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">patch_stride</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;SF-ALOS2-label2d.png&quot;</span><span class="p">))[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"SF-ALOS2-label2d.png"</span><span class="p">))[</span>
             <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span>
         <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># copy necessary as otherwise torch.from_numpy does not support</span>
         <span class="c1"># negative stride</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the total number of patches in the while image.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            the total number of patches in the dataset</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the indexes patch.</span>
 
 <span class="sd">        Arguments:</span>
@@ -425,7 +425,7 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: (patch, labels) where patch contains the 4 complex valued polarization HH, HV, VH, VV and labels contains the aligned semantic labels</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">alos_patch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
 
         <span class="n">row_stride</span><span class="p">,</span> <span class="n">col_stride</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alos_dataset</span><span class="o">.</span><span class="n">patch_stride</span>

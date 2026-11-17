@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2023 Jérémie Levi, Victor Dhédin, Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -328,13 +328,13 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">IndependentRealImag</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Generic module to apply a real valued activation function independently</span>
 <span class="sd">    on both the real and imaginary part</span>
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        fact: A nn.Module name of a real valued activation function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fact</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -342,19 +342,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">act_imag</span> <span class="o">=</span> <span class="n">fact</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Performs the forward pass</span>
 
 <span class="sd">        Arguments:</span>
 <span class="sd">            z: the input tensor on which to apply the activation function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">act_real</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">real</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">act_imag</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span>
 
 
 <div class="viewcode-block" id="CReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CReLU.html#torchcvnn.nn.CReLU">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CReLU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Applies a ReLU independently on both the real and imaginary parts</span>
 
 <span class="sd">    :math:`CReLU(z) = ReLU(\\Re[z]) + ReLU(\\Im[z])j`</span>
@@ -362,7 +362,7 @@
 <span class="sd">    Only the quadrant where both `\\Re[z]` and `\\Im[z]` are negative is projected to</span>
 <span class="sd">    :math:`0`. Otherwise either the real and/or the imaginary part is preserved.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="CReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CReLU.html#torchcvnn.nn.CReLU.__init__">[docs]</a>
@@ -375,11 +375,11 @@
 <div class="viewcode-block" id="CPReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CPReLU.html#torchcvnn.nn.CPReLU">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CPReLU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Applies a PReLU independently on both the real and imaginary parts</span>
 
 <span class="sd">    :math:`CPReLU(z) = PReLU(\\Re[z]) + PReLU(\\Im[z])j`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="CPReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CPReLU.html#torchcvnn.nn.CPReLU.__init__">[docs]</a>
@@ -392,14 +392,14 @@
 <div class="viewcode-block" id="CELU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CELU.html#torchcvnn.nn.CELU">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CELU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Applies a ELU independently on both the real and imaginary parts</span>
 
 <span class="sd">    Not to confuse with `torch.nn.CELU`. For the complex equivalent of</span>
 <span class="sd">    :external:py:class:`torch.nn.CELU`, see :class:`torchcvnn.nn.modules.activation.CCELU`</span>
 
 <span class="sd">    :math:`CELU(z) = ELU(\\Re[z]) + ELU(\\Im[z])j`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="CELU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CELU.html#torchcvnn.nn.CELU.__init__">[docs]</a>
@@ -412,11 +412,11 @@
 <div class="viewcode-block" id="CCELU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CCELU.html#torchcvnn.nn.CCELU">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CCELU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Applies a CELU independently on both the real and imaginary parts</span>
 
 <span class="sd">    :math:`CCELU(z) = CELU(\\Re[z]) + CELU(\\Im[z])j`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="CCELU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CCELU.html#torchcvnn.nn.CCELU.__init__">[docs]</a>
@@ -429,11 +429,11 @@
 <div class="viewcode-block" id="CGELU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CGELU.html#torchcvnn.nn.CGELU">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CGELU</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Applies a GELU independently on both the real and imaginary parts</span>
 
 <span class="sd">    :math:`CGELU(z) = GELU(\\Re[z]) + GELU(\\Im[z])j`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="CGELU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CGELU.html#torchcvnn.nn.CGELU.__init__">[docs]</a>
@@ -446,7 +446,7 @@
 <div class="viewcode-block" id="CSigmoid">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CSigmoid.html#torchcvnn.nn.CSigmoid">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CSigmoid</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Applies a Sigmoid independently on both the real and imaginary parts</span>
 
 <span class="sd">    as used in Nitta Tohru. An extension of the back-propagation algorithm to complex numbers. Neural Networks, 10(9):1391–1415, November 1997.</span>
@@ -454,7 +454,7 @@
 <span class="sd">    :math:`CSigmoid(z) = Sigmoid(\\Re[z]) + Sigmoid(\\Im[z])j`</span>
 
 <span class="sd">    where the real valued sigmoid is applied in the right hand side terms.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="CSigmoid.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CSigmoid.html#torchcvnn.nn.CSigmoid.__init__">[docs]</a>
@@ -467,13 +467,13 @@
 <div class="viewcode-block" id="CTanh">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CTanh.html#torchcvnn.nn.CTanh">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CTanh</span><span class="p">(</span><span class="n">IndependentRealImag</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Applies a Tanh independently on both the real and imaginary parts</span>
 
 <span class="sd">    :math:`CTanh(z) = \\tanh(\\Re[z]) + \\tanh(\\Im[z])j`</span>
 
 <span class="sd">    where the real valued sigmoid is applied in the right hand side terms.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="CTanh.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.CTanh.html#torchcvnn.nn.CTanh.__init__">[docs]</a>
@@ -486,14 +486,14 @@
 <div class="viewcode-block" id="zReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zReLU.html#torchcvnn.nn.zReLU">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">zReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Applies a zReLU</span>
 
 <span class="sd">    :math:`zReLU(z) = \begin{cases} z &amp; \mbox{if } \Re[z] &gt; 0 \mbox{ and } \Im[z] &gt; 0\\ 0 &amp; \mbox{otherwise}  \end{cases}`</span>
 
 <span class="sd">    All the quadrant where both :math:`\Re[z]` and :math:`\Im[z]` are non negative are</span>
 <span class="sd">    projected to :math:`0`. In other words, only one quadrant is preserved.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="zReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zReLU.html#torchcvnn.nn.zReLU.__init__">[docs]</a>
@@ -502,12 +502,12 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Performs the forward pass.</span>
 
 <span class="sd">        Arguments:</span>
 <span class="sd">            z: the input tensor on which to apply the activation function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">pos_real</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="n">pos_img</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">imag</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="n">z</span> <span class="o">*</span> <span class="n">pos_real</span> <span class="o">*</span> <span class="n">pos_img</span></div>
@@ -517,14 +517,14 @@
 <div class="viewcode-block" id="zAbsReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zAbsReLU.html#torchcvnn.nn.zAbsReLU">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">zAbsReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Applies a zAbsReLU</span>
 
 <span class="sd">    :math:`zAbsReLU(z) = \begin{cases} z &amp; \mbox{if } |z| \geq a\\ 0 &amp; \mbox{otherwise}  \end{cases}`</span>
 
 <span class="sd">    This cancels all the complex plane in the circle of radius :math:`a`, where :math:`a` is</span>
 <span class="sd">    trainable.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="zAbsReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zAbsReLU.html#torchcvnn.nn.zAbsReLU.__init__">[docs]</a>
@@ -536,12 +536,12 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Performs the forward pass.</span>
 
 <span class="sd">        Arguments:</span>
 <span class="sd">            z: the input tensor on which to apply the activation function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
         <span class="k">return</span> <span class="n">z</span> <span class="o">*</span> <span class="n">mask</span></div>
 
@@ -550,12 +550,12 @@
 <div class="viewcode-block" id="zLeakyReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zLeakyReLU.html#torchcvnn.nn.zLeakyReLU">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">zLeakyReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Applies a zLeakyReLU</span>
 
 <span class="sd">    :math:`zLeakyReLU(z) = \begin{cases} z &amp; \mbox{if } \Re[z] &gt; 0 \mbox{ and } \Im[z] &gt; 0\\ a.z &amp; \mbox{otherwise}  \end{cases}`</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="zLeakyReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.zLeakyReLU.html#torchcvnn.nn.zLeakyReLU.__init__">[docs]</a>
@@ -567,12 +567,12 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Performs the forward pass.</span>
 
 <span class="sd">        Arguments:</span>
 <span class="sd">            z: the input tensor on which to apply the activation function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">pos_real</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="n">pos_img</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">imag</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="n">z</span> <span class="o">*</span> <span class="n">pos_real</span> <span class="o">*</span> <span class="n">pos_img</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span> <span class="o">*</span> <span class="o">~</span><span class="p">(</span><span class="n">pos_real</span> <span class="o">*</span> <span class="n">pos_img</span><span class="p">))</span></div>
@@ -582,7 +582,7 @@
 <div class="viewcode-block" id="Mod">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Mod.html#torchcvnn.nn.Mod">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Mod</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Extracts the magnitude of the complex input. It maps to :math:`\mathbb{R}`</span>
 
 <span class="sd">    :math:`Mod(z) = |z|`</span>
@@ -590,7 +590,7 @@
 <span class="sd">    This activation function allows to go from complex values to real</span>
 <span class="sd">    values.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="Mod.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Mod.html#torchcvnn.nn.Mod.__init__">[docs]</a>
@@ -599,12 +599,12 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Performs the forward pass.</span>
 
 <span class="sd">        Arguments:</span>
 <span class="sd">            z: the input tensor on which to apply the activation function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z</span><span class="p">)</span></div>
 
 
@@ -612,11 +612,11 @@
 <div class="viewcode-block" id="modReLU">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.modReLU.html#torchcvnn.nn.modReLU">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">modReLU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Applies a ReLU with parametric offset on the amplitude, keeping the phase unchanged.</span>
 
 <span class="sd">    :math:`modReLU(z) = ReLU(|z| + b) e^{j \theta}`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="modReLU.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.modReLU.html#torchcvnn.nn.modReLU.__init__">[docs]</a>
@@ -626,20 +626,20 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Performs the forward pass.</span>
 
 <span class="sd">        Arguments:</span>
 <span class="sd">            z: the input tensor on which to apply the activation function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">z</span><span class="o">.</span><span class="n">angle</span><span class="p">())</span></div>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sgn</span><span class="p">(</span><span class="n">z</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="Cardioid">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Cardioid.html#torchcvnn.nn.Cardioid">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Cardioid</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    The cardioid activation function as proposed by Virtue et al. (2019) is given by :</span>
 
 <span class="sd">    :math:`Cardioid(z) = \frac{1+\cos(\theta)}{2} z`</span>
@@ -647,7 +647,7 @@
 <span class="sd">    For real numbers, e.g. :math:`\theta \in \{0, \pi\}`, it reduces to the ReLU :</span>
 
 <span class="sd">    :math:`\forall r \in \mathbb{R}, \theta \in \{0, \pi\}, Cardioid(r e^{j \theta}) = ReLU(r) e^{j \theta} = ReLU(r)`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="Cardioid.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Cardioid.html#torchcvnn.nn.Cardioid.__init__">[docs]</a>
@@ -656,20 +656,20 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Performs the forward pass.</span>
 
 <span class="sd">        Arguments:</span>
 <span class="sd">            z: the input tensor on which to apply the activation function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">angle</span><span class="p">()))</span> <span class="o">*</span> <span class="n">z</span></div>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sgn</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">)</span> <span class="o">*</span> <span class="n">z</span></div>
 
 
 
 <div class="viewcode-block" id="MultiheadAttention">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.MultiheadAttention.html#torchcvnn.nn.MultiheadAttention">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MultiheadAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 
 <span class="sd">    This class is adapted from torch.nn.MultiheadAttention to support complex valued tensors.</span>
 
@@ -719,7 +719,7 @@
 <span class="sd">            attn_output, attn_output_weights = multihead_attn(src, src, src)</span>
 <span class="sd">            # attn_output is (seq_len, batch_size, num_features)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="MultiheadAttention.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.MultiheadAttention.html#torchcvnn.nn.MultiheadAttention.__init__">[docs]</a>
@@ -734,7 +734,7 @@
         <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"device"</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">"dtype"</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span> <span class="o">=</span> <span class="n">embed_dim</span>
 
@@ -744,7 +744,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span> <span class="o">=</span> <span class="n">embed_dim</span> <span class="o">//</span> <span class="n">num_heads</span>
         <span class="k">assert</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span> <span class="o">*</span> <span class="n">num_heads</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span>
-        <span class="p">),</span> <span class="s2">&quot;embed_dim must be divisible by num_heads&quot;</span>
+        <span class="p">),</span> <span class="s2">"embed_dim must be divisible by num_heads"</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">q_norm</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k_norm</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span>
@@ -758,7 +758,7 @@
                 <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="s2">&quot;in_proj_bias&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="s2">"in_proj_bias"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">out_proj</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
             <span class="n">embed_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span> <span class="o">**</span><span class="n">factory_kwargs</span>
@@ -784,7 +784,7 @@
         <span class="n">need_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">average_attn_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Computes attention outputs using query, key and value embeddings.</span>
 
 <span class="sd">        This function is adapted from torch.nn.MultiheadAttention to support complex valued tensors. </span>
@@ -798,7 +798,7 @@
 <span class="sd">            Outputs:</span>
 <span class="sd">            - attn_output: :math:`(T, E)` or :math:`(T, B, E)` (``batch_first=False``) or :math:`(B, T, E) (``batch_first=True``), where T is the target sequence length, B is the batch size, E is the embedding dimension</span>
 <span class="sd">            - attn_output_weights :math:`(T, S)` or :math:`(B, T, S)` Optional output, not available if need_weights=False</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">is_batched</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
 

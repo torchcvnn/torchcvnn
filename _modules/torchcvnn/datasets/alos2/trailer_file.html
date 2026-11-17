@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -323,18 +323,18 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_utils</span>
 
 <span class="n">descriptor_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;file_id&quot;</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_low_resolution_image_records&quot;</span><span class="p">,</span> <span class="mi">490</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_of_pixels&quot;</span><span class="p">,</span> <span class="mi">504</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_of_lines&quot;</span><span class="p">,</span> <span class="mi">510</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;image_record_length&quot;</span><span class="p">,</span> <span class="mi">496</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"file_id"</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_low_resolution_image_records"</span><span class="p">,</span> <span class="mi">490</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_of_pixels"</span><span class="p">,</span> <span class="mi">504</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_of_lines"</span><span class="p">,</span> <span class="mi">510</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"image_record_length"</span><span class="p">,</span> <span class="mi">496</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="n">descriptor_record_length</span> <span class="o">=</span> <span class="mi">720</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_image_data</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">number_pixels</span><span class="p">,</span> <span class="n">number_lines</span><span class="p">):</span>
     <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">number_pixels</span> <span class="o">*</span> <span class="n">number_lines</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">data_array</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;H&quot;</span> <span class="o">*</span> <span class="n">number_pixels</span> <span class="o">*</span> <span class="n">number_lines</span><span class="p">),</span> <span class="n">data_bytes</span><span class="p">)</span>
+    <span class="n">data_array</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">"&gt;"</span> <span class="o">+</span> <span class="p">(</span><span class="s2">"H"</span> <span class="o">*</span> <span class="n">number_pixels</span> <span class="o">*</span> <span class="n">number_lines</span><span class="p">),</span> <span class="n">data_bytes</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ushort</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">number_pixels</span><span class="p">,</span> <span class="n">number_lines</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
 
@@ -342,13 +342,13 @@
 <div class="viewcode-block" id="TrailerFile">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.alos2.TrailerFile">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TrailerFile</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Processing of the SAR trailer file.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
             <span class="n">fh_offset</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">fh_offset</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">parse_from_format</span><span class="p">(</span>
                 <span class="n">fh</span><span class="p">,</span>
@@ -361,16 +361,16 @@
 
             <span class="c1"># Move the reading head to the beginning of the buffer</span>
             <span class="n">fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">fh_offset</span><span class="p">)</span>
-            <span class="n">num_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">[</span><span class="s2">&quot;number_of_pixels&quot;</span><span class="p">]</span>
-            <span class="n">num_lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">[</span><span class="s2">&quot;number_of_lines&quot;</span><span class="p">]</span>
+            <span class="n">num_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">[</span><span class="s2">"number_of_pixels"</span><span class="p">]</span>
+            <span class="n">num_lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">[</span><span class="s2">"number_of_lines"</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">image_data</span> <span class="o">=</span> <span class="n">parse_image_data</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">num_pixels</span><span class="p">,</span> <span class="n">num_lines</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">descriptor_txt</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="s2">Descriptor : </span>
 <span class="si">{</span><span class="n">descriptor_txt</span><span class="si">}</span>
-<span class="s2">        &quot;&quot;&quot;</span></div>
+<span class="s2">        """</span></div>
 
 </pre></div>
         </article>

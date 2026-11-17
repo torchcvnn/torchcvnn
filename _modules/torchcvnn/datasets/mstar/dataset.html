@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -326,25 +326,25 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_header</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This function parses the PhoenixHeader from a file handle from the provided file handle.</span>
 
 <span class="sd">    It returns a dictionnary containing all the fields of the PhoenixHeader.</span>
 
 <span class="sd">    It raises an exception if the header is not valid, i.e. does not start with [PhoenixHeaderVer01.04] or [PhoenixHeaderVer01.05]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">parsed_fields</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="c1"># There is one character at the very beginning of the file, before the header</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
     <span class="n">start_line</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">accepted_headers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;[PhoenixHeaderVer01.04]&quot;</span><span class="p">,</span> <span class="s2">&quot;[PhoenixHeaderVer01.05]&quot;</span><span class="p">]</span>
+    <span class="n">accepted_headers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"[PhoenixHeaderVer01.04]"</span><span class="p">,</span> <span class="s2">"[PhoenixHeaderVer01.05]"</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">start_line</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">accepted_headers</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Invalid header : </span><span class="si">{</span><span class="n">start_line</span><span class="si">}</span><span class="s2">, expected one of </span><span class="si">{</span><span class="n">accepted_headers</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Invalid header : </span><span class="si">{</span><span class="n">start_line</span><span class="si">}</span><span class="s2">, expected one of </span><span class="si">{</span><span class="n">accepted_headers</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
     <span class="n">next_line</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="k">while</span> <span class="n">next_line</span> <span class="o">!=</span> <span class="s2">&quot;[EndofPhoenixHeader]&quot;</span><span class="p">:</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="n">next_line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">next_line</span> <span class="o">!=</span> <span class="s2">"[EndofPhoenixHeader]"</span><span class="p">:</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">next_line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">)</span>
         <span class="n">key</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">parsed_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
@@ -354,7 +354,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MSTARSample</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This class implements a sample from the MSTAR dataset.</span>
 
 <span class="sd">    The extracted complex image is stored in the data attribute.</span>
@@ -365,23 +365,23 @@
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        filename : the name of the file to load</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
             <span class="c1"># Read the header from the file</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
 
-            <span class="n">num_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;NumberOfRows&quot;</span><span class="p">])</span>
-            <span class="n">num_cols</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;NumberOfColumns&quot;</span><span class="p">])</span>
-            <span class="n">phoenix_header_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;PhoenixHeaderLength&quot;</span><span class="p">])</span>
-            <span class="n">native_header_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;native_header_length&quot;</span><span class="p">])</span>
+            <span class="n">num_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NumberOfRows"</span><span class="p">])</span>
+            <span class="n">num_cols</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NumberOfColumns"</span><span class="p">])</span>
+            <span class="n">phoenix_header_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"PhoenixHeaderLength"</span><span class="p">])</span>
+            <span class="n">native_header_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"native_header_length"</span><span class="p">])</span>
 
             <span class="n">fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">phoenix_header_length</span> <span class="o">+</span> <span class="n">native_header_length</span><span class="p">)</span>
 
-            <span class="n">sig_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;PhoenixSigSize&quot;</span><span class="p">])</span>
+            <span class="n">sig_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"PhoenixSigSize"</span><span class="p">])</span>
             <span class="n">bytes_per_values</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">sig_size</span> <span class="o">-</span> <span class="n">phoenix_header_length</span> <span class="o">-</span> <span class="n">native_header_length</span>
             <span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">num_rows</span> <span class="o">*</span> <span class="n">num_cols</span><span class="p">)</span>
@@ -394,19 +394,19 @@
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Unsupported number of bytes per value : </span><span class="si">{</span><span class="n">bytes_per_values</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Unsupported number of bytes per value : </span><span class="si">{</span><span class="n">bytes_per_values</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
 
         <span class="c1"># Read the data from the file</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
             <span class="n">fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">phoenix_header_length</span> <span class="o">+</span> <span class="n">native_header_length</span><span class="p">)</span>
 
             <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">num_rows</span> <span class="o">*</span> <span class="n">num_cols</span> <span class="o">*</span> <span class="n">bytes_per_values</span><span class="p">)</span>
-            <span class="n">unpacked</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;f&quot;</span> <span class="o">*</span> <span class="n">num_cols</span> <span class="o">*</span> <span class="n">num_rows</span><span class="p">),</span> <span class="n">data_bytes</span><span class="p">)</span>
+            <span class="n">unpacked</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">"&gt;"</span> <span class="o">+</span> <span class="p">(</span><span class="s2">"f"</span> <span class="o">*</span> <span class="n">num_cols</span> <span class="o">*</span> <span class="n">num_rows</span><span class="p">),</span> <span class="n">data_bytes</span><span class="p">)</span>
             <span class="n">magnitudes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unpacked</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">)</span>
 
             <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">num_rows</span> <span class="o">*</span> <span class="n">num_cols</span> <span class="o">*</span> <span class="n">bytes_per_values</span><span class="p">)</span>
-            <span class="n">unpacked</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;f&quot;</span> <span class="o">*</span> <span class="n">num_cols</span> <span class="o">*</span> <span class="n">num_rows</span><span class="p">),</span> <span class="n">data_bytes</span><span class="p">)</span>
+            <span class="n">unpacked</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">"&gt;"</span> <span class="o">+</span> <span class="p">(</span><span class="s2">"f"</span> <span class="o">*</span> <span class="n">num_cols</span> <span class="o">*</span> <span class="n">num_rows</span><span class="p">),</span> <span class="n">data_bytes</span><span class="p">)</span>
             <span class="n">phases</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unpacked</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">magnitudes</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phases</span><span class="p">)</span>
@@ -414,25 +414,25 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gather_mstar_datafiles</span><span class="p">(</span><span class="n">rootdir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">target_name_depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This function gathers all the MSTAR datafiles from the root directory</span>
 <span class="sd">    It looks for files named HBxxxx that are data files (containing a PhoenixHeader).</span>
 
 <span class="sd">    The assigned target name is the name of the directory, or parent directory, at the target_name_depth level.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">data_files</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">rootdir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;**/HB*&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">rootdir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"**/HB*"</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
             <span class="k">continue</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
                 <span class="n">_</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
             <span class="c1"># sample = MSTARSample(filename)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;The file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> failed to be loaded as a MSTAR sample: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"The file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> failed to be loaded as a MSTAR sample: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="k">continue</span>
 
@@ -440,7 +440,7 @@
         <span class="k">if</span> <span class="n">target_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data_files</span><span class="p">:</span>
             <span class="n">data_files</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successfully parsed </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> as a </span><span class="si">{</span><span class="n">target_name</span><span class="si">}</span><span class="s2"> sample.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Successfully parsed </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> as a </span><span class="si">{</span><span class="n">target_name</span><span class="si">}</span><span class="s2"> sample."</span><span class="p">)</span>
         <span class="n">data_files</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data_files</span>
 
@@ -448,7 +448,7 @@
 <div class="viewcode-block" id="MSTARTargets">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.MSTARTargets">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MSTARTargets</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This class implements a PyTorch Dataset for the MSTAR dataset.</span>
 
 <span class="sd">    The MSTAR dataset is composed of several sub-datasets. The datasets must</span>
@@ -493,7 +493,7 @@
 <span class="sd">           :width: 60%</span>
 
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -506,11 +506,11 @@
         <span class="c1"># to the depth at which the target name is located in the directory structure</span>
         <span class="c1"># with respect to a datafile</span>
         <span class="n">sub_datasets</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;MSTAR_PUBLIC_T_72_VARIANTS_CD1&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="s2">&quot;MSTAR_PUBLIC_T_72_VARIANTS_CD2&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="s2">&quot;MSTAR_PUBLIC_MIXED_TARGETS_CD1&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="s2">&quot;MSTAR_PUBLIC_MIXED_TARGETS_CD2&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="s2">&quot;MSTAR_PUBLIC_TARGETS_CHIPS_T72_BMP2_BTR70_SLICY&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">"MSTAR_PUBLIC_T_72_VARIANTS_CD1"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">"MSTAR_PUBLIC_T_72_VARIANTS_CD2"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">"MSTAR_PUBLIC_MIXED_TARGETS_CD1"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">"MSTAR_PUBLIC_MIXED_TARGETS_CD2"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">"MSTAR_PUBLIC_TARGETS_CHIPS_T72_BMP2_BTR70_SLICY"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># We collect all the samples from all the sub-datasets</span>
@@ -518,7 +518,7 @@
         <span class="k">for</span> <span class="n">sub_dataset</span><span class="p">,</span> <span class="n">target_name_depth</span> <span class="ow">in</span> <span class="n">sub_datasets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">sub_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span> <span class="o">/</span> <span class="n">sub_dataset</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">sub_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Directory </span><span class="si">{</span><span class="n">sub_dir</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Directory </span><span class="si">{</span><span class="n">sub_dir</span><span class="si">}</span><span class="s2"> does not exist."</span><span class="p">)</span>
                 <span class="k">continue</span>
             <span class="c1"># Append the data files from the sub-dataset</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">gather_mstar_datafiles</span><span class="p">(</span>
@@ -537,20 +537,20 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_data_files</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_data_files</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tot_num_data_files</span><span class="si">}</span><span class="s2"> MSTAR samples from the following classes : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">class_names</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Loaded </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tot_num_data_files</span><span class="si">}</span><span class="s2"> MSTAR samples from the following classes : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">class_names</span><span class="si">}</span><span class="s2">."</span>
         <span class="p">)</span>
         <span class="c1"># List the number of samples per class</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_names</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Class </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_data_files</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2"> samples.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Class </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_data_files</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2"> samples."</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the total number of samples</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_data_files</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the sample at the given index. Applies the transform</span>
 <span class="sd">        if provided. The type of the first component of the tuple</span>
 <span class="sd">        depends on the provided transform. If None is provided, the</span>
@@ -562,7 +562,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            data : the sample</span>
 <span class="sd">            class_idx : the index of the class in the class_names list</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tot_num_data_files</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IndexError</span>
@@ -574,7 +574,7 @@
             <span class="n">index</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_data_files</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
         <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_files</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading the MSTAR file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading the MSTAR file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">sample</span> <span class="o">=</span> <span class="n">MSTARSample</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="n">class_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>

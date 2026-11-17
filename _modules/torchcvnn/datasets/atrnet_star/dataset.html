@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2025 Rodolphe Durand</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -328,33 +328,33 @@
     <span class="n">rootdir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
     <span class="n">split</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This function gathers all the ATRNet-STAR datafiles from the specified split in the root directory</span>
 
 <span class="sd">    It returns a list of the paths of the samples (without the extension).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">data_files</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">if</span> <span class="n">split</span> <span class="o">!=</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">split</span> <span class="o">!=</span> <span class="s2">"all"</span><span class="p">:</span>
         <span class="n">split_dir</span> <span class="o">=</span> <span class="n">rootdir</span> <span class="o">/</span> <span class="n">split</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">split_dir</span> <span class="o">=</span> <span class="n">rootdir</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">split_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">split_dir</span><span class="p">)</span><span class="si">}</span><span class="s2"> not found. Possible splits of benchmark </span><span class="si">{</span><span class="n">rootdir</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> are : </span><span class="si">{</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">split_dir</span><span class="p">)</span><span class="si">}</span><span class="s2"> not found. Possible splits of benchmark </span><span class="si">{</span><span class="n">rootdir</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> are : </span><span class="si">{</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()]</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Looking for all samples in </span><span class="si">{</span><span class="n">split_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Looking for all samples in </span><span class="si">{</span><span class="n">split_dir</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># only look for data files (avoid duplicates)</span>
-    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">split_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;**/*.mat&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">split_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"**/*.mat"</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
             <span class="k">continue</span>
 
         <span class="c1"># strip file of the .xml or .mat extension</span>
-        <span class="n">sample_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="n">sample_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">""</span><span class="p">))</span>
 
         <span class="c1"># add sample name to the list of known samples</span>
         <span class="n">data_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sample_name</span><span class="p">)</span>
@@ -363,13 +363,13 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">ATRNetSTARSample</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This class implements a sample from the ATRNet-STAR dataset.</span>
 <span class="sd">    Only slant-range quad polarization complex images are supported.</span>
 
 <span class="sd">    The extracted complex image is stored in the `data` attribute.</span>
 
-<span class="sd">    The data is a dictionnary, keys being the polarization (&#39;HH&#39;, &#39;HV&#39;, &#39;VH&#39; or &#39;VV&#39;)</span>
+<span class="sd">    The data is a dictionnary, keys being the polarization ('HH', 'HV', 'VH' or 'VV')</span>
 <span class="sd">    and values a numpy array of the corresponding complex image.</span>
 
 <span class="sd">    The image annotations are stored in the `annotation` attribute. It contains all the fields</span>
@@ -378,16 +378,16 @@
 <span class="sd">    Arguments:</span>
 <span class="sd">        sample_name (str): the name of the file to load WITHOUT the .mat or .xml extension</span>
 <span class="sd">        transform (Callable): (optional) A transform to apply to the data</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">DATA_FILETYPE</span> <span class="o">=</span> <span class="s2">&quot;.mat&quot;</span>
-    <span class="n">HEADER_FILETYPE</span> <span class="o">=</span> <span class="s2">&quot;.xml&quot;</span>
+    <span class="n">DATA_FILETYPE</span> <span class="o">=</span> <span class="s2">".mat"</span>
+    <span class="n">HEADER_FILETYPE</span> <span class="o">=</span> <span class="s2">".xml"</span>
 
     <span class="n">POL_KEY_TRANSLATION_DICT</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;HH&quot;</span><span class="p">:</span> <span class="s2">&quot;data_hh&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;HV&quot;</span><span class="p">:</span> <span class="s2">&quot;data_hv&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;VH&quot;</span><span class="p">:</span> <span class="s2">&quot;data_vh&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;VV&quot;</span><span class="p">:</span> <span class="s2">&quot;data_vv&quot;</span><span class="p">,</span>
+        <span class="s2">"HH"</span><span class="p">:</span> <span class="s2">"data_hh"</span><span class="p">,</span>
+        <span class="s2">"HV"</span><span class="p">:</span> <span class="s2">"data_hv"</span><span class="p">,</span>
+        <span class="s2">"VH"</span><span class="p">:</span> <span class="s2">"data_vh"</span><span class="p">,</span>
+        <span class="s2">"VV"</span><span class="p">:</span> <span class="s2">"data_vv"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">transform</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
@@ -413,7 +413,7 @@
 <div class="viewcode-block" id="ATRNetSTAR">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.ATRNetSTAR">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ATRNetSTAR</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Implements a PyTorch Dataset for the ATRNet-STAR dataset presented in :</span>
 
 <span class="sd">    Yongxiang Liu, Weĳie Li, Li Liu, Jie Zhou, Bowen Peng, Yafei Song, Xuying Xiong, Wei Yang,</span>
@@ -432,31 +432,31 @@
 <span class="sd">        root_dir (str): The root directory in which the different benchmarks are placed.</span>
 <span class="sd">                        Will be created if it does not exist.</span>
 <span class="sd">        benchmark (str): (optional) Chosen benchmark. If not specified, SOC_40 (entire dataset) will be used as default.</span>
-<span class="sd">        split (str): Chosen split (&#39;train&#39;, &#39;test&#39;, ... or &#39;all&#39; for all benchmark samples).</span>
+<span class="sd">        split (str): Chosen split ('train', 'test', ... or 'all' for all benchmark samples).</span>
 <span class="sd">                    Those are pre-defined by the dataset for each benchmark.</span>
 <span class="sd">        download (bool): (optional) Whether or not to download the dataset if it is not found. Default: False</span>
 <span class="sd">        class_level (str): (optional) The level of precision chosen for the class attributed to a sample.</span>
-<span class="sd">                            Either &#39;category&#39;, &#39;class&#39; or &#39;type&#39;. Default: &#39;type&#39; (the finest granularity)</span>
+<span class="sd">                            Either 'category', 'class' or 'type'. Default: 'type' (the finest granularity)</span>
 <span class="sd">        get_annotations (bool): (optional) If `False`, a dataset item will be a tuple (`sample`, `target class`) (default).</span>
 <span class="sd">                                If `True`, the entire sample annotation</span>
 <span class="sd">                                dictionnary will also be returned: (`sample`, `target class`, `annotation dict`).</span>
 <span class="sd">        transform (Callable): (optional) A transform to apply to the data</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Hugging Face repository constants</span>
-    <span class="n">HF_REPO_ID</span> <span class="o">=</span> <span class="s2">&quot;waterdisappear/ATRNet-STAR&quot;</span>
-    <span class="n">HF_BENCHMARKS_DIR_PATH</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;Slant_Range/complex_float_quad/&quot;</span><span class="p">)</span>
+    <span class="n">HF_REPO_ID</span> <span class="o">=</span> <span class="s2">"waterdisappear/ATRNet-STAR"</span>
+    <span class="n">HF_BENCHMARKS_DIR_PATH</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">"Slant_Range/complex_float_quad/"</span><span class="p">)</span>
 
     <span class="c1"># SOC_40classes is the complete original dataset, with the train/test splits defined</span>
     <span class="n">BENCHMARKS</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;SOC_40classes&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;EOC_azimuth&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;EOC_band&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;EOC_depression&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;EOC_scene&quot;</span><span class="p">,</span>
+        <span class="s2">"SOC_40classes"</span><span class="p">,</span>
+        <span class="s2">"EOC_azimuth"</span><span class="p">,</span>
+        <span class="s2">"EOC_band"</span><span class="p">,</span>
+        <span class="s2">"EOC_depression"</span><span class="p">,</span>
+        <span class="s2">"EOC_scene"</span><span class="p">,</span>
     <span class="p">]</span>
 
-    <span class="n">_ALLOWED_BENCHMARKS</span> <span class="o">=</span> <span class="n">BENCHMARKS</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;SOC_40&quot;</span><span class="p">]</span>
+    <span class="n">_ALLOWED_BENCHMARKS</span> <span class="o">=</span> <span class="n">BENCHMARKS</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"SOC_40"</span><span class="p">]</span>
     <span class="c1"># prettier logs later</span>
     <span class="n">_ALLOWED_BENCHMARKS</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -469,82 +469,82 @@
 
     <span class="c1">### class names for all levels</span>
 
-    <span class="n">CATEGORIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Car&quot;</span><span class="p">,</span> <span class="s2">&quot;Speacial&quot;</span><span class="p">,</span> <span class="s2">&quot;Truck&quot;</span><span class="p">,</span> <span class="s2">&quot;Bus&quot;</span><span class="p">]</span>
+    <span class="n">CATEGORIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Car"</span><span class="p">,</span> <span class="s2">"Speacial"</span><span class="p">,</span> <span class="s2">"Truck"</span><span class="p">,</span> <span class="s2">"Bus"</span><span class="p">]</span>
 
     <span class="n">CLASSES</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;Large_Car&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Medium_SUV&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Compact_SUV&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Mini_Car&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Medium_Car&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ECV&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Ambulance&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Road_Roller&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Shovel_Loader&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Light_DT&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Pickup&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Mixer_Truck&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Heavy_DT&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Medium_TT&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Light_PV&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Heavy_FT&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Forklift&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Heavy_ST&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Small_Bus&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Medium_Bus&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Large_Bus&quot;</span><span class="p">,</span>
+        <span class="s2">"Large_Car"</span><span class="p">,</span>
+        <span class="s2">"Medium_SUV"</span><span class="p">,</span>
+        <span class="s2">"Compact_SUV"</span><span class="p">,</span>
+        <span class="s2">"Mini_Car"</span><span class="p">,</span>
+        <span class="s2">"Medium_Car"</span><span class="p">,</span>
+        <span class="s2">"ECV"</span><span class="p">,</span>
+        <span class="s2">"Ambulance"</span><span class="p">,</span>
+        <span class="s2">"Road_Roller"</span><span class="p">,</span>
+        <span class="s2">"Shovel_Loader"</span><span class="p">,</span>
+        <span class="s2">"Light_DT"</span><span class="p">,</span>
+        <span class="s2">"Pickup"</span><span class="p">,</span>
+        <span class="s2">"Mixer_Truck"</span><span class="p">,</span>
+        <span class="s2">"Heavy_DT"</span><span class="p">,</span>
+        <span class="s2">"Medium_TT"</span><span class="p">,</span>
+        <span class="s2">"Light_PV"</span><span class="p">,</span>
+        <span class="s2">"Heavy_FT"</span><span class="p">,</span>
+        <span class="s2">"Forklift"</span><span class="p">,</span>
+        <span class="s2">"Heavy_ST"</span><span class="p">,</span>
+        <span class="s2">"Small_Bus"</span><span class="p">,</span>
+        <span class="s2">"Medium_Bus"</span><span class="p">,</span>
+        <span class="s2">"Large_Bus"</span><span class="p">,</span>
     <span class="p">]</span>
 
     <span class="n">TYPES</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;Great_Wall_Voleex_C50&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Hongqi_h5&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Hongqi_CA7180A3E&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Chang&#39;an_CS75_Plus&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Chevrolet_Blazer_1998&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Changfeng_Cheetah_CFA6473C&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Jeep_Patriot&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Mitsubishi_Outlander_2003&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Lincoln_MKC&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Hawtai_EV160B&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Chery_qq3&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Buick_Excelle_GT&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Chery_Arrizo 5&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Lveco_Proud_2009&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;JINBEI_SY5033XJH&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Changlin_8228-5&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;SDLG_ZL40F&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Foton_BJ1045V9JB5-54&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;FAW_Jiabao_T51&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;WAW_Aochi_1800&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Huanghai_N1&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Great_Wall_poer&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;CNHTC_HOWO&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Dongfeng_Tianjin_DFH2200B&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;WAW_Aochi_Hongrui&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Dongfeng_Duolika&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;JAC_Junling&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;FAW_J6P&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;SHACMAN_DeLong_M3000&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Hyundai_HLF25_II&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Dongfeng_Tianjin_KR230&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;SHACMAN_DeLong_X3000&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Wuling_Rongguang_V&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Buick_GL8&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Chang&#39;an_Starlight_4500&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Dongfeng_Forthing_Lingzhi&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Yangzi_YZK6590XCA&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Dongfeng_EQ6608LTV&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;MAXUS_V80&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Yutong_ZK6120HY1&quot;</span><span class="p">,</span>
+        <span class="s2">"Great_Wall_Voleex_C50"</span><span class="p">,</span>
+        <span class="s2">"Hongqi_h5"</span><span class="p">,</span>
+        <span class="s2">"Hongqi_CA7180A3E"</span><span class="p">,</span>
+        <span class="s2">"Chang'an_CS75_Plus"</span><span class="p">,</span>
+        <span class="s2">"Chevrolet_Blazer_1998"</span><span class="p">,</span>
+        <span class="s2">"Changfeng_Cheetah_CFA6473C"</span><span class="p">,</span>
+        <span class="s2">"Jeep_Patriot"</span><span class="p">,</span>
+        <span class="s2">"Mitsubishi_Outlander_2003"</span><span class="p">,</span>
+        <span class="s2">"Lincoln_MKC"</span><span class="p">,</span>
+        <span class="s2">"Hawtai_EV160B"</span><span class="p">,</span>
+        <span class="s2">"Chery_qq3"</span><span class="p">,</span>
+        <span class="s2">"Buick_Excelle_GT"</span><span class="p">,</span>
+        <span class="s2">"Chery_Arrizo 5"</span><span class="p">,</span>
+        <span class="s2">"Lveco_Proud_2009"</span><span class="p">,</span>
+        <span class="s2">"JINBEI_SY5033XJH"</span><span class="p">,</span>
+        <span class="s2">"Changlin_8228-5"</span><span class="p">,</span>
+        <span class="s2">"SDLG_ZL40F"</span><span class="p">,</span>
+        <span class="s2">"Foton_BJ1045V9JB5-54"</span><span class="p">,</span>
+        <span class="s2">"FAW_Jiabao_T51"</span><span class="p">,</span>
+        <span class="s2">"WAW_Aochi_1800"</span><span class="p">,</span>
+        <span class="s2">"Huanghai_N1"</span><span class="p">,</span>
+        <span class="s2">"Great_Wall_poer"</span><span class="p">,</span>
+        <span class="s2">"CNHTC_HOWO"</span><span class="p">,</span>
+        <span class="s2">"Dongfeng_Tianjin_DFH2200B"</span><span class="p">,</span>
+        <span class="s2">"WAW_Aochi_Hongrui"</span><span class="p">,</span>
+        <span class="s2">"Dongfeng_Duolika"</span><span class="p">,</span>
+        <span class="s2">"JAC_Junling"</span><span class="p">,</span>
+        <span class="s2">"FAW_J6P"</span><span class="p">,</span>
+        <span class="s2">"SHACMAN_DeLong_M3000"</span><span class="p">,</span>
+        <span class="s2">"Hyundai_HLF25_II"</span><span class="p">,</span>
+        <span class="s2">"Dongfeng_Tianjin_KR230"</span><span class="p">,</span>
+        <span class="s2">"SHACMAN_DeLong_X3000"</span><span class="p">,</span>
+        <span class="s2">"Wuling_Rongguang_V"</span><span class="p">,</span>
+        <span class="s2">"Buick_GL8"</span><span class="p">,</span>
+        <span class="s2">"Chang'an_Starlight_4500"</span><span class="p">,</span>
+        <span class="s2">"Dongfeng_Forthing_Lingzhi"</span><span class="p">,</span>
+        <span class="s2">"Yangzi_YZK6590XCA"</span><span class="p">,</span>
+        <span class="s2">"Dongfeng_EQ6608LTV"</span><span class="p">,</span>
+        <span class="s2">"MAXUS_V80"</span><span class="p">,</span>
+        <span class="s2">"Yutong_ZK6120HY1"</span><span class="p">,</span>
     <span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">root_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">split</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">split</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">"train"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">,</span> <span class="s2">"all"</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">benchmark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">download</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">class_level</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+        <span class="n">class_level</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">"class"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"type"</span><span class="p">,</span>
         <span class="n">get_annotations</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">transform</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
@@ -559,25 +559,25 @@
         <span class="k">if</span> <span class="n">benchmark</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># if no benchmark is given, default behavior should be to use the entire dataset (SOC_40)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="s2">&quot;No benchmark was specified. SOC_40 (full dataset) will be used.&quot;</span>
+                <span class="s2">"No benchmark was specified. SOC_40 (full dataset) will be used."</span>
             <span class="p">)</span>
-            <span class="n">benchmark</span> <span class="o">=</span> <span class="s2">&quot;SOC_40classes&quot;</span>
+            <span class="n">benchmark</span> <span class="o">=</span> <span class="s2">"SOC_40classes"</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">benchmark</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_verify_inputs</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">==</span> <span class="s2">&quot;SOC_40&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">==</span> <span class="s2">"SOC_40"</span><span class="p">:</span>
             <span class="c1"># allow use of the name given to the benchmark in the paper instead of the file</span>
             <span class="c1"># name actually used in their repository</span>
             <span class="c1"># (more consistent with the rest of their file naming)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="s2">&quot;SOC_40classes&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="s2">"SOC_40classes"</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">benchmark_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">benchmark_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">download</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span><span class="si">}</span><span class="s2"> benchmark not found. You can use download=True to download it&quot;</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span><span class="si">}</span><span class="s2"> benchmark not found. You can use download=True to download it"</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_download_dataset</span><span class="p">()</span>
@@ -586,26 +586,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">datafiles</span> <span class="o">=</span> <span class="n">gather_ATRNetSTAR_datafiles</span><span class="p">(</span>
             <span class="n">rootdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">benchmark_path</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span>
         <span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datafiles</span><span class="p">)</span><span class="si">}</span><span class="s2"> samples.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datafiles</span><span class="p">)</span><span class="si">}</span><span class="s2"> samples."</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_verify_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verify inputs are valid&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_level</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Verify inputs are valid"""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_level</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">"class"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unexpected class_level value. Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">class_level</span><span class="si">}</span><span class="s2"> instead of &#39;type&#39;, &#39;class&#39; or &#39;category&#39;.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Unexpected class_level value. Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">class_level</span><span class="si">}</span><span class="s2"> instead of 'type', 'class' or 'category'."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ALLOWED_BENCHMARKS</span><span class="p">:</span>
-            <span class="n">benchmarks_with_quotes</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ALLOWED_BENCHMARKS</span><span class="p">]</span>
+            <span class="n">benchmarks_with_quotes</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">'"</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ALLOWED_BENCHMARKS</span><span class="p">]</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unknown benchmark. Should be one of </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">benchmarks_with_quotes</span><span class="p">)</span><span class="si">}</span><span class="s2"> or None&quot;</span>
+                <span class="sa">f</span><span class="s2">"Unknown benchmark. Should be one of </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">benchmarks_with_quotes</span><span class="p">)</span><span class="si">}</span><span class="s2"> or None"</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_download_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Downloads the specified benchmark.</span>
 <span class="sd">        Will be placed in a directory named like the benchmark, in root_dir</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.download</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_7z</span><span class="p">,</span> <span class="n">download_benchmark</span>
 
         <span class="n">check_7z</span><span class="p">()</span>
@@ -618,28 +618,28 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the names of all classes at class_level,</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_level</span> <span class="o">==</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_level</span> <span class="o">==</span> <span class="s2">"category"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">CATEGORIES</span>
 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_level</span> <span class="o">==</span> <span class="s2">&quot;class&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_level</span> <span class="o">==</span> <span class="s2">"class"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">CLASSES</span>
 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_level</span> <span class="o">==</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_level</span> <span class="o">==</span> <span class="s2">"type"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TYPES</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unexpected class_level value. Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">class_level</span><span class="si">}</span><span class="s2"> instead of type, class or category.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Unexpected class_level value. Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">class_level</span><span class="si">}</span><span class="s2"> instead of type, class or category."</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datafiles</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the sample at the given index. Applies the transform</span>
 <span class="sd">        if provided. If `get_annotations` is True, also return the entire annotation dict.</span>
 <span class="sd">        The return type depends on the transform applied and whether or not get_annotations is True</span>
@@ -652,10 +652,10 @@
 <span class="sd">            class_idx : the index of the class in the classes list</span>
 <span class="sd">            (Optional) annotation : the annotation dict of the sample. Only if `get_annotations` is True.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">sample_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datafiles</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
         <span class="n">sample</span> <span class="o">=</span> <span class="n">ATRNetSTARSample</span><span class="p">(</span><span class="n">sample_name</span><span class="o">=</span><span class="n">sample_name</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
-        <span class="n">class_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">annotation</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">class_level</span><span class="p">])</span>
+        <span class="n">class_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">annotation</span><span class="p">[</span><span class="s2">"object"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">class_level</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_annotations</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span>

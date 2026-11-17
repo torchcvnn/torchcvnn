@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -334,7 +334,7 @@
 <div class="viewcode-block" id="TransformerEncoderLayer">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.TransformerEncoderLayer.html#torchcvnn.nn.TransformerEncoderLayer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TransformerEncoderLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;TransformerEncoderLayer is made up of self-attn and feedforward network.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""TransformerEncoderLayer is made up of self-attn and feedforward network.</span>
 
 <span class="sd">    This class is adapted from pytorch :py:class:`torch.nn.TransformerEncoderLayer`</span>
 
@@ -357,7 +357,7 @@
 <span class="sd">        batch_first: If ``True``, then the input and output tensors are provided</span>
 <span class="sd">            as (batch, seq, feature). Default: ``False`` (seq, batch, feature).</span>
 <span class="sd">        norm_first: if ``True``, layer norm is done prior to attention and feedforward</span>
-<span class="sd">            operations, respectively. Otherwise it&#39;s done after. Default: ``False`` (after).</span>
+<span class="sd">            operations, respectively. Otherwise it's done after. Default: ``False`` (after).</span>
 <span class="sd">        bias: If set to ``False``, ``Linear`` and ``LayerNorm`` layers will not learn an additive</span>
 <span class="sd">            bias. Default: ``True``.</span>
 
@@ -383,7 +383,7 @@
 <span class="sd">            src = torch.rand(32, 10, 512, dtype=torch.complex64)</span>
 <span class="sd">            out = encoder_layer(src)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="TransformerEncoderLayer.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.TransformerEncoderLayer.html#torchcvnn.nn.TransformerEncoderLayer.__init__">[docs]</a>
@@ -402,7 +402,7 @@
         <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
         <span class="n">attn_module</span><span class="o">=</span><span class="n">MultiheadAttention</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"device"</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">"dtype"</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">self_attn</span> <span class="o">=</span> <span class="n">attn_module</span><span class="p">(</span>
             <span class="n">d_model</span><span class="p">,</span>
@@ -438,7 +438,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;activation&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"activation"</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">CReLU</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span>
@@ -480,7 +480,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">TransformerEncoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;TransformerEncoder is a stack of N encoder layers.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""TransformerEncoder is a stack of N encoder layers.</span>
 
 <span class="sd">    This class is adapted from pytorch :py:class:`torch.nn.TransformerEncoder`</span>
 
@@ -510,13 +510,13 @@
 <span class="sd">        &gt;&gt;&gt; transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=6)</span>
 <span class="sd">        &gt;&gt;&gt; src = torch.rand(10, 32, 512)</span>
 <span class="sd">        &gt;&gt;&gt; out = transformer_encoder(src)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;norm&quot;</span><span class="p">]</span>
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"norm"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">encoder_layer</span><span class="p">:</span> <span class="s2">&quot;TransformerEncoderLayer&quot;</span><span class="p">,</span>
+        <span class="n">encoder_layer</span><span class="p">:</span> <span class="s2">"TransformerEncoderLayer"</span><span class="p">,</span>
         <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">norm</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -529,14 +529,14 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">src</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Pass the input through the encoder layers in turn.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Pass the input through the encoder layers in turn.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            src: the sequence to the encoder (required).</span>
 
 <span class="sd">        Shape:</span>
 <span class="sd">            see the docs in :class:`~torch.nn.Transformer`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">src</span>
 
         <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
@@ -554,7 +554,7 @@
 <div class="viewcode-block" id="TransformerDecoderLayer">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.TransformerDecoderLayer.html#torchcvnn.nn.TransformerDecoderLayer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TransformerDecoderLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;TransformerDecoderLayer is made up of self-attn, multi-head-attn and feedforward network.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""TransformerDecoderLayer is made up of self-attn, multi-head-attn and feedforward network.</span>
 
 <span class="sd">    Adapted from Pytorch :py:class:`torch.nn.TransformerDecoderLayer`.</span>
 
@@ -574,7 +574,7 @@
 <span class="sd">        batch_first: If ``True``, then the input and output tensors are provided</span>
 <span class="sd">            as (batch, seq, feature). Default: ``False`` (seq, batch, feature).</span>
 <span class="sd">        norm_first: if ``True``, layer norm is done prior to self attention, multihead</span>
-<span class="sd">            attention and feedforward operations, respectively. Otherwise it&#39;s done after.</span>
+<span class="sd">            attention and feedforward operations, respectively. Otherwise it's done after.</span>
 <span class="sd">            Default: ``False`` (after).</span>
 <span class="sd">        bias: If set to ``False``, ``Linear`` and ``LayerNorm`` layers will not learn an additive</span>
 <span class="sd">            bias. Default: ``True``.</span>
@@ -602,9 +602,9 @@
 <span class="sd">            memory = torch.rand(32, 10, 512, dtype=torch.complex64)</span>
 <span class="sd">            tgt = torch.rand(32, 20, 512, dtype=torch.complex64)</span>
 <span class="sd">            out = decoder_layer(tgt, memory)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;norm_first&quot;</span><span class="p">]</span>
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"norm_first"</span><span class="p">]</span>
 
     <span class="c1"># Adapted from Pytorch TransformerDecoderLayer</span>
     <span class="c1"># with CReLU instead of ReLU and dtype=torch.complex64</span>
@@ -624,7 +624,7 @@
         <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"device"</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">"dtype"</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">self_attn</span> <span class="o">=</span> <span class="n">MultiheadAttention</span><span class="p">(</span>
             <span class="n">d_model</span><span class="p">,</span>
@@ -671,8 +671,8 @@
     <span class="c1"># Adapted from Pytorch TransformerDecoderLayer</span>
     <span class="c1"># with CReLU instead of ReLU</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;activation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">state</span><span class="p">:</span>
-            <span class="n">state</span><span class="p">[</span><span class="s2">&quot;activation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CReLU</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">"activation"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">state</span><span class="p">:</span>
+            <span class="n">state</span><span class="p">[</span><span class="s2">"activation"</span><span class="p">]</span> <span class="o">=</span> <span class="n">CReLU</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
     <span class="c1"># Same from Pytorch TransformerDecoderLayer</span>
@@ -681,7 +681,7 @@
         <span class="n">tgt</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">memory</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Pass the inputs through the decoder layer.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Pass the inputs through the decoder layer.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            tgt: the sequence to the decoder layer (required).</span>
@@ -689,7 +689,7 @@
 
 <span class="sd">        Shape:</span>
 <span class="sd">            see the docs in :class:`~torch.nn.Transformer`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># see Fig. 1 of https://arxiv.org/pdf/2002.04745v1.pdf</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">tgt</span>
@@ -753,7 +753,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">TransformerDecoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;TransformerDecoder is a stack of N decoder layers.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""TransformerDecoder is a stack of N decoder layers.</span>
 
 <span class="sd">    Adapted from :py:class:`torch.nn.TransformerDecodder`.</span>
 
@@ -781,13 +781,13 @@
 <span class="sd">        &gt;&gt;&gt; memory = torch.rand(10, 32, 512)</span>
 <span class="sd">        &gt;&gt;&gt; tgt = torch.rand(20, 32, 512)</span>
 <span class="sd">        &gt;&gt;&gt; out = transformer_decoder(tgt, memory)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;norm&quot;</span><span class="p">]</span>
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"norm"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">decoder_layer</span><span class="p">:</span> <span class="s2">&quot;TransformerDecoderLayer&quot;</span><span class="p">,</span>
+        <span class="n">decoder_layer</span><span class="p">:</span> <span class="s2">"TransformerDecoderLayer"</span><span class="p">,</span>
         <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">norm</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -801,7 +801,7 @@
         <span class="n">tgt</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">memory</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Pass the inputs (and mask) through the decoder layer in turn.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Pass the inputs (and mask) through the decoder layer in turn.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            tgt: the sequence to the decoder (required).</span>
@@ -809,7 +809,7 @@
 
 <span class="sd">        Shape:</span>
 <span class="sd">            see the docs in :class:`~torch.nn.Transformer`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">tgt</span>
 
         <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
@@ -826,7 +826,7 @@
 <div class="viewcode-block" id="Transformer">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Transformer.html#torchcvnn.nn.Transformer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Transformer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A transformer model.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""A transformer model.</span>
 
 <span class="sd">    Adapted from :py:class:`torch.nn.Transformer`.</span>
 
@@ -872,7 +872,7 @@
 <span class="sd">            tgt = torch.rand((20, 32, 512), dtype=torch.complex64)</span>
 <span class="sd">            out = transformer_model(src, tgt)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="Transformer.__init__">
 <a class="viewcode-back" href="../../../../modules/_autosummary/torchcvnn.nn.Transformer.html#torchcvnn.nn.Transformer.__init__">[docs]</a>
@@ -892,7 +892,7 @@
         <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
+        <span class="n">factory_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"device"</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">"dtype"</span><span class="p">:</span> <span class="n">dtype</span><span class="p">}</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="n">encoder_layer</span> <span class="o">=</span> <span class="n">TransformerEncoderLayer</span><span class="p">(</span>

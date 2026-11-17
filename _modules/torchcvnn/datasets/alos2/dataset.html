@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -325,7 +325,7 @@
 <div class="viewcode-block" id="ALOSDataset">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.ALOSDataset">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ALOSDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    ALOSDataset</span>
 
 <span class="sd">    The format is described in</span>
@@ -341,12 +341,12 @@
 <span class="sd">    Arguments:</span>
 <span class="sd">        volpath: the path to the VOLUME file</span>
 <span class="sd">        transform : the transform applied the cropped image. It applies</span>
-<span class="sd">                    on a dictionnary of patches {&#39;HH&#39;: np.array, &#39;HV&#39;: np.array}</span>
+<span class="sd">                    on a dictionnary of patches {'HH': np.array, 'HV': np.array}</span>
 <span class="sd">        crop_coordinates: the subpart of the image to consider as ((row_i, col_i), (row_j, col_j))</span>
 <span class="sd">                          defining the corner coordinates</span>
 <span class="sd">        patch_size: the dimensions of the patches to consider (rows, cols)</span>
 <span class="sd">        patch_stride: the shift between two consecutive patches, default:patch_size</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -367,12 +367,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">volFile</span> <span class="o">=</span> <span class="n">VolFile</span><span class="p">(</span><span class="n">volpath</span><span class="p">)</span>
 
-        <span class="n">leader_filepath</span> <span class="o">=</span> <span class="n">volpath</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">volpath</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;VOL-&quot;</span><span class="p">,</span> <span class="s2">&quot;LED-&quot;</span><span class="p">)</span>
+        <span class="n">leader_filepath</span> <span class="o">=</span> <span class="n">volpath</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">volpath</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"VOL-"</span><span class="p">,</span> <span class="s2">"LED-"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">leaderFile</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">leader_filepath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">leaderFile</span> <span class="o">=</span> <span class="n">LeaderFile</span><span class="p">(</span><span class="n">leader_filepath</span><span class="p">)</span>
 
-        <span class="n">trailer_filepath</span> <span class="o">=</span> <span class="n">volpath</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">volpath</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;VOL-&quot;</span><span class="p">,</span> <span class="s2">&quot;TRL-&quot;</span><span class="p">)</span>
+        <span class="n">trailer_filepath</span> <span class="o">=</span> <span class="n">volpath</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">volpath</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"VOL-"</span><span class="p">,</span> <span class="s2">"TRL-"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trailerFile</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">trailer_filepath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">trailerFile</span> <span class="o">=</span> <span class="n">TrailerFile</span><span class="p">(</span><span class="n">trailer_filepath</span><span class="p">)</span>
@@ -382,8 +382,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">crop_coordinates</span> <span class="o">=</span> <span class="n">crop_coordinates</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">pol</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;HH&quot;</span><span class="p">,</span> <span class="s2">&quot;HV&quot;</span><span class="p">,</span> <span class="s2">&quot;VH&quot;</span><span class="p">,</span> <span class="s2">&quot;VV&quot;</span><span class="p">]:</span>
-            <span class="n">filepath</span> <span class="o">=</span> <span class="n">volpath</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">volpath</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;VOL-&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;IMG-</span><span class="si">{</span><span class="n">pol</span><span class="si">}</span><span class="s2">-&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">pol</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"HH"</span><span class="p">,</span> <span class="s2">"HV"</span><span class="p">,</span> <span class="s2">"VH"</span><span class="p">,</span> <span class="s2">"VV"</span><span class="p">]:</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">volpath</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">volpath</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"VOL-"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"IMG-</span><span class="si">{</span><span class="n">pol</span><span class="si">}</span><span class="s2">-"</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">filepath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                 <span class="k">continue</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">pol</span><span class="p">]</span> <span class="o">=</span> <span class="n">SARImage</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
@@ -395,7 +395,7 @@
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volFile</span><span class="o">.</span><span class="n">num_polarizations</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;I was expecting </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volFile</span><span class="o">.</span><span class="n">num_polarizations</span><span class="si">}</span><span class="s2"> data file but I found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">)</span><span class="si">}</span><span class="s2"> data file&quot;</span>
+                <span class="sa">f</span><span class="s2">"I was expecting </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volFile</span><span class="o">.</span><span class="n">num_polarizations</span><span class="si">}</span><span class="s2"> data file but I found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">)</span><span class="si">}</span><span class="s2"> data file"</span>
             <span class="p">)</span>
 
         <span class="c1"># Precompute the dimension of the grid of patches</span>
@@ -414,7 +414,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+            <span class="sa">f</span><span class="s2">"""</span>
 <span class="s2">Volume File</span>
 <span class="s2">===========</span>
 <span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volFile</span><span class="si">}</span>
@@ -426,27 +426,27 @@
 <span class="s2">Trailer File</span>
 <span class="s2">===========</span>
 <span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trailerFile</span><span class="si">}</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the length of the dataset according to the patch size, stride</span>
 <span class="sd">        and image size</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            int: the total number of available patches</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsamples_per_rows</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsamples_per_cols</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Access and returns the subpatch specified by the index</span>
 
 <span class="sd">        Arguments:</span>
 <span class="sd">            idx: the index of the patch to access</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">row_stride</span><span class="p">,</span> <span class="n">col_stride</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_stride</span>
         <span class="n">start_row</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">crop_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">idx</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsamples_per_cols</span><span class="p">)</span> <span class="o">*</span> <span class="n">row_stride</span>

@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -320,21 +320,21 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_utils</span>
 
 <span class="n">descriptor_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;file_id&quot;</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_map_projection_record&quot;</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"file_id"</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_map_projection_record"</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="n">descriptor_record_length</span> <span class="o">=</span> <span class="mi">720</span>
 
 <span class="n">summary_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;scene_id&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_sar_channels&quot;</span><span class="p">,</span> <span class="mi">388</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;sensor_id&quot;</span><span class="p">,</span> <span class="mi">412</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;line_content_indicator&quot;</span><span class="p">,</span> <span class="mi">1670</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># RANGEbbb for L1.1 or OTHERbbb</span>
-    <span class="p">(</span><span class="s2">&quot;line_spacing&quot;</span><span class="p">,</span> <span class="mi">1686</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;F16.7&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;pixel_spacing&quot;</span><span class="p">,</span> <span class="mi">1702</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;F16.7&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;doppler_center_frequency_constant_term&quot;</span><span class="p">,</span> <span class="mi">1734</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;F16.7&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;doppler_center_frequency_linear_term&quot;</span><span class="p">,</span> <span class="mi">1750</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;F16.7&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;nominal_off_nadir&quot;</span><span class="p">,</span> <span class="mi">1838</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;F16.7&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"scene_id"</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_sar_channels"</span><span class="p">,</span> <span class="mi">388</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"sensor_id"</span><span class="p">,</span> <span class="mi">412</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"line_content_indicator"</span><span class="p">,</span> <span class="mi">1670</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># RANGEbbb for L1.1 or OTHERbbb</span>
+    <span class="p">(</span><span class="s2">"line_spacing"</span><span class="p">,</span> <span class="mi">1686</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"F16.7"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pixel_spacing"</span><span class="p">,</span> <span class="mi">1702</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"F16.7"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"doppler_center_frequency_constant_term"</span><span class="p">,</span> <span class="mi">1734</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"F16.7"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"doppler_center_frequency_linear_term"</span><span class="p">,</span> <span class="mi">1750</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"F16.7"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"nominal_off_nadir"</span><span class="p">,</span> <span class="mi">1838</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"F16.7"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="n">summary_record_length</span> <span class="o">=</span> <span class="mi">4096</span>
 
@@ -345,15 +345,15 @@
 <span class="n">platform_projection_record_length</span> <span class="o">=</span> <span class="mi">4680</span>
 
 <span class="n">altitude_data_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;pitch&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">&quot;E14.6&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;roll&quot;</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">&quot;E14.6&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;yaw&quot;</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">&quot;E14.6&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pitch"</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">"E14.6"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"roll"</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">"E14.6"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"yaw"</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">"E14.6"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="n">altitude_data_record_length</span> <span class="o">=</span> <span class="mi">16384</span>
 
 <span class="n">radiometric_data_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;record_number&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;calibration_factor&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;F16.7&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"record_number"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"calibration_factor"</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"F16.7"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="n">radiometric_data_record_length</span> <span class="o">=</span> <span class="mi">9860</span>
 
@@ -367,16 +367,16 @@
 <div class="viewcode-block" id="LeaderFile">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.alos2.LeaderFile">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LeaderFile</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Processing of the SAR trailer file.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_record</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">summary_record</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">altitude_record</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radiometric_record</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
             <span class="n">fh_offset</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">fh_offset</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">parse_from_format</span><span class="p">(</span>
                 <span class="n">fh</span><span class="p">,</span>
@@ -397,7 +397,7 @@
 
             <span class="c1"># Skip map projection record</span>
             <span class="c1"># Does not exist in L1.1</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_record</span><span class="p">[</span><span class="s2">&quot;number_map_projection_record&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_record</span><span class="p">[</span><span class="s2">"number_map_projection_record"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">fh_offset</span> <span class="o">+=</span> <span class="n">map_projection_record_length</span>
 
             <span class="c1"># Skip platform projection record</span>
@@ -425,7 +425,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">calibration_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">cf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radiometric_record</span><span class="p">[</span><span class="s2">&quot;calibration_factor&quot;</span><span class="p">]</span>
+        <span class="n">cf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radiometric_record</span><span class="p">[</span><span class="s2">"calibration_factor"</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">10.0</span> <span class="o">**</span> <span class="p">((</span><span class="n">cf</span> <span class="o">-</span> <span class="mf">32.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -433,7 +433,7 @@
         <span class="n">summary_txt</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">summary_record</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">altitude_txt</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude_record</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">radiometric_txt</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radiometric_record</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="s2">Descriptor:</span>
 <span class="si">{</span><span class="n">descriptor_txt</span><span class="si">}</span>
 <span class="s2">Summary:</span>
@@ -442,7 +442,7 @@
 <span class="si">{</span><span class="n">altitude_txt</span><span class="si">}</span>
 <span class="s2">Radiometric:</span>
 <span class="si">{</span><span class="n">radiometric_txt</span><span class="si">}</span>
-<span class="s2">        &quot;&quot;&quot;</span></div>
+<span class="s2">        """</span></div>
 
 </pre></div>
         </article>

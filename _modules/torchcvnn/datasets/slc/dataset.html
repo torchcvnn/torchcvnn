@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -328,7 +328,7 @@
 <div class="viewcode-block" id="SLCDataset">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.SLCDataset">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SLCDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    SLCDataset</span>
 
 <span class="sd">    The format is described in https://uavsar.jpl.nasa.gov/science/documents/stack-format.html</span>
@@ -361,10 +361,10 @@
 
 <span class="sd">            def get_pauli(data):</span>
 <span class="sd">                # Returns Pauli in (H, W, C)</span>
-<span class="sd">                HH = data[&quot;HH&quot;]</span>
-<span class="sd">                HV = data[&quot;HV&quot;]</span>
-<span class="sd">                VH = data[&quot;VH&quot;]</span>
-<span class="sd">                VV = data[&quot;VV&quot;]</span>
+<span class="sd">                HH = data["HH"]</span>
+<span class="sd">                HV = data["HV"]</span>
+<span class="sd">                VH = data["VH"]</span>
+<span class="sd">                VV = data["VV"]</span>
 
 <span class="sd">                alpha = HH + VV</span>
 <span class="sd">                beta = HH - VV</span>
@@ -383,10 +383,10 @@
 <span class="sd">    Arguments:</span>
 <span class="sd">        rootdir: the path containing the SLC and ANN files</span>
 <span class="sd">        transform : the transform applied to the patches. It applies</span>
-<span class="sd">                    on a dictionnary of patches {&#39;HH&#39;: np.array, &#39;HV&#39;: np.array, ...}</span>
+<span class="sd">                    on a dictionnary of patches {'HH': np.array, 'HV': np.array, ...}</span>
 <span class="sd">        patch_size: the dimensions of the patches to consider (rows, cols)</span>
 <span class="sd">        patch_stride: the shift between two consecutive patches, default:patch_size</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -405,7 +405,7 @@
 
         <span class="c1"># Let us find all the SLC files</span>
         <span class="c1"># We group the polorizations of the stack together</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">slcs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;*.slc&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slcs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"*.slc"</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">slc_polarizations</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">patch_counts</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">slc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">slcs</span><span class="p">:</span>
@@ -440,7 +440,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Usefull params :</span>
 <span class="sd">        - 1x1_slc_azimuth_pixel_spacing</span>
 <span class="sd">        - 1x1_slc_range_pixel_spacing</span>
@@ -448,7 +448,7 @@
 <span class="sd">        - center_wavelength</span>
 <span class="sd">        - slc_SEGMENT_1x1_rows</span>
 <span class="sd">        - slc_SEGMENT_1x1_columns</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Now, request the patch from the right SLC file</span>
         <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">item</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span>
 

@@ -296,7 +296,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -305,7 +305,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -329,53 +329,53 @@
 <span class="c1"># - For L1.1 : Signal data</span>
 
 <span class="n">descriptor_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;format_control_document_id&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;CEOS-SAR    &quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;file_id&quot;</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_data_records&quot;</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;sar_data_record_length&quot;</span><span class="p">,</span> <span class="mi">186</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;bit_length_per_sample&quot;</span><span class="p">,</span> <span class="mi">216</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;num_samples_per_data_group&quot;</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;num_bytes_per_data_group&quot;</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_bytes_prefix_data&quot;</span><span class="p">,</span> <span class="mi">276</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 544 for L1.1, 192 for L1.5/3.1</span>
-    <span class="p">(</span><span class="s2">&quot;number_bytes_data_record&quot;</span><span class="p">,</span> <span class="mi">280</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;number_bytes_suffix_data&quot;</span><span class="p">,</span> <span class="mi">288</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 0</span>
-    <span class="p">(</span><span class="s2">&quot;sample_data_number_locator&quot;</span><span class="p">,</span> <span class="mi">296</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;sar_data_format_type&quot;</span><span class="p">,</span> <span class="mi">428</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># e.g L1.1 &#39;C*8b&#39;</span>
-    <span class="p">(</span><span class="s2">&quot;scanscar_num_burst&quot;</span><span class="p">,</span> <span class="mi">448</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;scanscar_num_lines_per_burst&quot;</span><span class="p">,</span> <span class="mi">452</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;scanscar_burst_information&quot;</span><span class="p">,</span> <span class="mi">456</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"format_control_document_id"</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"CEOS-SAR    "</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"file_id"</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_data_records"</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"sar_data_record_length"</span><span class="p">,</span> <span class="mi">186</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"bit_length_per_sample"</span><span class="p">,</span> <span class="mi">216</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"num_samples_per_data_group"</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"num_bytes_per_data_group"</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_bytes_prefix_data"</span><span class="p">,</span> <span class="mi">276</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 544 for L1.1, 192 for L1.5/3.1</span>
+    <span class="p">(</span><span class="s2">"number_bytes_data_record"</span><span class="p">,</span> <span class="mi">280</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"number_bytes_suffix_data"</span><span class="p">,</span> <span class="mi">288</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 0</span>
+    <span class="p">(</span><span class="s2">"sample_data_number_locator"</span><span class="p">,</span> <span class="mi">296</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"sar_data_format_type"</span><span class="p">,</span> <span class="mi">428</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># e.g L1.1 'C*8b'</span>
+    <span class="p">(</span><span class="s2">"scanscar_num_burst"</span><span class="p">,</span> <span class="mi">448</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"scanscar_num_lines_per_burst"</span><span class="p">,</span> <span class="mi">452</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"scanscar_burst_information"</span><span class="p">,</span> <span class="mi">456</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="n">descriptor_record_length</span> <span class="o">=</span> <span class="mi">720</span>
 
 
 <span class="n">data_records_format</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;record_sequence_number&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;record_type_code&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>  <span class="c1"># To check we are aligned with the file format</span>
-    <span class="p">(</span><span class="s2">&quot;record_length&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;sar_image_data_line_number&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;num_left_fill_pixels&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># No left fill in 1.1, hence 0 is expected</span>
-    <span class="p">(</span><span class="s2">&quot;count_data_pixels&quot;</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"record_sequence_number"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"record_type_code"</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>  <span class="c1"># To check we are aligned with the file format</span>
+    <span class="p">(</span><span class="s2">"record_length"</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"sar_image_data_line_number"</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"num_left_fill_pixels"</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># No left fill in 1.1, hence 0 is expected</span>
+    <span class="p">(</span><span class="s2">"count_data_pixels"</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="p">(</span>
-        <span class="s2">&quot;num_right_fill_pixels&quot;</span><span class="p">,</span>
+        <span class="s2">"num_right_fill_pixels"</span><span class="p">,</span>
         <span class="mi">28</span><span class="p">,</span>
         <span class="mi">4</span><span class="p">,</span>
-        <span class="s2">&quot;B&quot;</span><span class="p">,</span>
+        <span class="s2">"B"</span><span class="p">,</span>
         <span class="mi">0</span><span class="p">,</span>
     <span class="p">),</span>  <span class="c1"># No right fill in 1.1, hence 0 is expected</span>
-    <span class="p">(</span><span class="s2">&quot;transmitted_pulse_polarization&quot;</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># either H(0) or V(1)</span>
-    <span class="p">(</span><span class="s2">&quot;received_pulse_polarization&quot;</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># either H(0) or V(1)</span>
-    <span class="p">(</span><span class="s2">&quot;chirp_length&quot;</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;chirp_constant_coefficient&quot;</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;chirp_linear_coefficient&quot;</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;chirp_quadratic_coefficient&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;receiver_gain&quot;</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;slant_range,_first_data&quot;</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;latitude_first&quot;</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 1/1,000,000 deg</span>
-    <span class="p">(</span><span class="s2">&quot;latitude_last&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 1/1,000,000 deg</span>
-    <span class="p">(</span><span class="s2">&quot;longitude_first&quot;</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 1/1,000,000 deg</span>
-    <span class="p">(</span><span class="s2">&quot;longitude_last&quot;</span><span class="p">,</span> <span class="mi">212</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 1/1,000,000 deg</span>
-    <span class="p">(</span><span class="s2">&quot;ALOS2_frame_number&quot;</span><span class="p">,</span> <span class="mi">284</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;auxiliary_data&quot;</span><span class="p">,</span> <span class="mi">288</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"transmitted_pulse_polarization"</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># either H(0) or V(1)</span>
+    <span class="p">(</span><span class="s2">"received_pulse_polarization"</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># either H(0) or V(1)</span>
+    <span class="p">(</span><span class="s2">"chirp_length"</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"chirp_constant_coefficient"</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"chirp_linear_coefficient"</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"chirp_quadratic_coefficient"</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"receiver_gain"</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"slant_range,_first_data"</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"latitude_first"</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 1/1,000,000 deg</span>
+    <span class="p">(</span><span class="s2">"latitude_last"</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 1/1,000,000 deg</span>
+    <span class="p">(</span><span class="s2">"longitude_first"</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 1/1,000,000 deg</span>
+    <span class="p">(</span><span class="s2">"longitude_last"</span><span class="p">,</span> <span class="mi">212</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># 1/1,000,000 deg</span>
+    <span class="p">(</span><span class="s2">"ALOS2_frame_number"</span><span class="p">,</span> <span class="mi">284</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"auxiliary_data"</span><span class="p">,</span> <span class="mi">288</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="n">data_record_header_length</span> <span class="o">=</span> <span class="mi">544</span>
 
@@ -383,16 +383,16 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_image_data</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">base_offset</span><span class="p">,</span> <span class="n">number_records</span><span class="p">):</span>
     <span class="c1"># For some reasons, the following which I expect to be faster</span>
     <span class="c1"># is taking much more memory than the line by line approach below</span>
-    <span class="c1"># print(&quot;Parsing image data&quot;)</span>
+    <span class="c1"># print("Parsing image data")</span>
     <span class="c1"># data_bytes = fh.read(number_records * number_pixels * 8)</span>
-    <span class="c1"># datas = struct.unpack(&quot;&gt;&quot; + (&quot;i&quot; * number_records * number_pixels * 2), data_bytes)</span>
+    <span class="c1"># datas = struct.unpack("&gt;" + ("i" * number_records * number_pixels * 2), data_bytes)</span>
     <span class="c1"># cplx_datas = [real + 1j * imag for (real, imag) in zip(datas[0::2], datas[1::2])]</span>
     <span class="c1"># del datas</span>
 
-    <span class="c1"># print(&quot;Cplx data&quot;)</span>
+    <span class="c1"># print("Cplx data")</span>
     <span class="c1"># datas = np.array(cplx_datas).reshape(number_records, number_pixels) / 2**16</span>
     <span class="c1"># del cplx_datas</span>
-    <span class="c1"># print(&quot;As numpy&quot;)</span>
+    <span class="c1"># print("As numpy")</span>
 
     <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">record_info</span> <span class="o">=</span> <span class="p">{}</span>
@@ -407,14 +407,14 @@
             <span class="n">data_record_header_length</span><span class="p">,</span>
             <span class="n">base_offset</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">assert</span> <span class="n">i</span> <span class="o">==</span> <span class="p">(</span><span class="n">record_info</span><span class="p">[</span><span class="s2">&quot;sar_image_data_line_number&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">i</span> <span class="o">==</span> <span class="p">(</span><span class="n">record_info</span><span class="p">[</span><span class="s2">"sar_image_data_line_number"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="n">number_pixels</span> <span class="o">=</span> <span class="n">record_info</span><span class="p">[</span><span class="s2">&quot;count_data_pixels&quot;</span><span class="p">]</span>
+        <span class="n">number_pixels</span> <span class="o">=</span> <span class="n">record_info</span><span class="p">[</span><span class="s2">"count_data_pixels"</span><span class="p">]</span>
 
         <span class="n">fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">base_offset</span><span class="p">)</span>
         <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">number_pixels</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
         <span class="c1"># TODO: is that the correct unpacking format ?!</span>
-        <span class="n">datas</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;f&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">number_pixels</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">data_bytes</span><span class="p">)</span>
+        <span class="n">datas</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">"&gt;"</span> <span class="o">+</span> <span class="p">(</span><span class="s2">"f"</span> <span class="o">*</span> <span class="p">(</span><span class="n">number_pixels</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">data_bytes</span><span class="p">)</span>
 
         <span class="n">cplx_datas</span> <span class="o">=</span> <span class="p">[</span><span class="n">real</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">imag</span> <span class="k">for</span> <span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">imag</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datas</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">datas</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])]</span>
         <span class="n">cplx_datas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cplx_datas</span><span class="p">)</span>
@@ -432,16 +432,16 @@
 <div class="viewcode-block" id="SARImage">
 <a class="viewcode-back" href="../../../../modules/datasets.html#torchcvnn.datasets.alos2.SARImage">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SARImage</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Processing of the SAR Image</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_records</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
             <span class="n">fh_offset</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">fh_offset</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">parse_from_format</span><span class="p">(</span>
                 <span class="n">fh</span><span class="p">,</span>
@@ -464,20 +464,20 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">num_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">[</span><span class="s2">&quot;number_data_records&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">[</span><span class="s2">"number_data_records"</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">num_cols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_records</span><span class="p">[</span><span class="s2">&quot;count_data_pixels&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_records</span><span class="p">[</span><span class="s2">"count_data_pixels"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">read_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_line</span><span class="p">,</span> <span class="n">num_lines</span><span class="p">,</span> <span class="n">start_col</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">):</span>
-        <span class="n">number_of_pixels_per_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_records</span><span class="p">[</span><span class="s2">&quot;count_data_pixels&quot;</span><span class="p">]</span>
+        <span class="n">number_of_pixels_per_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_records</span><span class="p">[</span><span class="s2">"count_data_pixels"</span><span class="p">]</span>
         <span class="n">base_offset</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">descriptor_record_length</span>
             <span class="o">+</span> <span class="p">(</span><span class="n">data_record_header_length</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">number_of_pixels_per_line</span><span class="p">)</span> <span class="o">*</span> <span class="n">start_line</span>
         <span class="p">)</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_lines</span><span class="p">):</span>
                 <span class="n">offset</span> <span class="o">=</span> <span class="n">base_offset</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span>
                     <span class="n">data_record_header_length</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">number_of_pixels_per_line</span>
@@ -500,7 +500,7 @@
                 <span class="c1"># Move the fh up to the columns to read</span>
                 <span class="n">fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">start_col</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># whence=1 for relative shift</span>
                 <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">num_cols</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
-                <span class="n">datas</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;f&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_cols</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">data_bytes</span><span class="p">)</span>
+                <span class="n">datas</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">"&gt;"</span> <span class="o">+</span> <span class="p">(</span><span class="s2">"f"</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_cols</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">data_bytes</span><span class="p">)</span>
                 <span class="n">cplx_datas</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">real</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">imag</span> <span class="k">for</span> <span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">imag</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datas</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">datas</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
                 <span class="p">]</span>
@@ -511,13 +511,13 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">descriptor_txt</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">descriptor_records</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">data_txt</span> <span class="o">=</span> <span class="n">parse_utils</span><span class="o">.</span><span class="n">format_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_records</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="s2">Descriptor : </span>
 <span class="si">{</span><span class="n">descriptor_txt</span><span class="si">}</span>
 
 <span class="s2">Data:</span>
 <span class="si">{</span><span class="n">data_txt</span><span class="si">}</span>
-<span class="s2">        &quot;&quot;&quot;</span></div>
+<span class="s2">        """</span></div>
 
 </pre></div>
         </article>

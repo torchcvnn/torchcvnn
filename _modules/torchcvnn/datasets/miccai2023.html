@@ -298,7 +298,7 @@
 <span class="c1"># Copyright (c) 2024 Jeremy Fix</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -307,7 +307,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -340,11 +340,11 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">load_matlab_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load a matlab file in HDF5 format</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got the keys </span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Got the keys </span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">][()]</span>
     <span class="k">return</span> <span class="n">data</span>
 
@@ -352,7 +352,7 @@
 <div class="viewcode-block" id="kspace_to_image">
 <a class="viewcode-back" href="../../../modules/datasets.html#torchcvnn.datasets.miccai2023.kspace_to_image">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">kspace_to_image</span><span class="p">(</span><span class="n">kspace</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert k-space data to image data. The returned kspace is</span>
 <span class="sd">    of the same type than the the provided image (np.ndarray or torch.Tensor).</span>
 
@@ -363,7 +363,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        torch.Tensor or np.ndarray</span>
 <span class="sd">            image data</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kspace</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">kspace</span><span class="p">)))</span>
     <span class="k">else</span><span class="p">:</span>
@@ -377,7 +377,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">image_to_kspace</span><span class="p">(</span>
     <span class="n">img</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert image data to k-space data. The returned kspace is</span>
 <span class="sd">    of the same type than the the provided image (np.ndarray or torch.Tensor)</span>
 
@@ -389,7 +389,7 @@
 <span class="sd">        torch.Tensor or np.ndarray</span>
 <span class="sd">            k-space data</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
         <span class="n">kspace</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">img</span><span class="p">)))</span>
     <span class="k">else</span><span class="p">:</span>
@@ -401,7 +401,7 @@
 <div class="viewcode-block" id="combine_coils_from_kspace">
 <a class="viewcode-back" href="../../../modules/datasets.html#torchcvnn.datasets.miccai2023.combine_coils_from_kspace">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">combine_coils_from_kspace</span><span class="p">(</span><span class="n">kspace</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Combine the coils of the k-space data using the root sum of squares</span>
 
 <span class="sd">    Arguments:</span>
@@ -411,10 +411,10 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        np.ndarray</span>
 <span class="sd">            Image data with coils combined, of shape (ky, kx), real valued, positive</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">kspace</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;kspace should have 3 dimensions, got </span><span class="si">{</span><span class="n">kspace</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">. Expected dimensions (sc, ky, kx)&quot;</span>
+            <span class="sa">f</span><span class="s2">"kspace should have 3 dimensions, got </span><span class="si">{</span><span class="n">kspace</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">. Expected dimensions (sc, ky, kx)"</span>
         <span class="p">)</span>
     <span class="n">images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">kspace</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">images</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span></div>
@@ -424,7 +424,7 @@
 <div class="viewcode-block" id="MICCAI2023">
 <a class="viewcode-back" href="../../../modules/datasets.html#torchcvnn.datasets.miccai2023.MICCAI2023">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MICCAI2023</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Loads the MICCAI2023 challenge data for the reconstruction task Task 1</span>
 
 <span class="sd">    The data are described on https://cmrxrecon.github.io/Task1-Cine-reconstruction.html</span>
@@ -536,7 +536,7 @@
 <span class="sd">           :width: 50%</span>
 <span class="sd">           :align: center</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -547,26 +547,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">view</span> <span class="o">==</span> <span class="n">CINEView</span><span class="o">.</span><span class="n">SAX</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span> <span class="o">=</span> <span class="s2">&quot;cine_sax.mat&quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span> <span class="o">=</span> <span class="s2">&quot;cine_sax_mask.mat&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span> <span class="o">=</span> <span class="s2">"cine_sax.mat"</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span> <span class="o">=</span> <span class="s2">"cine_sax_mask.mat"</span>
         <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="n">CINEView</span><span class="o">.</span><span class="n">LAX</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span> <span class="o">=</span> <span class="s2">&quot;cine_lax.mat&quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span> <span class="o">=</span> <span class="s2">&quot;cine_lax_mask.mat&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span> <span class="o">=</span> <span class="s2">"cine_lax.mat"</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span> <span class="o">=</span> <span class="s2">"cine_lax_mask.mat"</span>
 
         <span class="c1"># List all the available data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fullsampled_rootdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span> <span class="o">/</span> <span class="s2">&quot;MultiCoil&quot;</span> <span class="o">/</span> <span class="s2">&quot;cine&quot;</span> <span class="o">/</span> <span class="s2">&quot;TrainingSet&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fullsampled_key</span> <span class="o">=</span> <span class="s2">&quot;kspace_full&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fullsampled_rootdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span> <span class="o">/</span> <span class="s2">"MultiCoil"</span> <span class="o">/</span> <span class="s2">"cine"</span> <span class="o">/</span> <span class="s2">"TrainingSet"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fullsampled_key</span> <span class="o">=</span> <span class="s2">"kspace_full"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subsampled_rootdir</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span>
-            <span class="o">/</span> <span class="s2">&quot;MultiCoil&quot;</span>
-            <span class="o">/</span> <span class="s2">&quot;cine&quot;</span>
-            <span class="o">/</span> <span class="s2">&quot;TrainingSet&quot;</span>
-            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;AccFactor</span><span class="si">{</span><span class="n">acc_factor</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="o">/</span> <span class="s2">"MultiCoil"</span>
+            <span class="o">/</span> <span class="s2">"cine"</span>
+            <span class="o">/</span> <span class="s2">"TrainingSet"</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">"AccFactor</span><span class="si">{</span><span class="n">acc_factor</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subsampled_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;kspace_sub</span><span class="si">{</span><span class="n">acc_factor</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mask_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;mask</span><span class="si">{</span><span class="n">acc_factor</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subsampled_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"kspace_sub</span><span class="si">{</span><span class="n">acc_factor</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"mask</span><span class="si">{</span><span class="n">acc_factor</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">"</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading data from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">subsampled_rootdir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading data from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">subsampled_rootdir</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="c1"># We list all the patients in the subsampled data directory</span>
         <span class="c1"># and check we have the data, mask and full sampled data</span>
@@ -576,33 +576,33 @@
                 <span class="k">continue</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">patient</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="si">}</span><span class="s2"> for patient </span><span class="si">{</span><span class="n">patient</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="si">}</span><span class="s2"> for patient </span><span class="si">{</span><span class="n">patient</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="k">continue</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">patient</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span><span class="si">}</span><span class="s2"> for patient </span><span class="si">{</span><span class="n">patient</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span><span class="si">}</span><span class="s2"> for patient </span><span class="si">{</span><span class="n">patient</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="k">continue</span>
 
             <span class="n">fullsampled_patient</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullsampled_rootdir</span> <span class="o">/</span> <span class="n">patient</span><span class="o">.</span><span class="n">name</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">fullsampled_patient</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Missing </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="si">}</span><span class="s2"> for patient </span><span class="si">{</span><span class="n">fullsampled_patient</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Missing </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="si">}</span><span class="s2"> for patient </span><span class="si">{</span><span class="n">fullsampled_patient</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
                 <span class="k">continue</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">patients</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">patient</span><span class="p">)</span>
 
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;I found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patients</span><span class="p">)</span><span class="si">}</span><span class="s2"> patient(s) : </span><span class="si">{</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">patients</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"I found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patients</span><span class="p">)</span><span class="si">}</span><span class="s2"> patient(s) : </span><span class="si">{</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">patients</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patients</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the subsampled k-space data, the mask and the fully sampled k-space data</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">patient</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patients</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
 
         <span class="n">subsampled_data</span> <span class="o">=</span> <span class="kc">None</span>
@@ -610,15 +610,15 @@
         <span class="n">fullsampled_data</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Load the subsampled data</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading </span><span class="si">{</span><span class="n">patient</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading </span><span class="si">{</span><span class="n">patient</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">subsampled_data</span> <span class="o">=</span> <span class="n">load_matlab_file</span><span class="p">(</span>
             <span class="n">patient</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsampled_key</span>
         <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">subsampled_data</span> <span class="o">=</span> <span class="n">subsampled_data</span><span class="p">[</span><span class="s2">&quot;real&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">subsampled_data</span><span class="p">[</span><span class="s2">&quot;imag&quot;</span><span class="p">]</span>
+        <span class="n">subsampled_data</span> <span class="o">=</span> <span class="n">subsampled_data</span><span class="p">[</span><span class="s2">"real"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">subsampled_data</span><span class="p">[</span><span class="s2">"imag"</span><span class="p">]</span>
         <span class="c1"># (kx, ky, sc, sz, t) for multi-coil data</span>
         <span class="c1"># e.g. (246, 512, 10, 10, 12)</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading </span><span class="si">{</span><span class="n">patient</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading </span><span class="si">{</span><span class="n">patient</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">subsampled_mask</span> <span class="o">=</span> <span class="n">load_matlab_file</span><span class="p">(</span>
             <span class="n">patient</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_key</span>
         <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -626,13 +626,13 @@
         <span class="c1"># e.g. (246, 512)</span>
 
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Loading </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullsampled_rootdir</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">patient</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Loading </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullsampled_rootdir</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">patient</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
         <span class="n">fullsampled_data</span> <span class="o">=</span> <span class="n">load_matlab_file</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fullsampled_rootdir</span> <span class="o">/</span> <span class="n">patient</span><span class="o">.</span><span class="n">name</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fullsampled_key</span><span class="p">,</span>
         <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">fullsampled_data</span> <span class="o">=</span> <span class="n">fullsampled_data</span><span class="p">[</span><span class="s2">&quot;real&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">fullsampled_data</span><span class="p">[</span><span class="s2">&quot;imag&quot;</span><span class="p">]</span>
+        <span class="n">fullsampled_data</span> <span class="o">=</span> <span class="n">fullsampled_data</span><span class="p">[</span><span class="s2">"real"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">fullsampled_data</span><span class="p">[</span><span class="s2">"imag"</span><span class="p">]</span>
         <span class="c1"># kx, ky, sc, sz, t</span>
         <span class="c1"># e.g. (246, 512, 10, 10, 12)</span>
 

@@ -299,7 +299,7 @@
 <span class="c1"># PyTorch library for the complex-valued neural networks</span>
 
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
 <span class="c1"># in the Software without restriction, including without limitation the rights</span>
 <span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
@@ -308,7 +308,7 @@
 <span class="c1"># The above copyright notice and this permission notice shall be included in</span>
 <span class="c1"># all copies or substantial portions of the Software.</span>
 
-<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -330,10 +330,10 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">complex_kaiming_normal_</span><span class="p">(</span>
     <span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;fan_in&quot;</span><span class="p">,</span>
-    <span class="n">nonlinearity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;leaky_relu&quot;</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"fan_in"</span><span class="p">,</span>
+    <span class="n">nonlinearity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"leaky_relu"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Fills the input `Tensor` with values according to the method</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Fills the input `Tensor` with values according to the method</span>
 <span class="sd">    described in `Delving deep into rectifiers: Surpassing human-level</span>
 <span class="sd">    performance on ImageNet classification` - He, K. et al. (2015), using a</span>
 <span class="sd">    normal distribution. The resulting tensor will have values sampled from</span>
@@ -347,20 +347,20 @@
 <span class="sd">    Arguments:</span>
 <span class="sd">        tensor: an n-dimensional `torch.Tensor`</span>
 <span class="sd">        a: the negative slope of the rectifier used after this layer (only</span>
-<span class="sd">            used with ``&#39;leaky_relu&#39;``)</span>
-<span class="sd">        mode: either ``&#39;fan_in&#39;`` (default) or ``&#39;fan_out&#39;``. Choosing ``&#39;fan_in&#39;``</span>
+<span class="sd">            used with ``'leaky_relu'``)</span>
+<span class="sd">        mode: either ``'fan_in'`` (default) or ``'fan_out'``. Choosing ``'fan_in'``</span>
 <span class="sd">            preserves the magnitude of the variance of the weights in the</span>
-<span class="sd">            forward pass. Choosing ``&#39;fan_out&#39;`` preserves the magnitudes in the</span>
+<span class="sd">            forward pass. Choosing ``'fan_out'`` preserves the magnitudes in the</span>
 <span class="sd">            backwards pass.</span>
 <span class="sd">        nonlinearity: the non-linear function (`nn.functional` name),</span>
-<span class="sd">            recommended to use only with ``&#39;relu&#39;`` or ``&#39;leaky_relu&#39;`` (default).</span>
+<span class="sd">            recommended to use only with ``'relu'`` or ``'leaky_relu'`` (default).</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; w = torch.empty(3, 5, dtype=torch.complex64)</span>
-<span class="sd">        &gt;&gt;&gt; c_nn.init.complex_kaiming_normal_(w, mode=&#39;fan_out&#39;, nonlinearity=&#39;relu&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; c_nn.init.complex_kaiming_normal_(w, mode='fan_out', nonlinearity='relu')</span>
 
 <span class="sd">    This implementation is a minor adaptation of the :external:py:func:`torch.nn.init.kaiming_normal_` function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">fan</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">_calculate_correct_fan</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
     <span class="n">gain</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">calculate_gain</span><span class="p">(</span><span class="n">nonlinearity</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
@@ -375,10 +375,10 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">complex_kaiming_uniform_</span><span class="p">(</span>
     <span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;fan_in&quot;</span><span class="p">,</span>
-    <span class="n">nonlinearity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;leaky_relu&quot;</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"fan_in"</span><span class="p">,</span>
+    <span class="n">nonlinearity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"leaky_relu"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Fills the input `Tensor` with values according to the method</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Fills the input `Tensor` with values according to the method</span>
 <span class="sd">    described in `Delving deep into rectifiers: Surpassing human-level</span>
 <span class="sd">    performance on ImageNet classification` - He, K. et al. (2015), using a</span>
 <span class="sd">    uniform distribution. The resulting tensor will have values sampled from</span>
@@ -393,23 +393,23 @@
 <span class="sd">    Arguments:</span>
 <span class="sd">        tensor: an n-dimensional :external:py:class`torch.Tensor`</span>
 <span class="sd">        a: the negative slope of the rectifier used after this layer (only</span>
-<span class="sd">            used with ``&#39;leaky_relu&#39;``)</span>
-<span class="sd">        mode: either ``&#39;fan_in&#39;`` (default) or ``&#39;fan_out&#39;``. Choosing ``&#39;fan_in&#39;``</span>
+<span class="sd">            used with ``'leaky_relu'``)</span>
+<span class="sd">        mode: either ``'fan_in'`` (default) or ``'fan_out'``. Choosing ``'fan_in'``</span>
 <span class="sd">            preserves the magnitude of the variance of the weights in the</span>
-<span class="sd">            forward pass. Choosing ``&#39;fan_out&#39;`` preserves the magnitudes in the</span>
+<span class="sd">            forward pass. Choosing ``'fan_out'`` preserves the magnitudes in the</span>
 <span class="sd">            backwards pass.</span>
 <span class="sd">        nonlinearity: the non-linear function (`nn.functional` name),</span>
-<span class="sd">            recommended to use only with ``&#39;relu&#39;`` or ``&#39;leaky_relu&#39;`` (default).</span>
+<span class="sd">            recommended to use only with ``'relu'`` or ``'leaky_relu'`` (default).</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; w = torch.empty(3, 5, dtype=torch.complex64)</span>
-<span class="sd">        &gt;&gt;&gt; c_nn.init.complex_kaiming_uniform_(w, mode=&#39;fan_in&#39;, nonlinearity=&#39;relu&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; c_nn.init.complex_kaiming_uniform_(w, mode='fan_in', nonlinearity='relu')</span>
 
 <span class="sd">    This implementation is a minor adaptation of the :external:py:func:`torch.nn.init.kaiming_uniform_` function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Initializing zero-element tensors is a no-op&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">"Initializing zero-element tensors is a no-op"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tensor</span>
     <span class="n">fan</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">_calculate_correct_fan</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
     <span class="n">gain</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">calculate_gain</span><span class="p">(</span><span class="n">nonlinearity</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
@@ -425,9 +425,9 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">complex_xavier_uniform_</span><span class="p">(</span>
     <span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="n">nonlinearity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;leaky_relu&quot;</span><span class="p">,</span>
+    <span class="n">nonlinearity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"leaky_relu"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Fills the input `Tensor` with values according to the method</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Fills the input `Tensor` with values according to the method</span>
 <span class="sd">    described in `Understanding the difficulty of training deep feedforward</span>
 <span class="sd">    neural networks` - Glorot, X. &amp; Bengio, Y. (2010), using a uniform</span>
 <span class="sd">    distribution. The resulting tensor will have values sampled from</span>
@@ -446,10 +446,10 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; w = torch.empty(3, 5, dtype=torch.complex64)</span>
-<span class="sd">        &gt;&gt;&gt; c_nn.init.complex_xavier_uniform_(w, nonlinearity=&#39;relu&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; c_nn.init.complex_xavier_uniform_(w, nonlinearity='relu')</span>
 
 <span class="sd">    This implementation is a minor adaptation of the :external:py:func:`torch.nn.init.xavier_uniform_` function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">fan_in</span><span class="p">,</span> <span class="n">fan_out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">_calculate_fan_in_and_fan_out</span><span class="p">(</span><span class="n">tensor</span><span class="p">)</span>
     <span class="n">gain</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">calculate_gain</span><span class="p">(</span><span class="n">nonlinearity</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
     <span class="n">std</span> <span class="o">=</span> <span class="n">gain</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">fan_in</span> <span class="o">+</span> <span class="n">fan_out</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -464,9 +464,9 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">complex_xavier_normal_</span><span class="p">(</span>
     <span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="n">nonlinearity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;leaky_relu&quot;</span><span class="p">,</span>
+    <span class="n">nonlinearity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"leaky_relu"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Fills the input `Tensor` with values according to the method</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Fills the input `Tensor` with values according to the method</span>
 <span class="sd">    described in `Understanding the difficulty of training deep feedforward</span>
 <span class="sd">    neural networks` - Glorot, X. &amp; Bengio, Y. (2010), using a normal</span>
 <span class="sd">    distribution. The resulting tensor will have values sampled from</span>
@@ -485,10 +485,10 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; w = torch.empty(3, 5, dtype=torch.complex64)</span>
-<span class="sd">        &gt;&gt;&gt; nn.init.complex_xavier_normal_(w, nonlinearity=&#39;relu&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; nn.init.complex_xavier_normal_(w, nonlinearity='relu')</span>
 
 <span class="sd">    This implementation is a minor adaptation of the :external:py:func:`torch.nn.init.xavier_normal_` function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">fan_in</span><span class="p">,</span> <span class="n">fan_out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">_calculate_fan_in_and_fan_out</span><span class="p">(</span><span class="n">tensor</span><span class="p">)</span>
     <span class="n">gain</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">calculate_gain</span><span class="p">(</span><span class="n">nonlinearity</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
     <span class="n">std</span> <span class="o">=</span> <span class="p">(</span><span class="n">gain</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">fan_in</span> <span class="o">+</span> <span class="n">fan_out</span><span class="p">)))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
